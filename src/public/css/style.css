@@ -1,0 +1,56 @@
+/*PRIMARY COLOR */
+.primary{
+	background-color: #03A9F4 !important;
+}
+.primary.lighten{
+	background-color: #81D4FA !important;
+}
+.primary.darken{
+	background-color: #2c3e50 !important;
+}
+.primary-text{
+	color: #2c3e50 !important;
+}
+.accent{
+	background-color: #03A9F4 !important;
+}
+.accent-text{
+	color: #ff1744 !important;
+}
+#header{
+	margin-bottom: 0px;
+}
+#header h1,#header h2,#header h3{
+	margin-top: 0px;
+	color:white;
+}
+#documentation-index{
+	width: 270px;
+}
+.site-footer{
+	margin-top: 0px;
+}
+.side-nav{
+	left:0;
+}
+.row{
+	margin-bottom: 0px;
+}
+#documentation-content h1{
+	font-size: 2em;
+}
+#documentation-content h2{
+	font-size: 1.8em;
+}
+#documentation-content h3{
+	font-size: 1.6em;
+}
+#documentation-content h4{
+	font-size: 1.4em;
+}
+#documentation-content h5{
+	font-size: 1.2em;
+}
+#documentation-content p{
+	font-size: 1em;
+}

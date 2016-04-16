@@ -1,0 +1,53 @@
+<script>
+		//page("ruta",callback)
+	page("/",main);
+	page("/data",data);
+	page("/configure",configure);
+	page("/documentation",documentation);
+	page("/documentation/:article",getArticle);
+	page();
+
+	function hidding(){
+		$("#main").addClass("hide");
+		$("#data").addClass("hide");
+		$("#configure").addClass("hide");
+		$("#documentation").addClass("hide");
+	}
+	function main(){
+		hidding();
+		$("#main").removeClass("hide");
+	}
+	function configure(){
+		hidding();
+		$("#configure").removeClass("hide");
+	}
+	function documentation(){
+		hidding();
+		$("#documentation").removeClass("hide");
+	}
+	function data(){
+		hidding();
+		$("#data").removeClass("hide");
+	}
+	function article(res){
+		hidding();
+		$("#documentation").removeClass("hide");
+		var article = res.params.article;
+		$('#article-title').html(article);
+	}
+	function getArticle(res){
+		hidding();
+		$("#documentation").removeClass("hide");
+		var article = res.params.article;
+		$.get( "/documentation/"+article,function(data){
+			$('#documentation-content').html(data);
+			resizeDocIndex();
+		});
+	}
+	function resizeDocIndex(){
+		var h= $("#documentation-content").height();
+		$('#documentation-index').css({minHeight: h});
+	}
+	//resize event
+	$( window ).resize(resizeDocIndex())
+</script>

@@ -3,6 +3,7 @@
 var CACHE_NAME = 'my-site-cache-v1';
 // The files we want to cache
 var urlsToCache = [
+  './',
   './css/icon.css',
   './css/materialize.css',
   './css/style.css',

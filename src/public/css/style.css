@@ -1,4 +1,4 @@
-/*PRIMARY COLOR */
+/*COLOR PALETTE*/
 .primary{
 	background-color: #03A9F4 !important;
 }
@@ -12,10 +12,85 @@
 	color: #2c3e50 !important;
 }
 .accent{
-	background-color: #03A9F4 !important;
+	background-color: #ff1744 !important;
 }
 .accent-text{
 	color: #ff1744 !important;
+}
+/*estatus Colors*/
+.done{
+	background-color: #00c853  !important;
+}
+.done-text{
+	background-color: #2c3e50 !important;
+	color: #e8f5e9 !important;
+}
+.error{
+	background-color: #d50000  !important;
+}
+
+.error-text{
+	background-color: #ffebee  !important;
+	color: #d50000  !important;
+}
+.sync{
+	background-color: #ffab00   !important;
+}
+/*Fixed action button anination*/
+.fixed-action-btn{
+    -webkit-transition-timing-function: ease; /* Safari and Chrome */
+    transition-timing-function: ease;
+   	transition: all 0.2s;
+}
+.fixed-action-btn.hide{
+	display:block !important;
+	-ms-transform: scale(0,0); /* IE 9 */
+    -webkit-transform: scale(0,0); /* Safari */
+    transform: scale(0,0);
+}
+.btn-floating.done i,.btn-floating.error i,.btn-floating.sync i{
+	display: none;
+}
+.btn-floating.done:after, .btn-floating.error:after, .btn-floating.sync:after{
+	color: white;
+	font-family: 'Material Icons';
+	font-weight: normal;
+	font-style: normal;
+	letter-spacing: normal;
+	text-transform: none;
+	display: inline-block;
+	white-space: nowrap;
+	word-wrap: normal;
+	direction: ltr;
+	-webkit-font-feature-settings: 'liga';
+	-webkit-font-smoothing: antialiased;
+	line-height: 57px;
+	font-size: 1.6rem;	
+}
+.btn-floating.done:after{
+	content:'done';
+}
+.btn-floating.error:after{
+	content:'error';
+}
+.btn-floating.sync:after{
+	content:'sync';
+	-webkit-animation: mdi-spin 2s infinite linear;
+  	animation: mdi-spin 2s infinite linear;
+  	-webkit-transform-origin: 50% 50%;
+ 	-moz-transform-origin: 50% 50%;
+ 	-o-transform-origin: 50% 50%;
+  	transform-origin: 50% 50%;
+}
+/*menu button improvements */
+nav .button-collapse i{
+	font-size: 2rem;
+}
+.nav-wrapper{
+	padding-left: 16px;
+	padding-right: 16px;
+}
+/*style*/
 }
 #header{
 	margin-bottom: 0px;

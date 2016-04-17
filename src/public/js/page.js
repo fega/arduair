@@ -1120,6 +1120,7 @@ module.exports = Array.isArray || function (arr) {
   page("/documentation",documentation);
   page("/documentation/:article",getArticle);
   page("/add",pageAdd)
+  page("/debug",pageDebugger);
   page();
 
   function hidding(){
@@ -1131,6 +1132,7 @@ module.exports = Array.isArray || function (arr) {
     $("#actionBtn-configure").addClass("hide");
     $("#actionBtn-search").addClass("hide");
     $("#actionBtn-comment").addClass("hide");
+    $("#debugger").addClass("hide");
   }
   function main(){
     hidding();
@@ -1151,12 +1153,6 @@ module.exports = Array.isArray || function (arr) {
     $("#data").removeClass("hide");
     $("#actionBtn-search").removeClass("hide");
   }
-  function pageAdd(res){
-    hidding();
-    $("#add").removeClass("hide");
-    $("#actionBtn-add").removeClass("hide");
-    
-  }
   function getArticle(res){
     hidding();
     $("#documentation").removeClass("hide");
@@ -1165,6 +1161,16 @@ module.exports = Array.isArray || function (arr) {
       $('#documentation-content').html(data);
       resizeDocIndex();
     });
+  }
+  function pageAdd(res){
+    hidding();
+    $("#add").removeClass("hide");
+    $("#actionBtn-add").removeClass("hide");
+    
+  }
+  function pageDebugger(){
+    hidding();
+    $("#debugger").removeClass("hide");
   }
   function resizeDocIndex(){
     var h= $("#documentation-content").height();

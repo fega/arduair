@@ -1066,97 +1066,6 @@ nav ul a span.badge {
   font-weight: normal;
   font-style: normal; }
 
-[class^="mdi-"], [class*="mdi-"] {
-  speak: none;
-  display: inline-block;
-  font-family: "Material-Design-Icons";
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translate(0, 0); }
-  [class^="mdi-"]:before, [class*="mdi-"]:before {
-    display: inline-block;
-    speak: none;
-    text-decoration: inherit; }
-  [class^="mdi-"].pull-left, [class*="mdi-"].pull-left {
-    margin-right: .3em; }
-  [class^="mdi-"].pull-right, [class*="mdi-"].pull-right {
-    margin-left: .3em; }
-  [class^="mdi-"].mdi-lg:before, [class^="mdi-"].mdi-lg:after, [class*="mdi-"].mdi-lg:before, [class*="mdi-"].mdi-lg:after {
-    font-size: 1.33333333em;
-    line-height: 0.75em;
-    vertical-align: -15%; }
-  [class^="mdi-"].mdi-2x:before, [class^="mdi-"].mdi-2x:after, [class*="mdi-"].mdi-2x:before, [class*="mdi-"].mdi-2x:after {
-    font-size: 2em; }
-  [class^="mdi-"].mdi-3x:before, [class^="mdi-"].mdi-3x:after, [class*="mdi-"].mdi-3x:before, [class*="mdi-"].mdi-3x:after {
-    font-size: 3em; }
-  [class^="mdi-"].mdi-4x:before, [class^="mdi-"].mdi-4x:after, [class*="mdi-"].mdi-4x:before, [class*="mdi-"].mdi-4x:after {
-    font-size: 4em; }
-  [class^="mdi-"].mdi-5x:before, [class^="mdi-"].mdi-5x:after, [class*="mdi-"].mdi-5x:before, [class*="mdi-"].mdi-5x:after {
-    font-size: 5em; }
-
-[class^="mdi-device-signal-cellular-"]:after, [class^="mdi-device-battery-"]:after, [class^="mdi-device-battery-charging-"]:after, [class^="mdi-device-signal-cellular-connected-no-internet-"]:after, [class^="mdi-device-signal-wifi-"]:after, [class^="mdi-device-signal-wifi-statusbar-not-connected"]:after, .mdi-device-network-wifi:after {
-  opacity: .3;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1;
-  display: inline-block;
-  speak: none;
-  text-decoration: inherit; }
-
-[class^="mdi-device-signal-cellular-"]:after {
-  content: "\e758"; }
-
-[class^="mdi-device-battery-"]:after {
-  content: "\e735"; }
-
-[class^="mdi-device-battery-charging-"]:after {
-  content: "\e733"; }
-
-[class^="mdi-device-signal-cellular-connected-no-internet-"]:after {
-  content: "\e75d"; }
-
-[class^="mdi-device-signal-wifi-"]:after, .mdi-device-network-wifi:after {
-  content: "\e765"; }
-
-[class^="mdi-device-signal-wifi-statusbasr-not-connected"]:after {
-  content: "\e8f7"; }
-
-.mdi-device-signal-cellular-off:after, .mdi-device-signal-cellular-null:after, .mdi-device-signal-cellular-no-sim:after, .mdi-device-signal-wifi-off:after, .mdi-device-signal-wifi-4-bar:after, .mdi-device-signal-cellular-4-bar:after, .mdi-device-battery-alert:after, .mdi-device-signal-cellular-connected-no-internet-4-bar:after, .mdi-device-battery-std:after, .mdi-device-battery-full .mdi-device-battery-unknown:after {
-  content: ""; }
-
-.mdi-fw {
-  width: 1.28571429em;
-  text-align: center; }
-
-.mdi-ul {
-  padding-left: 0;
-  margin-left: 2.14285714em;
-  list-style-type: none; }
-
-.mdi-ul > li {
-  position: relative; }
-
-.mdi-li {
-  position: absolute;
-  left: -2.14285714em;
-  width: 2.14285714em;
-  top: 0.14285714em;
-  text-align: center; }
-
-.mdi-li.mdi-lg {
-  left: -1.85714286em; }
-
-.mdi-border {
-  padding: .2em .25em .15em;
-  border: solid 0.08em #eeeeee;
-  border-radius: .1em; }
-
 .mdi-spin {
   -webkit-animation: mdi-spin 2s infinite linear;
   animation: mdi-spin 2s infinite linear;
@@ -1223,26 +1132,6 @@ nav ul a span.badge {
 
 :root .mdi-rotate-90, :root .mdi-rotate-180, :root .mdi-rotate-270, :root .mdi-flip-horizontal, :root .mdi-flip-vertical {
   filter: none; }
-
-.mdi-stack {
-  position: relative;
-  display: inline-block;
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
-  vertical-align: middle; }
-
-.mdi-stack-1x, .mdi-stack-2x {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  text-align: center; }
-
-.mdi-stack-1x {
-  line-height: inherit; }
-
-.mdi-stack-2x {
-  font-size: 2em; }
 
 .mdi-inverse {
   color: #ffffff; }
@@ -2390,18 +2279,6 @@ button.btn-floating {
     pointer-events: none; }
   .waves-effect.waves-light .waves-ripple {
     background-color: rgba(255, 255, 255, 0.45); }
-  .waves-effect.waves-red .waves-ripple {
-    background-color: rgba(244, 67, 54, 0.7); }
-  .waves-effect.waves-yellow .waves-ripple {
-    background-color: rgba(255, 235, 59, 0.7); }
-  .waves-effect.waves-orange .waves-ripple {
-    background-color: rgba(255, 152, 0, 0.7); }
-  .waves-effect.waves-purple .waves-ripple {
-    background-color: rgba(156, 39, 176, 0.7); }
-  .waves-effect.waves-green .waves-ripple {
-    background-color: rgba(76, 175, 80, 0.7); }
-  .waves-effect.waves-teal .waves-ripple {
-    background-color: rgba(0, 150, 136, 0.7); }
   .waves-effect input[type="button"], .waves-effect input[type="reset"], .waves-effect input[type="submit"] {
     border: 0;
     font-style: normal;

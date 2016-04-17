@@ -34,7 +34,7 @@ self.addEventListener('install', function(event) {
 
   './js/init.js',
   './js/jquery.js',
-  './js/materialize.js',
+  './js/materialize.min.js',
   './js/page.js'
   ];
   console.log('Handling install event. Resources to prefetch:', urlsToPrefetch);

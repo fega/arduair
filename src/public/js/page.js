@@ -1119,6 +1119,7 @@ module.exports = Array.isArray || function (arr) {
   page("/configure",configure);
   page("/documentation",documentation);
   page("/documentation/:article",getArticle);
+  page("/add",pageAdd)
   page();
 
   function hidding(){
@@ -1126,6 +1127,10 @@ module.exports = Array.isArray || function (arr) {
     $("#data").addClass("hide");
     $("#configure").addClass("hide");
     $("#documentation").addClass("hide");
+    $("#actionBtn-add").addClass("hide");
+    $("#actionBtn-configure").addClass("hide");
+    $("#actionBtn-search").addClass("hide");
+    $("#actionBtn-comment").addClass("hide");
   }
   function main(){
     hidding();
@@ -1134,20 +1139,23 @@ module.exports = Array.isArray || function (arr) {
   function configure(){
     hidding();
     $("#configure").removeClass("hide");
+    $("#actionBtn-configure").removeClass("hide");
   }
   function documentation(){
     hidding();
     $("#documentation").removeClass("hide");
+    $("#actionBtn-comment").removeClass("hide");
   }
   function data(){
     hidding();
     $("#data").removeClass("hide");
+    $("#actionBtn-search").removeClass("hide");
   }
-  function article(res){
+  function pageAdd(res){
     hidding();
-    $("#documentation").removeClass("hide");
-    var article = res.params.article;
-    $('#article-title').html(article);
+    $("#add").removeClass("hide");
+    $("#actionBtn-add").removeClass("hide");
+    
   }
   function getArticle(res){
     hidding();

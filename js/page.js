@@ -1114,13 +1114,13 @@ module.exports = Array.isArray || function (arr) {
 
 
   //page("ruta",callback)
-  page("./",main);
-  page("./data",data);
-  page("./configure",configure);
-  page("./documentation",documentation);
-  page("./documentation/:article",getArticle);
-  page("./add",pageAdd)
-  page("./debug",pageDebugger);
+  page("arduair/",main);
+  page("arduair/data",data);
+  page("arduair/configure",configure);
+  page("arduair/documentation",documentation);
+  page("arduair/documentation/:article",getArticle);
+  page("arduair/add",pageAdd)
+  page("arduair/debug",pageDebugger);
   page();
 
   function hidding(){

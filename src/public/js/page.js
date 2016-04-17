@@ -1114,13 +1114,13 @@ module.exports = Array.isArray || function (arr) {
 
 
   //page("ruta",callback)
-  page("./",main);
-  page("./data",data);
-  page("./configure",configure);
-  page("./documentation",documentation);
-  page("./documentation/:article",getArticle);
-  page("./add",pageAdd)
-  page("./debug",pageDebugger);
+  page("/",main);
+  page("/data",data);
+  page("/configure",configure);
+  page("/documentation",documentation);
+  page("/documentation/:article",getArticle);
+  page("/add",pageAdd)
+  page("/debug",pageDebugger);
   page();
 
   function hidding(){

@@ -3,16 +3,16 @@
 var CACHE_NAME = 'my-site-cache-v1';
 // The files we want to cache
 var urlsToCache = [
-  '/css/icon.css',
-  '/css/materialize.css',
-  '/css/style.css',
-  '/css/stylesheet.css',
-  '/css/material.woff2',//iconsFont
+  './css/icon.css',
+  './css/materialize.css',
+  './css/style.css',
+  './css/stylesheet.css',
+  './css/material.woff2',//iconsFont
 
-  '/js/init.js',
-  '/js/jquery.js',
-  '/js/materialize.js',
-  '/js/page.js'
+  './js/init.js',
+  './js/jquery.js',
+  './js/materialize.js',
+  './js/page.js'
 ];
 
 var CACHE_VERSION = 1;

@@ -25,17 +25,17 @@ self.addEventListener('install', function(event) {
   var now = Date.now();
 
   var urlsToPrefetch = [
-  '/',
-  '/css/icon.css',
-  '/css/materialize.css',
-  '/css/style.css',
-  '/css/stylesheet.css',
-  '/css/material.woff2',//iconsFont
+  './',
+  './css/icon.css',
+  './css/materialize.css',
+  './css/style.css',
+  './css/stylesheet.css',
+  './css/material.woff2',//iconsFont
 
-  '/js/init.js',
-  '/js/jquery.js',
-  '/js/materialize.js',
-  '/js/page.js'
+  './js/init.js',
+  './js/jquery.js',
+  './js/materialize.js',
+  './js/page.js'
   ];
   console.log('Handling install event. Resources to prefetch:', urlsToPrefetch);
 

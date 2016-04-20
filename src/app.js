@@ -9,7 +9,8 @@ var exphbs = require('express-handlebars');
 var routes = require('./routes/index');
 //MONTAR MONGOOSE Y CONECTAR A LA BASE DE DATOS
 var mongoose = require('mongoose');
-//mongoose.connect(dbConfig.url);
+var db = require('./db/db')
+mongoose.connect(db.url);
 
 var app = express();
 

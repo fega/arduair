@@ -1,19 +1,6 @@
-//Arduair Service Worker
+/*//Arduair Service Worker
 //Cache Version
-var CACHE_NAME = 'my-site-cache-v1';
-// The files we want to cache
-var urlsToCache = [
-  '/css/icon.css',
-  '/css/materialize.css',
-  '/css/style.css',
-  '/css/stylesheet.css',
-  '/css/material.woff2',//iconsFont
 
-  '/js/init.js',
-  '/js/jquery.js',
-  '/js/materialize.js',
-  '/js/page.js'
-];
 
 var CACHE_VERSION = 1;
 var CURRENT_CACHES = {
@@ -33,7 +20,7 @@ self.addEventListener('install', function(event) {
 
   '/js/init.js',
   '/js/jquery.js',
-  '/js/materialize.js',
+  '/js/materialize.min.js',
   '/js/page.js'
   ];
   console.log('Handling install event. Resources to prefetch:', urlsToPrefetch);
@@ -122,4 +109,4 @@ self.addEventListener('fetch', function(event) {
       });
     })
   );
-});
+});*/

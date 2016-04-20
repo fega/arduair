@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 //MODELO DE MONGOSE
 module.exports =mongoose.model('device',{
     name: String,
@@ -5,6 +6,8 @@ module.exports =mongoose.model('device',{
     password: String,
     description:String,
     parameters:[String],
+    owner:String,
+    email:String,
 
     lastRegister: {type: Date, default: Date.now},
     data:[{

@@ -1109,20 +1109,19 @@ module.exports = Array.isArray || function (arr) {
 
 },{}]},{},[1])(1)
 });
-
-
-
-
   //page("ruta",callback)
   page("/",main);
+  page("/data/:device",pageDataGraph);
   page("/data",data);
   page("/configure",configure);
   page("/documentation",documentation);
   page("/documentation/:article",getArticle);
-  page("/add",pageAdd)
+  page("/add",pageAdd);
   page("/debug",pageDebugger);
+  page("/about",pageAbout);
+  
   page();
-
+//Routing functions
   function hidding(){
     $("#main").addClass("hide");
     $("#data").addClass("hide");
@@ -1132,7 +1131,9 @@ module.exports = Array.isArray || function (arr) {
     $("#actionBtn-configure").addClass("hide");
     $("#actionBtn-search").addClass("hide");
     $("#actionBtn-comment").addClass("hide");
+    $("#add").addClass("hide");
     $("#debugger").addClass("hide");
+    $('.button-collapse').sideNav('hide');
   }
   function main(){
     hidding();
@@ -1152,13 +1153,42 @@ module.exports = Array.isArray || function (arr) {
     hidding();
     $("#data").removeClass("hide");
     $("#actionBtn-search").removeClass("hide");
+    $("#actionBtn-search a").addClass("sync");
+
+    $.get('/device', function(res){
+      console.log(res);
+      $("#actionBtn-search a").removeClass("sync");
+      $("#actionBtn-search a").addClass(res.status);
+      Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-search a").removeClass(res.status);});
+      
+      var devices='';
+      if (res.devices.length>0){
+        for(var i=0; i<res.devices.length;i++){
+          devices +='<li class="collection-item avatar">';
+          devices +='<a href="'+res.devices[i].name+'">';
+          devices +=' <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">';
+          devices +='<span class="primary-text title">'+res.devices[i].name+'</span>';
+          devices +='<p>Owner:'+res.devices[i].owner+'</p>';
+          devices +='<p>Last register:'+res.devices[i].lastRegister+'</p>';
+          //devices +='<p>Measure:'+res.devices[i].owner+'</p>';
+          //devices +='<p>Last Location:'+res.devices[i].owner+'</p>';
+          devices+='</a>';
+          devices+='</li>';
+        }
+      }else{
+        devices +='<div class="col s12 center"><p class="error-text">';
+        devices+=res.message;
+        devices+='</p> </div>';
+      }
+      $('#deviceCollection').html(devices);
+    });
   }
   function getArticle(res){
     hidding();
     $("#documentation").removeClass("hide");
     var article = res.params.article;
-    $.get( "/documentation/"+article,function(data){
-      $('#documentation-content').html(data);
+    $.get( "/documentation/"+article,function(res){
+      $('#documentation-content').html(res);
       resizeDocIndex();
     });
   }
@@ -1166,7 +1196,6 @@ module.exports = Array.isArray || function (arr) {
     hidding();
     $("#add").removeClass("hide");
     $("#actionBtn-add").removeClass("hide");
-    
   }
   function pageDebugger(){
     hidding();
@@ -1175,6 +1204,37 @@ module.exports = Array.isArray || function (arr) {
   function resizeDocIndex(){
     var h= $("#documentation-content").height();
     $('#documentation-index').css({minHeight: h});
+  }
+  function pageAbout(){
+  }
+  function pageDataGraph(){
+  }
+  //button search
+  $('#actionBtn-search').click(function(){
+    $('#modalSearch').openModal();
+  })
+  $('#actionBtn-SearchClose').click(function(){
+    console.log("ModalClosed");
+    $('#modalSearch').closeModal();
+  })
+  //jqueryform.js
+  $(document).ready(function() { 
+      // bind 'myForm' and provide a simple callback function 
+      $('#addform').ajaxForm({
+        success: addSuccess,
+        beforeSubmit: addBefore
+      }); 
+  });
+  function addSuccess(res){
+    var status =res.status
+    $("#actionBtn-add a").addClass(status);
+    console.log(status);
+    console.log($("#actionBtn-add a"));
+    $("#actionBtn-add a").removeClass("sync");
+    Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-add a").removeClass(status);});
+  }
+  function addBefore(){
+    $("#actionBtn-add a").addClass("sync");
   }
   //resize event
   $( window ).resize(resizeDocIndex())

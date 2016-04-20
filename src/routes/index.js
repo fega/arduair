@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var fs =require ('fs');
 var marked = require('marked');
+var bodyParser = require('body-parser');
+var getBody = bodyParser.urlencoded({extended: true});
+var addDevice = require('../db/addDevice');
+var getDevice = require('../db/getDeviceAll');
 
 var getWiki=function(req,res,next){
 	console.log(req.params.article);
@@ -20,14 +24,36 @@ var getWiki=function(req,res,next){
 	});
 }
 
-
+/* GET documentation article. */
 router.get('/documentation/:article',getWiki,function(req,res,next){
 	res.send(req.wiki);
 });
 
-/* GET home page. */
-router.get('/*', function(req, res, next) {
-  	res.render('index', { title: 'Express' });
+/*POST addDevice*/
+router.post('/device',getBody,addDevice,function(req,res){
+	res.send(req.result);
 });
+/*GET all devices*/
+router.get('/device',getDevice, function(req, res, next) {
+ 	res.send(req.result);
+});
+
+/* GET home page. */
+router.get('/documentation', function(req, res, next) {
+  	res.render('index', { title: 'Arduair' });
+});
+router.get('/data', function(req, res, next) {
+  	res.render('index', { title: 'Arduair' });
+});
+router.get('/add', function(req, res, next) {
+  	res.render('index', { title: 'Arduair' });
+});
+router.get('/configure', function(req, res, next) {
+  	res.render('index', { title: 'Arduair' });
+});
+router.get('/', function(req, res, next) {
+  	res.render('index', { title: 'Arduair' });
+});
+
 
 module.exports = router;

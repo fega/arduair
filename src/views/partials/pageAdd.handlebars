@@ -1,0 +1,50 @@
+<section class="page-header">
+			<h1 class="project-name">Add a new device</h1>
+</section>
+<section>
+<div class="container">
+	{{! FORM FOR NEW DEVICES REGISTER}}
+	<form action="/device" method="POST" id="addform">
+		{{! DEVICE NAME AND PASSWORD }}
+		<div class="row">
+			<div class="input-field col s12 m6 l6">
+				<input  id="addname" name="addname" type="text" class="validate" required>
+	          	<label for="addname">Device Name</label>
+			</div>
+			<div class="input-field col s12 m6 l6">
+				<input  id="addpassword" name="addpassword" type="password" class="validate" required>
+	          	<label for="addpassword">Device Password</label>
+			</div>
+		</div>
+		{{!DEVICE OWNER AND EMAIL}}
+		<div class="row">
+			<div class="input-field col s12 m6 l6">
+				<input  id="addowner" name="addowner" type="text" class="validate" required>
+	          	<label for="addowner">Device Owner</label>
+			</div>
+			<div class="input-field col s12 m6 l6">
+				<input  id="addemail" name="addemail" type="email" class="validate" required>
+	          	<label for="addemail">Owner Name</label>
+			</div>
+		</div>
+		{{!DEVICE DESCRIPTION}}
+		<div class="row">
+			<div class="input-field col s12 m12 l12">
+				<textarea id="adddescription" name="adddescription" class="materialize-textarea"></textarea>
+          		<label for="adddescription">Device Description</label>
+			</div>
+		</div>
+		{{!}}
+		
+		<div class="row">
+			<div class="input-field col s12 m12	l12 center">
+				<button class="waves-effect waves-teal btn-large primary darken">¿generate config file?</button>
+			</div>
+		</div>
+	</form>
+
+	<h3 class="primary-text">Initial</h3>
+
+	<p class="flow-text ">Simple, Quick, without problems</p>
+	</div>
+</section>

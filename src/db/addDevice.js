@@ -1,21 +1,41 @@
 var bCrypt = require('bcrypt-nodejs');
-var device = requite('db/device');
+var Device = require('./device');
 
 module.exports = function(req,res,next){
-	device.findOne({macAddress:req.param.macAddress},function(err,dev){
-		if (err) {
-			console.log('Error in SignUp: ' + err);
-			return done(err);
-		}
-		if (dev) {
-			console.log('User already exists with username: ' + username);
-			return done(null, false, req.flash('message', 'User Already Exists'));
-		} else {
-			var newDevice =new Device();
+	console.log(req);
+	add=function(){
+			Device.findOne({name:req.body.addname},function(err,dev){
+			if (err) {
+				console.log('Error in register: ' + err);
+				req.result={status:"error ",message:"something happened, please try again"};
+				return next();
+			}
+			if (dev) {
+				console.log('device already exist: ' + dev);
+				req.result={status:"error ",message:"Device Name already exists"};
+				return next();
+			} else {
+				var newDevice =new Device();
 
-			newDevice.name = req.param.name;
-		    newDevice.macAddress = req.param.macAddress;
-		    newDevice.password = req.param.password;
-		    newDevice.description = req.param.description;
-		});
+				newDevice.name = req.body.addname;
+			    newDevice.macAddress = req.body.macAddress;
+			    newDevice.owner = req.body.addowner;
+			    newDevice.email = req.body.addemail;
+			    newDevice.password = req.body.addpassword;
+			    newDevice.description = req.body.adddescription;
+				newDevice.save(function(err){
+					if (err){
+						console.log('error saving the device');
+						req.result={status:"error ",message:"Saving error, please try again"};
+						return next();					
+					}else{
+						console.log('Device '+req.body.addname+' Saved');
+						req.result={status:"done ",message:"Device saved"};
+						return next();
+					}
+				});
+			}
+			});
+	}
+	process.nextTick(add);
 }

@@ -1227,14 +1227,14 @@ module.exports = Array.isArray || function (arr) {
   });
   function addSuccess(res){
     var status =res.status
-    $("#actionBtn-add a").addClass(status);
+    $("#actionBtn-add button").addClass(status);
     console.log(status);
-    console.log($("#actionBtn-add a"));
-    $("#actionBtn-add a").removeClass("sync");
-    Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-add a").removeClass(status);});
+    console.log($("#actionBtn-add button"));
+    $("#actionBtn-add button").removeClass("sync");
+    Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-add button").removeClass(status);});
   }
   function addBefore(){
-    $("#actionBtn-add a").addClass("sync");
+    $("#actionBtn-add button").addClass("sync");
   }
   //resize event
   $( window ).resize(resizeDocIndex())

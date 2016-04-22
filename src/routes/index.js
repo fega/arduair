@@ -28,7 +28,6 @@ var getWiki=function(req,res,next){
 router.get('/documentation/:article',getWiki,function(req,res,next){
 	res.send(req.wiki);
 });
-
 /*POST addDevice*/
 router.post('/device',getBody,addDevice,function(req,res){
 	res.send(req.result);
@@ -36,6 +35,18 @@ router.post('/device',getBody,addDevice,function(req,res){
 /*GET all devices*/
 router.get('/device',getDevice, function(req, res, next) {
  	res.send(req.result);
+});
+/*GET device data*/
+router.get('/device/:device/:password',function(req,res,next){
+	res.send('device Data');
+});
+/*GET device status*/
+router.get('/device/:device/:password/status',function(req,res,next){
+	res.send('device status');
+});
+/* GET test page*/
+router.get('/test',function(req,res,next){
+	res.send('Server and Device OK :)');
 });
 
 /* GET home page. */

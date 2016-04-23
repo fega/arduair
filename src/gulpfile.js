@@ -7,7 +7,7 @@ var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 
 gulp.task('cssmin', function () {
-    return gulp.src('./public/css/*.(!min|css)')
+    return gulp.src(['./public/css/*.css','!./public/css/*.min.css'])
         .pipe(csso())
         .pipe(concat('css.min.css'))
         .pipe(gulp.dest('./public/css'));

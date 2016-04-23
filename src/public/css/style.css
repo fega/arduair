@@ -1,6 +1,87 @@
-/* Materialize Helpers
+* {
+  box-sizing: border-box; }
+
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #606c71; }
+
+a {
+  color: #1e6bb8;
+  text-decoration: none; }
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+  .btn {
+       font-size: 0.9rem; } }
+
+@media screen and (max-width: 700px) {
+  .btn {
+    display: block;
+    width: 100%;
+    font-size: 0.9rem; }
+    .btn + .btn {
+      margin-top: 1rem;
+      margin-left: 0; } }
+
+.page-header {
+  color: #fff;
+  text-align: center;
+  background-color: #159957;
+  background-image: linear-gradient(120deg, #2980b9, #2c3e50); }
+
+@media screen and (min-width: 64em) {
+  .page-header {
+    padding: 5rem 6rem; } }
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+  .page-header {
+    padding: 3rem 4rem; } }
+
+@media screen and (max-width: 42em) {
+  .page-header {
+    padding: 2rem 1rem; } }
+
+.project-name {
+  margin-top: 0;
+  margin-bottom: 0.1rem; }
+
+@media screen and (min-width: 64em) {
+  .project-name {
+    font-size: 3.25rem; } }
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+  .project-name {
+    font-size: 2.25rem; } }
+
+@media screen and (max-width: 42em) {
+  .project-name {
+    font-size: 1.75rem; } }
+
+.project-tagline {
+  margin-bottom: 2rem;
+  font-weight: normal;
+  opacity: 0.8; }
+
+@media screen and (min-width: 64em) {
+  .project-tagline {
+    font-size: 1.25rem; } }
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+  .project-tagline {
+    font-size: 1.15rem; } }
+
+@media screen and (max-width: 42em) {
+  .project-tagline {
+    font-size: 1rem; } }
+
+.footer {
+  border-top: solid 1px #eff0f1; }
+
+/*! Materialize Helpers
 * By Fabian Enrique Gutierrez Angulo
-*/
+**/
 /*COLOR PALETTE*/
 .primary{
 	background-color: #2980b9 !important;
@@ -127,9 +208,12 @@ nav .button-collapse i{
 	padding-left: 16px;
 	padding-right: 16px;
 }
-/* Project Style
+/*! Project Style
 * 
 */
+.waves-effect.waves-pink .waves-ripple {
+      background-color: rgba(255, 28, 68, 0.65);
+    }
 #header{
 	margin-bottom: 0px;
 }

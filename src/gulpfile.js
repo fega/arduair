@@ -5,13 +5,8 @@ var concat = require('gulp-concat');
 var csslint = require('gulp-csslint');
 var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
-
-gulp.task('cssmin', function () {
-    return gulp.src(['./public/css/*.css','!./public/css/*.min.css'])
-        .pipe(csso())
-        .pipe(concat('css.min.css'))
-        .pipe(gulp.dest('./public/css'));
-});
+var uglify = require('gulp-uglify');
+var gzip = require('gulp-gzip');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;// we'd need a slight delay to reload browsers, connected to browser-sync after restarting nodemon
 
@@ -49,15 +44,19 @@ gulp.task('browser-sync', ['nodemon'], function () {
 });
 
 gulp.task('js',  function () {
-  return gulp.src('public/**/*.js')
-    // do stuff to JavaScript files
-    //.pipe(uglify())
-    //.pipe(gulp.dest('...'));
+  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/init.js','./public/js/page.js','!./public/js/js.min.js'])
+    .pipe(concat('js.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./public/js'));
+
 });
 
 gulp.task('css', function () {
-  return gulp.src('public/**/*.css')
-    .pipe(browserSync.reload({ stream: true }));
+  return gulp.src(['./public/css/*.css','!./public/css/*.min.css'])
+        .pipe(csso())
+        .pipe(concat('css.min.css'))
+        .pipe(gulp.dest('./public/css'))
+        .pipe(browserSync.reload({ stream: true }));
 })
 
 gulp.task('bs-reload', function () {
@@ -65,8 +64,8 @@ gulp.task('bs-reload', function () {
 });
 
 gulp.task('default', ['browser-sync'], function () {
-  gulp.watch('public/**/*.js',   ['js', browserSync.reload]);
-  gulp.watch('public/**/*.css',  ['cssmin',browserSync.reload]);
+  gulp.watch('public/**/*.js',   ['js']);
+  gulp.watch('public/**/*.css',  ['css']);
   gulp.watch('public/**/*.html', ['bs-reload']);
   gulp.watch('views/**/*.handlebars', ['bs-reload']);
 });

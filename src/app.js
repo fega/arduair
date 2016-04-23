@@ -1,3 +1,4 @@
+var compression = require('compression');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -13,6 +14,7 @@ var db = require('./db/db')
 mongoose.connect(db.url);
 
 var app = express();
+app.use(compression());//enables gzip compression
 
 //MONTAR HANDLEBARS TEMPLATE ENGINE
 app.engine('handlebars', exphbs({

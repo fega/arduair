@@ -1208,6 +1208,7 @@ module.exports = Array.isArray || function (arr) {
   function pageAbout(){
   }
   function pageDataGraph(){
+    
   }
   //button search
   $('#actionBtn-search').click(function(){
@@ -1238,3 +1239,4 @@ module.exports = Array.isArray || function (arr) {
   }
   //resize event
   $( window ).resize(resizeDocIndex())
+

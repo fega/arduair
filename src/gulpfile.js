@@ -6,7 +6,6 @@ var csslint = require('gulp-csslint');
 var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 var uglify = require('gulp-uglify');
-var gzip = require('gulp-gzip');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;// we'd need a slight delay to reload browsers, connected to browser-sync after restarting nodemon
 
@@ -52,7 +51,7 @@ gulp.task('js',  function () {
 });
 
 gulp.task('css', function () {
-  return gulp.src(['./public/css/*.css','!./public/css/*.min.css'])
+  return gulp.src(['./public/css/materialize.css','./public/css/*.css','!./public/css/*.min.css'])
         .pipe(csso())
         .pipe(concat('css.min.css'))
         .pipe(gulp.dest('./public/css'))

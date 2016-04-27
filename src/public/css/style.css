@@ -224,7 +224,15 @@ nav .button-collapse{
 .nav-wrapper{
 	padding-left: 16px;
 	padding-right: 16px;
-
+}
+#logo-container{
+  height: 56px;
+  margin-top: 8px;
+}
+@media screen and (max-width: 600px){
+#logo-container{
+  margin-top: 3px;
+}
 }
 /*! Project Style
 * 

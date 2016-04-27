@@ -234,6 +234,10 @@ nav .button-collapse{
   margin-top: 3px;
 }
 }
+.side-nav li{
+  display: list-item;
+}
+
 /*! Project Style
 * 
 */

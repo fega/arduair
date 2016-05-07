@@ -29,7 +29,7 @@ void sdBegin(){
 
 void tableWrite(){
   
-  myFile = SD.open("DATA.txt", FILE_WRITE); //abrir la SD
+  myFile = SD.open("exampleCC3000.txt", FILE_WRITE); //abrir la SD
   if (myFile){
     int h = 15;
     myFile.print(h);
@@ -53,12 +53,12 @@ void tableWrite(){
   }
 }
 void tableCreate(){
-    if (SD.exists("example.txt")) {
-    Serial.println("example.txt exists.");
+    if (SD.exists("exampleCC3000.txt")) {
+    Serial.println("exampleCC3000.txt exists.");
   }
   else {
-    Serial.println("example.txt doesn't exisT, creating...");
-    myFile = SD.open("DATA.txt", FILE_WRITE);
+    Serial.println("exampleCC3000.txt doesn't exisT, creating...");
+    myFile = SD.open("exampleCC3000.txt", FILE_WRITE);
     myFile.close();
   }
 }

@@ -1,3 +1,4 @@
+/*jslint node: true */
 var compression = require('compression');
 var express = require('express');
 var path = require('path');
@@ -10,7 +11,7 @@ var exphbs = require('express-handlebars');
 var routes = require('./routes/index');
 //MONTAR MONGOOSE Y CONECTAR A LA BASE DE DATOS
 var mongoose = require('mongoose');
-var db = require('./db/db')
+var db = require('./db/db');
 mongoose.connect(db.url);
 
 var app = express();

@@ -22,7 +22,7 @@ var getWiki=function(req,res,next){
 			return next();
 		}
 	});
-}
+};
 
 /* GET documentation article. */
 router.get('/documentation/:article',getWiki,function(req,res,next){

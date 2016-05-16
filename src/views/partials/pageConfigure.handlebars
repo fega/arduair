@@ -1,6 +1,167 @@
+{{!Device configuration partial}}
+{{!Device configuration Header}}
 <section class="page-header">
 			<h1 class="project-name">Configure Device</h1>
 </section>
+{{!Device to configurate selection form}}
 <section>
-<div class="container">
+	<form action="">
+		<div class="container">
+		<h3>Search Device:</h3>
+ 		<p class="flow-text">Please search the device to configure</p>
+		{{!First Row: device name and Password}}
+			<div class="row">
+	 			<div class="input-field col s12 m6 l6">
+					<input  id="config-deviceName" name="config-deviceName" type="text" class="validate" required>
+		        	<label for="config-deviceName">Device Name</label>
+				</div>
+				<div class="input-field col s12 m6 l6">
+					<input  id="config-devicePassword" name="config-devicePassword" type="text" class="validate" required>
+		        	<label for="config-devicePassword">Device Password</label>
+				</div>
+	 		</div>
+		</div>
+	</form>
 </section>
+<div class="row">
+	<div class="col s12 m12	l12 center">
+		<a id="config-search-btn"class="waves-effect waves-teal btn-large primary darken">Search</a>
+	</div>
+</div>
+<br>
+<div id="config-device-finded" style="display: none;">{{!this tag, is a wrapper to hide all the configuration form before the user search the device}}
+
+	<div class="divider"></div>
+	{{!Device sampling configuration form}}
+	<section>
+	 	<div class="container">
+	 		<h3>Sampling configuration:</h3>
+	 		<p class="flow-text">Use this form to change the sampling options</p>
+	 		<form action="">
+	 		{{! first row: Sampling name}}
+	 			<div class="row">
+	 				<div class="input-field col s12 m6 l6">
+						<input  id="config-sample-name" name="config-sample-name" type="text" class="validate" required>
+		          		<label for="config-sample-name">Sampling Name</label>
+					</div>
+	 			</div>
+	 		{{!Second row: begin and end date}}
+	 			<div class="row">
+	 				<div class="input-field col s6 m6 l6">
+						<input class="datepicker" id="beginDate" name="beginDate" type="date" class="validate" required>
+		          		<label for="beginDate">Begin Date</label>
+					</div>
+					<div class="input-field col s6 m6 l6">
+						<input class="datepicker" id="endDate" name="endDate" type="date" class="validate" required>
+		          		<label for="endDate">End Date</label>
+					</div>
+	 			</div>
+	 		</form>
+	 	</div>
+	</section>
+	<div class="divider"></div>
+	{{!Device Sensor configuration form}}
+	<section>
+		<div class="container">
+			<h3>Sensor configuration:</h3>
+	 		<p class="flow-text">Fill this form is you want to change the sensor ubication</p>
+	 		<div class="row">
+	 			{{!sensor 1}}
+				<div class="row">
+					<div class=" col s3">
+						<p class="flow-text">Sensor:</p>
+					</div>
+					<div class="input-field col s3">
+						<select id="sensor1" name="sensor1">
+							{{>helpers/sensor-select}}
+						</select>
+					</div>
+					<div class="col s3">
+						<p class="flow-text center">on Pin:</p>
+					</div>
+					<div class="col s3">
+						<select id="config-pin1" name="pin1">
+							{{>helpers/pin-select}}
+						</select>
+					</div>
+				</div>
+				{{!sensor 2}}
+				<div class="row">
+					<div class=" col s3">
+						<p class="flow-text">Sensor:</p>
+					</div>
+					<div class="input-field col s3">
+						<select id="sensor2" name="sensor2">
+							{{>helpers/sensor-select}}
+						</select>
+					</div>
+					<div class="col s3">
+						<p class="flow-text center">on Pin:</p>
+					</div>
+					<div class="col s3">
+						<select id="config-pin2" name="pin2">
+							{{>helpers/pin-select}}
+						</select>
+					</div>
+				</div>
+				{{!sensor 3}}
+				<div class="row">
+					<div class=" col s3">
+						<p class="flow-text">Sensor:</p>
+					</div>
+					<div class="input-field col s3">
+						<select id="sensor3" name="sensor3">
+							{{>helpers/sensor-select}}
+						</select>
+					</div>
+					<div class="col s3">
+						<p class="flow-text center">on Pin:</p>
+					</div>
+					<div class="col s3">
+						<select id="config-pin3" name="pin3">
+							{{>helpers/pin-select}}
+						</select>
+					</div>
+				</div>
+				{{!sensor 4}}
+				<div class="row">
+					<div class=" col s3">
+						<p class="flow-text">Sensor:</p>
+					</div>
+					<div class="input-field col s3">
+						<select id="sensor4" name="sensor4">
+							{{>helpers/sensor-select}}
+						</select>
+					</div>
+					<div class="col s3">
+						<p class="flow-text center">on Pin:</p>
+					</div>
+					<div class="col s3">
+						<select id="config-pin4" name="pin4">
+							{{>helpers/pin-select}}
+						</select>
+					</div>
+				</div>
+				{{!sensor 5}}
+				<div class="row">
+					<div class=" col s3">
+						<p class="flow-text">Sensor:</p>
+					</div>
+					<div class="input-field col s3">
+						<select id="sensor5" name="sensor5">
+							{{>helpers/sensor-select}}
+						</select>
+					</div>
+					<div class="col s3">
+						<p class="flow-text center">on Pin:</p>
+					</div>
+					<div class="col s3">
+						<select id="config-pin5" name="pin5">
+							{{>helpers/pin-select}}
+						</select>
+					</div>
+				</div>
+	 		</div>
+		</div>
+	</section>
+</div>

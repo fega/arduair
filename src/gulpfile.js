@@ -1,3 +1,4 @@
+/*jslint node: true */
 'use strict';
 var gulp = require('gulp');
 var csso = require('gulp-csso');
@@ -23,9 +24,7 @@ gulp.task('nodemon', function (cb) {
     })
     .on('restart', function onRestart() {
       setTimeout(function reload() {// reload connected browsers after a slight delay
-        browserSync.reload({
-          stream: false
-        });
+        browserSync.reload({stream: false });
       }, BROWSER_SYNC_RELOAD_DELAY);
     });
 });
@@ -33,7 +32,7 @@ gulp.task('nodemon', function (cb) {
 JS linter
 ///////////////////////////////////////*/
 gulp.task('jslint', function() {
-  return gulp.src('**/*.js','!./node_modules/*')
+  return gulp.src(['**/*.js','!./node_modules/**/*.js',"./public/js/init.js","!./public/js/*.min.js","!./public/js/jquer*.js","!./public/js/page.js"])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -52,10 +51,11 @@ gulp.task('browser-sync', ['nodemon'], function () {
 });
 
 gulp.task('js',  function () {
-  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/init.js','./public/js/page.js','!./public/js/js.min.js'])
+  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/init.js','./public/js/page.js','./public/js/script.js','!./public/js/js.min.js'])
     .pipe(concat('js.min.js'))
     .pipe(uglify({preserveComments:"license"}))
-    .pipe(gulp.dest('./public/js'));
+    .pipe(gulp.dest('./public/js'))
+    .pipe(browserSync.reload({ stream: true }));  
 });
 
 gulp.task('css', function () {

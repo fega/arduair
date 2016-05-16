@@ -4,6 +4,9 @@
 <section>
 <div class="container">
 	{{! FORM FOR NEW DEVICES REGISTER}}
+	<div class="row">
+		<h3>device data:</h3>
+	</div>
 	<form action="/device" method="POST" id="addform">
 		{{! DEVICE NAME AND PASSWORD }}
 		<div class="row">
@@ -34,13 +37,121 @@
           		<label for="adddescription">Device Description</label>
 			</div>
 		</div>
-		{{!}}
-		
-		<div class="row">
-			<div class="input-field col s12 m12	l12 center">
-				<a class="waves-effect waves-teal btn-large primary darken">¿generate config file?</a>
+		{{!DEVICE CONFIG FILE GENERATION}}
+		<div id="config-file" style="display: none;">
+			<div class="row">
+				<h3>device config:</h3>
+			</div>
+			{{!sensor 1}}
+			<div class="row">
+				<div class=" col s3">
+					<p class="flow-text">Sensor:</p>
+				</div>
+				<div class="input-field col s3">
+					<select id="sensor1" name="sensor1">
+						{{>helpers/sensor-select}}
+					</select>
+				</div>
+				<div class="col s3">
+					<p class="flow-text center">on Pin:</p>
+				</div>
+				<div class="col s3">
+					<select id="pin1" name="pin1">
+						{{>helpers/pin-select}}
+					</select>
+				</div>
+			</div>
+			{{!sensor 2}}
+			<div class="row">
+				<div class=" col s3">
+					<p class="flow-text">Sensor:</p>
+				</div>
+				<div class="input-field col s3">
+					<select id="sensor2" name="sensor2">
+						{{>helpers/sensor-select}}
+					</select>
+				</div>
+				<div class="col s3">
+					<p class="flow-text center">on Pin:</p>
+				</div>
+				<div class="col s3">
+					<select id="pin2" name="pin2">
+						{{>helpers/pin-select}}
+					</select>
+				</div>
+			</div>
+			{{!sensor 3}}
+			<div class="row">
+				<div class=" col s3">
+					<p class="flow-text">Sensor:</p>
+				</div>
+				<div class="input-field col s3">
+					<select id="sensor3" name="sensor3">
+						{{>helpers/sensor-select}}
+					</select>
+				</div>
+				<div class="col s3">
+					<p class="flow-text center">on Pin:</p>
+				</div>
+				<div class="col s3">
+					<select id="pin3" name="pin3">
+						{{>helpers/pin-select}}
+					</select>
+				</div>
+			</div>
+			{{!sensor 4}}
+			<div class="row">
+				<div class=" col s3">
+					<p class="flow-text">Sensor:</p>
+				</div>
+				<div class="input-field col s3">
+					<select id="sensor4" name="sensor4">
+						{{>helpers/sensor-select}}
+					</select>
+				</div>
+				<div class="col s3">
+					<p class="flow-text center">on Pin:</p>
+				</div>
+				<div class="col s3">
+					<select id="pin4" name="pin4">
+						{{>helpers/pin-select}}
+					</select>
+				</div>
+			</div>
+			{{!sensor 5}}
+			<div class="row">
+				<div class=" col s3">
+					<p class="flow-text">Sensor:</p>
+				</div>
+				<div class="input-field col s3">
+					<select id="sensor5" name="sensor5">
+						{{>helpers/sensor-select}}
+					</select>
+				</div>
+				<div class="col s3">
+					<p class="flow-text center">on Pin:</p>
+				</div>
+				<div class="col s3">
+					<select id="pin5" name="pin5">
+						{{>helpers/pin-select}}
+					</select>
+				</div>
 			</div>
 		</div>
+		{{!sensor end}}
 	</form>
 	</div>
+	<div class="divider"></div>
+	{{!generate a config file buttons}}
+	<br>
+	<div class="row">
+		<div class="col s12 m12	l12 center">
+			<a id="config-file-btn"class="waves-effect waves-teal btn-large primary darken">¿generate config file?</a>
+		</div>
+		<div class="col s12 m12	l12 center">
+			<a id="no-config-file-btn"class="hide waves-effect waves-teal btn-large primary darken"
+			>No, I dont want a config file</a>
+		</div>
+	</div>
+	<br>
 </section>

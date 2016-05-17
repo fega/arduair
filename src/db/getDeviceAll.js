@@ -1,4 +1,4 @@
-var Device = require('./device');
+ var Device = require('./device');
 
 module.exports = function (req,res,next){
 	Device.find({},function(err,devices){

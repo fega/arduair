@@ -37,7 +37,7 @@ router.get('/device',getDevice, function(req, res, next) {
  	res.send(req.result);
 });
 /*GET device data*/
-router.get('/device/:device/:password',function(req,res,next){
+router.get('/device/:device',function(req,res,next){
 	res.send('device Data');
 });
 /*GET device status*/
@@ -52,7 +52,7 @@ router.get('/test',function(req,res,next){
 router.post('/config',getBody,getDeviceToConfig,function(req,res){
 	console.log(req.body);
 	res.send(req.result);
-})
+});
 
 
 
@@ -63,6 +63,9 @@ router.get('/documentation', function(req, res, next) {
   	res.render('index', { title: 'Arduair' });
 });
 router.get('/data', function(req, res, next) {
+  	res.render('index', { title: 'Arduair' });
+});
+router.get('/data/:device', function(req, res, next) {
   	res.render('index', { title: 'Arduair' });
 });
 router.get('/add', function(req, res, next) {

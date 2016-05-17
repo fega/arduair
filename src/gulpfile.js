@@ -32,7 +32,7 @@ gulp.task('nodemon', function (cb) {
 JS linter
 ///////////////////////////////////////*/
 gulp.task('jslint', function() {
-  return gulp.src(['**/*.js','!./node_modules/**/*.js',"./public/js/init.js","!./public/js/*.min.js","!./public/js/jquer*.js","!./public/js/page.js"])
+  return gulp.src(['**/*.js','!./node_modules/**/*.js',"./public/js/init.js","!./public/js/*.min.js","!./public/js/jquer*.js","!./public/js/page.js","!./public/js/chart.js"])
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -51,7 +51,7 @@ gulp.task('browser-sync', ['nodemon'], function () {
 });
 
 gulp.task('js',  function () {
-  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/init.js','./public/js/page.js','./public/js/script.js','!./public/js/js.min.js'])
+  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/init.js','./public/js/page.js','./public/js/chart.js','./public/js/script.js','./public/js/scriptChart.js','!./public/js/js.min.js'])
     .pipe(concat('js.min.js'))
     .pipe(uglify({preserveComments:"license"}))
     .pipe(gulp.dest('./public/js'))

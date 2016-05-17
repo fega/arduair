@@ -20,12 +20,15 @@ function hidding(){
     $("#data").addClass("hide");
     $("#configure").addClass("hide");
     $("#documentation").addClass("hide");
+    $("#add").addClass("hide");
+    $("#debugger").addClass("hide");
+    $("#graph").addClass("hide");
+
     $("#actionBtn-add").addClass("hide");
     $("#actionBtn-configure").addClass("hide");
     $("#actionBtn-search").addClass("hide");
     $("#actionBtn-comment").addClass("hide");
-    $("#add").addClass("hide");
-    $("#debugger").addClass("hide");
+    
     $('.button-collapse').sideNav('hide');
 }
 function main(){
@@ -59,7 +62,7 @@ function data(){
 
         for(var i=0; i<res.devices.length;i++){
           devices +='<li class="collection-item avatar">';
-          devices +='<a href="'+res.devices[i].name+'">';
+          devices +='<a href="data/'+res.devices[i].name+'">';
           devices +=' <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">';
           devices +='<span class="primary-text title">'+res.devices[i].name+'</span>';
           devices +='<p>Owner:'+res.devices[i].owner+'</p>';
@@ -98,7 +101,17 @@ function pageDebugger(){
 }
 function pageAbout(){
 }
-function pageDataGraph(){  
+function pageDataGraph(ctx){
+  hidding();
+  $('#graph').removeClass("hide");
+  $.get('/device'+ ctx.params.device,function(res){
+    var status=res.status;
+    var message=res.message;
+    var data=res.data;
+
+    $('graph-row').html(data);
+    Materialize.toast(message, 4000,'',function(){$("#actionBtn-search a").removeClass(status);});
+  });
 }
 /*////////////////////
 //AJAX Forms
@@ -140,10 +153,14 @@ function formError(){
   Materialize.toast('error desconocido, intenta de nuevo', 4000,'',function(){$(btn).removeClass('error');});
 }
 function configSearchSuccess(res){
-  formSuccess(res);
+  var status =res.status;
+  var btn=this.buttonId;
+  $(btn).addClass(status);
+  $(btn).removeClass("sync");
+  Materialize.toast(res.message, 4000,'',function(){$(btn).removeClass(status);});
   
   if (res.status=="done"){
-    $('#config-device-founded').slideDown(500);
+    $('#config-device-founded').slideDown(700);
   }
 }
 /*////////////////////

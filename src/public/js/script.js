@@ -104,12 +104,15 @@ function pageAbout(){
 function pageDataGraph(ctx){
   hidding();
   $('#graph').removeClass("hide");
-  $.get('/device'+ ctx.params.device,function(res){
+
+  $.get('/device/'+ ctx.params.device,function(res){
     var status=res.status;
     var message=res.message;
     var data=res.data;
+    console.log(res.status);
+    console.log(res.message);
 
-    $('graph-row').html(data);
+    //$('#graph-row').html(data);
     Materialize.toast(message, 4000,'',function(){$("#actionBtn-search a").removeClass(status);});
   });
 }
@@ -163,6 +166,31 @@ function configSearchSuccess(res){
     $('#config-device-founded').slideDown(700);
   }
 }
+/*////////////////////
+//CHART
+////////////////////*/
+var chartctx = $("#chart");
+var myChart = new Chart(chartctx, {
+    type: 'line',
+    data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3]
+        }]
+    },
+    options: {
+        defaultColor:'rgba(0,0,10,0.1)',
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
 /*////////////////////
 //Other stuff
 ////////////////////*/

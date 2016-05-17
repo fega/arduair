@@ -6,7 +6,9 @@ var bodyParser = require('body-parser');
 var getBody = bodyParser.urlencoded({extended: true});
 var addDevice = require('../db/addDevice');
 var getDevice = require('../db/getDeviceAll');
+var getData = require ('../db/getDeviceData');
 var getDeviceToConfig = require('../db/getDeviceToConfig');
+
 
 var getWiki=function(req,res,next){
 	console.log(req.params.article);
@@ -37,8 +39,8 @@ router.get('/device',getDevice, function(req, res, next) {
  	res.send(req.result);
 });
 /*GET device data*/
-router.get('/device/:device',function(req,res,next){
-	res.send('device Data');
+router.get('/device/:device',getBody,getData,function(req,res,next){
+	res.send(req.result);
 });
 /*GET device status*/
 router.get('/device/:device/:password/status',function(req,res,next){

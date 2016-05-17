@@ -13,7 +13,7 @@ module.exports = function (req,res,next){
 			}
 			if (device){
 				console.log('Devices matched');
-				req.result ={status:"done",message:"Device Founded",device:device};
+				req.result ={status:"done",message:"Device Found",device:device};
 				return next();
 			}
 	});

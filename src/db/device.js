@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-//MODELO DE MONGOSE
+//MODELO DE MONGOOSE
 module.exports =mongoose.model('device',{
     name: String,
     macAddress:String,

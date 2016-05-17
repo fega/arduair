@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var getBody = bodyParser.urlencoded({extended: true});
 var addDevice = require('../db/addDevice');
 var getDevice = require('../db/getDeviceAll');
+var getDeviceToConfig = require('../db/getDeviceToConfig');
 
 var getWiki=function(req,res,next){
 	console.log(req.params.article);
@@ -23,7 +24,6 @@ var getWiki=function(req,res,next){
 		}
 	});
 };
-
 /* GET documentation article. */
 router.get('/documentation/:article',getWiki,function(req,res,next){
 	res.send(req.wiki);
@@ -48,8 +48,17 @@ router.get('/device/:device/:password/status',function(req,res,next){
 router.get('/test',function(req,res,next){
 	res.send('Server and Device OK :)');
 });
+/*POST: device and password combination exist?, to config the device?*/
+router.post('/config',getBody,getDeviceToConfig,function(req,res){
+	console.log(req.body);
+	res.send(req.result);
+})
 
+
+
+/*//////////////////
 /* GET home page. */
+//////////////////*/
 router.get('/documentation', function(req, res, next) {
   	res.render('index', { title: 'Arduair' });
 });

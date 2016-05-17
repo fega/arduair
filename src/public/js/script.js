@@ -96,7 +96,6 @@ function pageDebugger(){
     hidding();
     $("#debugger").removeClass("hide");
 }
-
 function pageAbout(){
 }
 function pageDataGraph(){  
@@ -108,21 +107,44 @@ function pageDataGraph(){
 $(document).ready(function() { 
     // bind 'addForm' and provide a simple callback function 
     $('#addform').ajaxForm({
-      success: addSuccess,    //success Callback
-      beforeSubmit: addBefore //Before Submit Callback
+      success: formSuccess,    //success Callback
+      beforeSubmit: formBefore, //Before Submit Callback
+      buttonId:"#actionBtn-add button",
+      error: formError
+    });
+    $('#config-search-form').ajaxForm({
+      success: configSearchSuccess,    //success Callback
+      beforeSubmit: formBefore, //Before Submit Callback
+      buttonId:"#actionBtn-configure a",
+      error: formError
     }); 
 });
-function addSuccess(res){
+function formSuccess(res){
   //res.status= status sended by the server
   //res.message= message sended by the sever, for human reading
   var status =res.status;
-  $("#actionBtn-add button").addClass(status);
-  $("#actionBtn-add button").removeClass("sync");
-  Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-add button").removeClass(status);});
+  var btn=this.buttonId;
+  $(btn).addClass(status);
+  $(btn).removeClass("sync");
+  Materialize.toast(res.message, 4000,'',function(){$(btn).removeClass(status);});
 }
-function addBefore(){
+function formBefore(){
   //add a sync class before send the form
-  $("#actionBtn-add button").addClass("sync");
+  $(this.buttonId).addClass("sync");
+  console.log("sending request");
+}
+function formError(){
+  var btn=this.buttonId;
+  $(btn).addClass('error');
+  $(btn).removeClass("sync");
+  Materialize.toast('error desconocido, intenta de nuevo', 4000,'',function(){$(btn).removeClass('error');});
+}
+function configSearchSuccess(res){
+  formSuccess(res);
+  
+  if (res.status=="done"){
+    $('#config-device-founded').slideDown(500);
+  }
 }
 /*////////////////////
 //Other stuff

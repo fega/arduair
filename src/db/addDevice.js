@@ -2,7 +2,6 @@ var bCrypt = require('bcrypt-nodejs');
 var Device = require('./device');
 
 module.exports = function(req,res,next){
-	console.log(req);
 	add=function(){
 			Device.findOne({name:req.body.addname},function(err,dev){
 			if (err) {

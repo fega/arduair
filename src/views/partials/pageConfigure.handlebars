@@ -5,31 +5,32 @@
 </section>
 {{!Device to configurate selection form}}
 <section>
-	<form action="">
+	<form action="/config" method="POST" id="config-search-form">
 		<div class="container">
 		<h3>Search Device:</h3>
  		<p class="flow-text">Please search the device to configure</p>
 		{{!First Row: device name and Password}}
 			<div class="row">
 	 			<div class="input-field col s12 m6 l6">
-					<input  id="config-deviceName" name="config-deviceName" type="text" class="validate" required>
+					<input  id="config-deviceName" name="name" type="text" class="validate" required>
 		        	<label for="config-deviceName">Device Name</label>
 				</div>
 				<div class="input-field col s12 m6 l6">
-					<input  id="config-devicePassword" name="config-devicePassword" type="text" class="validate" required>
+					<input  id="config-devicePassword" name="password" type="text" class="validate" required>
 		        	<label for="config-devicePassword">Device Password</label>
 				</div>
 	 		</div>
 		</div>
+		{{!submit form button}}
+		<div class="row">
+			<div class="col s12 m12	l12 center">
+				<input id="config-search-btn" type="submit" value="Submit" class=" waves-teal btn-large primary darken" form="config-search-form">
+			</div>
+		</div>
 	</form>
 </section>
-<div class="row">
-	<div class="col s12 m12	l12 center">
-		<a id="config-search-btn"class="waves-effect waves-teal btn-large primary darken">Search</a>
-	</div>
-</div>
-<br>
-<div id="config-device-finded" style="display: none;">{{!this tag, is a wrapper to hide all the configuration form before the user search the device}}
+<br> 
+<div id="config-device-founded" style="display: none;">{{!this tag, is a wrapper to hide all the configuration form before the user search the device}}
 
 	<div class="divider"></div>
 	{{!Device sampling configuration form}}

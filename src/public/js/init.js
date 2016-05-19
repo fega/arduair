@@ -1,3 +1,6 @@
+/*///////////////////////////////////////
+MaterializeCSS initialization
+///////////////////////////////////////*/
 (function($){
   $(function(){
     $('.button-collapse').sideNav();
@@ -10,5 +13,11 @@
   	});
   }); // end of document ready
 })(jQuery); // end of jQuery name space
-	
+/*///////////////////////////////////////
+ChartJS Global Configuration
+///////////////////////////////////////*/
+//Chart.defaults.global={
+//  responsive:true,
+//  responsiveAnimationDuration: 400
+//};
 

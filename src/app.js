@@ -9,6 +9,8 @@ var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 
 var routes = require('./routes/index');
+var test = require('./routes/test');
+var api = require('./routes/api');
 //MONTAR MONGOOSE Y CONECTAR A LA BASE DE DATOS
 var mongoose = require('mongoose');
 var db = require('./db/db');
@@ -34,6 +36,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/test', test);
+app.use('/api', api);
 //app.use('/users', users);
 
 // catch 404 and forward to error handler

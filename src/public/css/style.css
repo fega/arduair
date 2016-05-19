@@ -281,3 +281,17 @@ nav .button-collapse{
 #documentation-content p{
 	font-size: 1em;
 }
+.emptyGraphData{
+  height: 36px;
+  margin:6px;
+  border-radius: 2px;
+  background-color: #eceff1;
+  color:#606c71;
+}
+.emptyGraphData:hover{
+  height: 36px;
+  margin:6px;
+  border-radius: 2px;
+  background-color: #78909c  ;
+  color: white;
+}

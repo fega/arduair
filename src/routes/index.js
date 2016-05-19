@@ -47,9 +47,9 @@ router.get('/device/:device/:password/status',function(req,res,next){
 	res.send('device status');
 });
 /* GET test page*/
-router.get('/test',function(req,res,next){
-	res.send('Server and Device OK :)');
-});
+//router.get('/test',function(req,res,next){
+//	res.send('Server and Device OK :)');
+//});
 /*POST: device and password combination exist?, to config the device?*/
 router.post('/config',getBody,getDeviceToConfig,function(req,res){
 	console.log(req.body);

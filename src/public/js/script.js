@@ -109,10 +109,11 @@ function pageDataGraph(ctx){
     var status=res.status;
     var message=res.message;
     var data=res.data;
-    console.log(res.status);
-    console.log(res.message);
-
-    //$('#graph-row').html(data);
+    console.log(status);
+    console.log(message);
+    console.log(data)
+    string=JSON.stringify(data)
+    $('#graph-row').html(string);
     Materialize.toast(message, 4000,'',function(){$("#actionBtn-search a").removeClass(status);});
   });
 }
@@ -169,14 +170,16 @@ function configSearchSuccess(res){
 /*////////////////////
 //CHART
 ////////////////////*/
+
 var chartctx = $("#chart");
+var chartData =[12, 19, , 5, 2, 3];
 var myChart = new Chart(chartctx, {
     type: 'line',
     data: {
         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3]
+            data: chartData
         }]
     },
     options: {
@@ -190,6 +193,9 @@ var myChart = new Chart(chartctx, {
         }
     }
 });
+//to update the points use:
+//myChart.data.datasets[0].data
+//myLineChart.update();
 
 /*////////////////////
 //Other stuff

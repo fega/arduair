@@ -110,8 +110,32 @@ function pageDataGraph(ctx){
     var message=res.message;
     var data=res.data;
     if(status=='done'){
-      myChart.data.datasets[0].data=data.humidity;
-      // myChart.data.datasets[1].data=data.temperature;
+      Lines[0].data=data.humidity;
+      Lines[0].label='humidity';
+      Lines[1].data=data.pressure;
+      Lines[1].label='pressure';
+      Lines[2].data=data.temperature;
+      Lines[2].label='temperature';
+      Lines[3].data=data.pst;
+      Lines[3].label='pst';
+      Lines[4].data=data.so2;
+      Lines[4].label='so2';
+      Lines[5].data=data.co;
+      Lines[5].label='co';
+      Lines[6].data=data.nh3;
+      Lines[6].label='nh3';
+      Lines[7].data=data.ch4;
+      Lines[7].label='ch4';
+      myChart.data.datasets[0]=Lines[0];
+      myChart.data.datasets[1]=Lines[1];
+      myChart.data.datasets[2]=Lines[2];
+      myChart.data.datasets[3]=Lines[3];
+      myChart.data.datasets[4]=Lines[4];
+      myChart.data.datasets[5]=Lines[5];
+      myChart.data.datasets[6]=Lines[6];
+      myChart.data.datasets[7]=Lines[7];
+      myChart.data.labels=data.date;
+      // myChart.data.datasets[1]
       // myChart.data.datasets[2].data=data.pressure;
       // myChart.data.datasets[3].data=data.pst;
       // myChart.data.datasets[4].data=data.pm10;
@@ -183,29 +207,70 @@ function configSearchSuccess(res){
 /*////////////////////
 //CHART
 ////////////////////*/
+Chart.defaults.global.defaultColor='#FF1744';
+Chart.defaults.global.defaultFontColor='#2c3e50';
+Chart.defaults.global.elements.line.fill=false;
+Chart.defaults.global.elements.line.backgroundColor='rgba(255, 23, 68, 0.1)';
+Chart.defaults.global.elements.line.borderColor='#FF1744';
+Chart.defaults.global.elements.point.backgroundColor='rgba(255, 23, 68, 0.1)';
+Chart.defaults.global.elements.point.radius=4;
+Chart.defaults.global.elements.point.borderColor='#FF1744';
+
+var Lines=[{
+  label: '',
+  data: [],
+},{
+  backgroundColor:'#2980b9',
+  borderColor:'#2980b9'
+
+},{
+  backgroundColor:'#2c3e50',
+  borderColor:'#2c3e50'
+
+},{
+  backgroundColor:'#ffab00',
+  borderColor:'#ffab00'
+
+},{
+  backgroundColor:'#00bfa5',
+  borderColor:'#00bfa5'
+
+},{
+  backgroundColor:'#6200ea',
+  borderColor:'#6200ea'
+
+},{
+  backgroundColor:'#8d6e63',
+  borderColor:'#8d6e63'
+},{
+  backgroundColor:'#ff3d00 ',
+  borderColor:'#ff3d00 '
+}];
+
+
 
 var chartctx = $("#chart");
 var chartData =[12, 19,5 , 5, 2, 3];
 var myChart = new Chart(chartctx, {
-    type: 'line',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: chartData
-        }]
-    },
-    options: {
-        defaultColor:'rgba(0,0,10,0.1)',
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
+  type: 'line',
+  data: {
+    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    datasets: [{
+      label: '# of Votes',
+      data: chartData
+    }]
+  },
+  options: {
+    defaultColor:'#FF1744',
+    scales: {
+      type:'time',
+      xAxes: [{
+        type:"time"
+      }]
     }
+  }
 });
+myChart.update();
 //to update the points use:
 //myChart.data.datasets[0].data
 //myLineChart.update();

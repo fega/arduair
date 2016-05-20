@@ -75,7 +75,7 @@ gulp.task('bs-reload', function () {
 Build
 ///////////////////////////////////////*/
 gulp.task('js',  function () {
-  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/chart.js','./public/js/init.js','./public/js/page.js','./public/js/script.js','./public/js/scriptChart.js','!./public/js/js.min.js'])
+  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/moment.js','./public/js/chart.js','./public/js/init.js','./public/js/page.js','./public/js/script.js','./public/js/scriptChart.js','!./public/js/js.min.js'])
     .pipe(plumberit('JS build Error'))
     .pipe(concat('js.min.js'))
     .pipe(uglify({preserveComments:"license"}))

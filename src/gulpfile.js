@@ -47,7 +47,7 @@ gulp.task('nodemon', function (cb) {
 Linters
 ///////////////////////////////////////*/
 gulp.task('jslint', function() {
-  return gulp.src(['**/*.js','!./node_modules/**/*.js',"./public/js/init.js","!./public/js/*.min.js","!./public/js/jquer*.js","!./public/js/page.js","!./public/js/chart.js"])
+  return gulp.src(['**/*.js','!./node_modules/**/*.js',"./public/js/init.js","!./public/js/*.min.js","!./public/js/jquer*.js","!./public/js/page.js","!./public/js/chart.js","!./public/js/moment.js"])
     .pipe(plumberit('JsLint Error'))
     .pipe(jshint())
     .pipe(jshint.reporter('default'));

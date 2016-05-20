@@ -26,7 +26,6 @@ module.exports =mongoose.model('device',{
     co:     [Number],
     ch4:    [Number],
     nh3:    [Number]
-
 });
 
 

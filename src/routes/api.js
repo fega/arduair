@@ -3,7 +3,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var getBody = bodyParser.urlencoded({extended: true});
 var store = require('../db/storeData');
-var dateCheck = require('../lib/datecheck')
+var dateCheck = require('../lib/datecheck');
 /*GET test:
 *CC3000 : PASS
 */

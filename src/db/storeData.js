@@ -4,10 +4,10 @@ module.exports= function(req,res,next){
 	var dataDate;
 	if (req.isServerTime){
 		dataDate = new Date();
-		console.log("using internal date"+dataDate)
+		console.log("using internal date"+dataDate);
 	}else{
 		dataDate= new Date(req.params.year, req.params.month, req.params.day, req.params.hours, req.params.minutes, 0, 0);
-		console.log("using provided date"+dataDate)
+		console.log("using provided date"+dataDate);
 	}
 
 	var query= {name: req.params.device,password:req.params.password};//search a device/password combination

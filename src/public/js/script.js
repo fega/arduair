@@ -109,11 +109,24 @@ function pageDataGraph(ctx){
     var status=res.status;
     var message=res.message;
     var data=res.data;
-    console.log(status);
-    console.log(message);
-    console.log(data)
-    string=JSON.stringify(data)
-    $('#graph-row').html(string);
+    if(status=='done'){
+      myChart.data.datasets[0].data=data.humidity;
+      // myChart.data.datasets[1].data=data.temperature;
+      // myChart.data.datasets[2].data=data.pressure;
+      // myChart.data.datasets[3].data=data.pst;
+      // myChart.data.datasets[4].data=data.pm10;
+      // myChart.data.datasets[5].data=data.pm25;
+      // myChart.data.datasets[6].data=data.so2;
+      // myChart.data.datasets[7].data=data.no2;
+      // myChart.data.datasets[8].data=data.o3;
+      // myChart.data.datasets[9].data=data.co;
+      // myChart.data.datasets[10].data=data.ch4;
+      // myChart.data.datasets[11].data=data.nh3;
+      myChart.update();
+    }
+    if (status=='error')
+    //string=JSON.stringify(data)
+    //$('#graph-row').html(string);
     Materialize.toast(message, 4000,'',function(){$("#actionBtn-search a").removeClass(status);});
   });
 }
@@ -172,7 +185,7 @@ function configSearchSuccess(res){
 ////////////////////*/
 
 var chartctx = $("#chart");
-var chartData =[12, 19, , 5, 2, 3];
+var chartData =[12, 19,5 , 5, 2, 3];
 var myChart = new Chart(chartctx, {
     type: 'line',
     data: {

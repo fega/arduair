@@ -1,3 +1,8 @@
+var arduair={
+  data: [null,null,null,null,null]
+  units:[]
+}
+ 
 /*////////////////////
 //page.js config
 //page("ruta",callback)
@@ -102,57 +107,10 @@ function pageDebugger(){
 function pageAbout(){
 }
 function pageDataGraph(ctx){
-  hidding();
-  $('#graph').removeClass("hide");
-
-  $.get('/device/'+ ctx.params.device,function(res){
-    var status=res.status;
-    var message=res.message;
-    var data=res.data;
-    if(status=='done'){
-      Lines[0].data=data.humidity;
-      Lines[0].label='humidity';
-      Lines[1].data=data.pressure;
-      Lines[1].label='pressure';
-      Lines[2].data=data.temperature;
-      Lines[2].label='temperature';
-      Lines[3].data=data.pst;
-      Lines[3].label='pst';
-      Lines[4].data=data.so2;
-      Lines[4].label='so2';
-      Lines[5].data=data.co;
-      Lines[5].label='co';
-      Lines[6].data=data.nh3;
-      Lines[6].label='nh3';
-      Lines[7].data=data.ch4;
-      Lines[7].label='ch4';
-      myChart.data.datasets[0]=Lines[0];
-      myChart.data.datasets[1]=Lines[1];
-      myChart.data.datasets[2]=Lines[2];
-      myChart.data.datasets[3]=Lines[3];
-      myChart.data.datasets[4]=Lines[4];
-      myChart.data.datasets[5]=Lines[5];
-      myChart.data.datasets[6]=Lines[6];
-      myChart.data.datasets[7]=Lines[7];
-      myChart.data.labels=data.date;
-      // myChart.data.datasets[1]
-      // myChart.data.datasets[2].data=data.pressure;
-      // myChart.data.datasets[3].data=data.pst;
-      // myChart.data.datasets[4].data=data.pm10;
-      // myChart.data.datasets[5].data=data.pm25;
-      // myChart.data.datasets[6].data=data.so2;
-      // myChart.data.datasets[7].data=data.no2;
-      // myChart.data.datasets[8].data=data.o3;
-      // myChart.data.datasets[9].data=data.co;
-      // myChart.data.datasets[10].data=data.ch4;
-      // myChart.data.datasets[11].data=data.nh3;
-      myChart.update();
-    }
-    if (status=='error')
-    //string=JSON.stringify(data)
-    //$('#graph-row').html(string);
-    Materialize.toast(message, 4000,'',function(){$("#actionBtn-search a").removeClass(status);});
-  });
+  	//hide tab
+  	hidding();
+  	$('#graph').removeClass("hide");
+	dataGraphRequest(ctx.params.device);
 }
 /*////////////////////
 //AJAX Forms
@@ -209,13 +167,13 @@ function configSearchSuccess(res){
 ////////////////////*/
 
 var chartctx = $("#chart");
-var chartData =[12, 19,5 , 5, 2, 3];
+var chartData =[0];
 var myChart = new Chart(chartctx, {
   type: 'line',
   data: {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    labels: [0],
     datasets: [{
-      label: '# of Votes',
+      label: '0',
       data: chartData
     }]
   },
@@ -258,3 +216,122 @@ $("#no-config-file-btn").click(function(){
   $(this).addClass('hide');
   $("#config-file-btn").removeClass('hide');
 });
+
+function checkDataName(until,name){
+  var result=true
+  for (var i=0; i<until;i++){
+    if (arduair.data[i].name==name){
+      result= false;
+    }
+  }
+  return result;
+}
+function printMenuGraph(index){
+	var content=""; 
+	console.log("printMenuGraph: "+index)
+	for ( var i in arduair.data[index]){
+		if(i=='date' || i=='Location' || i=='pst' || i=='name'){  
+		}else{
+			content+= '<a href="#" class="btn filledGraphData" >'+i+'</a>';
+		}
+	}
+	index++;
+	$('#graph-btn-'+ index ).slideUp(0);
+	$('#graph-options-'+ index ).html(content);
+	$('#graph-edit-btn-'+ index ).slideDown(400);
+	$('#graph-options-'+ index ).slideDown(400);
+}
+function printChartGraph(index){
+	var data=arduair.data[index];
+
+	Lines[0].data=data.humidity;
+	Lines[0].label='humidity';
+	Lines[1].data=data.pressure;
+	Lines[1].label='pressure';
+	Lines[2].data=data.temperature;
+	Lines[2].label='temperature';
+	Lines[3].data=data.pst;
+	Lines[3].label='pst';
+	Lines[4].data=data.so2;
+	Lines[4].label='so2';
+	Lines[5].data=data.co;
+	Lines[5].label='co';
+	Lines[6].data=data.nh3;
+	Lines[6].label='nh3';
+	Lines[7].data=data.ch4;
+	Lines[7].label='ch4';
+	myChart.data.datasets[0]=Lines[0];
+	myChart.data.datasets[1]=Lines[1];
+	myChart.data.datasets[2]=Lines[2];
+	myChart.data.datasets[3]=Lines[3];
+	myChart.data.datasets[4]=Lines[4];
+	myChart.data.datasets[5]=Lines[5];
+	myChart.data.datasets[6]=Lines[6];
+	myChart.data.datasets[7]=Lines[7];
+	myChart.data.labels=data.date;
+	myChart.update();
+}
+
+
+function dataGraphRequest(device){
+	var position= false
+	console.log("dataGraph:"+position)
+	var pos=-1;
+	$.get('/device/'+ device,function(res){
+		console.log("IMPRIMIR:");
+		console.log(arduair.data);
+
+		var name=res.data.name
+		if(res.status==='error'){
+			Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-search a").removeClass(res.status);});
+		}
+		if(res.status==='done'){
+			if(arduair.data.isNull()){
+				position=0;
+				console.log("HEY: todo el array es null");
+			}else{
+				position=arduair.data.checkNewData(name)
+				console.log("CheckNewData retornando"+position)
+				if(position===false || position===null || position===undefined){
+					position= arduair.data.firstNull();
+					console.log("no hay data con ese nombre, poniendo la data en:"+position);
+				}
+				if(position=== -1){
+					position=4;
+					console.log("Data full, sobre escribiendo 4");
+				}
+				if (position>=0){
+					
+					console.log("poniendo la data en :"+position);
+					
+				}
+				
+			}
+		}
+	
+	
+	Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-search a").removeClass(res.status);});
+	arduair.data[position]=res.data;
+	printMenuGraph(position);
+	printChartGraph(position);
+	})
+}
+//funcion que checkea si array is null
+Array.prototype.isNull = function (){
+    return this.join().replace(/,/g,'').length === 0;
+};
+
+Array.prototype.checkNewData = function(name){
+	var result=false;
+	arduair.data.forEach(function(el,index){
+		if(el){
+			if(el.name==name){
+			result=index;
+		}
+	}
+	})
+	return result;
+}
+Array.prototype.firstNull = function(){
+	return arduair.data.indexOf(null);
+}

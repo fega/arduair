@@ -283,10 +283,25 @@ nav .button-collapse{
 }
 .emptyGraphData{
   height: 36px;
-  margin:6px;
+  margin-top:6px;
   border-radius: 2px;
   background-color: #eceff1;
   color:#606c71;
+}
+.filledGraphData{
+  margin-top:6px;
+  background-color: #eceff1;
+  color:#606c71;
+  width:100%;
+  padding: 2px;
+  font-size: 10px;  
+}
+.editGraphData{
+  height: 36px;
+  margin-top:6px;
+  border-radius: 2px;
+  background-color: #2980B9;
+  color:white;
 }
 .emptyGraphData:hover{
   height: 36px;

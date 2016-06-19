@@ -14,6 +14,7 @@ module.exports = function(req,res,next){
 		if (device){
 			console.log('Device Data retrieved'+ device);
 			var data= {
+				name: device.name,
 				date : device.date ,
 				humidity : device.humidity ,
 				temperature : device.temperature ,

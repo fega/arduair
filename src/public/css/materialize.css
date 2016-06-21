@@ -1843,7 +1843,7 @@ button.btn-floating {
   border: none; }
 
 .fixed-action-btn {
-  position: fixed;
+  position: absolute;
   right: 23px;
   bottom: 23px;
   padding-top: 15px;

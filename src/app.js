@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
+var minifyHTML = require('express-minify-html');
 
 var routes = require('./routes/index');
 var test = require('./routes/test');
@@ -19,6 +20,17 @@ mongoose.connect(db.url);
 var app = express();
 app.use(compression());//enables gzip compression
 
+app.use(minifyHTML({
+    override:      false,
+    htmlMinifier: {
+        removeComments:            true,
+        collapseWhitespace:        true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes:     true,
+        removeEmptyAttributes:     true,
+        minifyJS:                  true
+    }
+}));
 //MONTAR HANDLEBARS TEMPLATE ENGINE
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',

@@ -288,13 +288,55 @@ nav .button-collapse{
   background-color: #eceff1;
   color:#606c71;
 }
-.filledGraphData{
+.fixed-action-btn.editGraphData-container{
+    position: relative; 
+    right: 0px;
+    padding: 0 0 0 0px !important;
+    bottom:0px;
+
+}
+a.filledGraphData{
   margin-top:6px;
   background-color: #eceff1;
   color:#606c71;
   width:100%;
   padding: 2px;
   font-size: 10px;  
+}
+a.filledGraphData.active{
+  background-color: #2980b9; 
+  color:white;
+}
+
+
+.editGraphData-container.fixed-action-btn.horizontal ul {
+      text-align: right;
+      right: 90px;
+      top: 28%;
+      transform: translateY(-50%);
+      height: 100%;
+      left: initial;
+      width: 500px;
+      /*width 100% only goes to width of button container */ 
+    }
+.fixed-action-btn.horizontal ul li {
+        display: inline-block;
+        margin: 15px 15px 0 0; 
+}
+
+#page-graph-chips .chip, #page-graph-chips a{
+  margin-right: 10px;
+}
+#page-graph-edit-menu{
+  position: absolute;
+  background-color: rgba(255,255,255,0.0);
+}
+
+@media only screen and (min-width: 993px){
+  #page-graph-edit-menu.row .col.l2, .row .col.l3 {
+      width: 20%;
+      margin-left: 0;
+  }
 }
 .editGraphData{
   height: 36px;

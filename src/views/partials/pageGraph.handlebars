@@ -1,47 +1,111 @@
 <section class="page-header">
-			<h4 class="project-name">Graphs</h4>
+	<h4 class="project-name">Graphs</h4>
 </section>
 <section>
-<div class="container">
-<p class="flow-text">Devices used: </p>
-{{!Mobile Data selector}}
-<div class="row">
-	<div class="col s12 m2 l2 center">
-		<div id="graph-btn-1" class="btn emptyGraphData waves-effect waves-light">add</div>
-		<div id="graph-edit-btn-1" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
-		<div id="graph-options-1" class="card-panel" style="display: none;"></div>
-	</div>
-	<div class="col s12 m2 l2 center">
-		<div id="graph-btn-2" class="btn emptyGraphData waves-effect waves-light">add</div>
-		<div id="graph-edit-btn-2" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
-		<div id="graph-options-2" class="card-panel" style="display: none;"></div>
-	</div>
-	<div class="col s12 m2 l2 center">
-		<div id="graph-btn-3" class="btn emptyGraphData waves-effect waves-light">add</div>
-		<div id="graph-edit-btn-3" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
-		<div id="graph-options-3" class="card-panel" style="display: none;"></div>
-	</div>
-	<div class="col s12 m2 l2 center">
-		<div id="graph-btn-4" class="btn emptyGraphData waves-effect waves-light">add</div><div id="graph-edit-btn-4" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
-		<div id="graph-options-4" class="card-panel" style="display: none;"></div>	</div>
-	<div class="col s12 m2 l2 center">
-		<div id="graph-btn-5" class="btn emptyGraphData waves-effect waves-light">add</div>
-		<div id="graph-edit-btn-5" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
-		<div id="graph-options-5" class="card-panel" style="display: none;"></div>
+	<div class="container">
+		<p class="flow-text">Devices used: </p>
+		{{!Nuevo selector}}
+		<div class="row">
+			<div id="page-graph-chips" class="col s12 ">
+				<div class="chip">
+					Tag
+					<i class="material-icons">close</i>
+				</div>
+				<div class="chip">
+					Tag
+					<i class="material-icons">close</i>
+				</div>
+				<a id="page-graph-add" class="btn-floating accent"><i class="material-icons">add</i></a>
+				<a id="page-graph-edit" class="btn-floating primary"><i class="material-icons">edit</i></a>
+			</div>
+		</div>
+		
+		{{!Antiguo selector}}
+		{{!--<div class="row">
+			<div class="col s12 m2 l2 center">
+				<div id="graph-btn-1" class="btn emptyGraphData waves-effect waves-light">add</div>
+				<div class="editGraphData-container fixed-action-btn horizontal">
+					<div id="graph-edit-btn-1" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
+					<ul>
+						<li><a class="btn-floating accent"><i class="material-icons">clear</i></a></li>
+					</ul>
+				</div>
+				{{!<div id="graph-options-1" class="card-panel" style="display: none;"></div>}}
 			</div>
 
-	<div class="col s12 m2 l2">
-		
-	</div>
-</div>
-{{!graph}}
-<p class="flow-text">Graph: </p>
-<div id="graph-row" class="row">
-	<canvas id="chart" width="400" height="300"></canvas>
-</div>
-{{!graph options}}
-<div class="row">
-	
-</div>
+			<div class="col s12 m2 l2 center">
+				<div id="graph-btn-2" class="btn emptyGraphData waves-effect waves-light">add</div>
+				<div class="editGraphData-container fixed-action-btn horizontal">
+					<div id="graph-edit-btn-2" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
+					<ul>
+						<li><a class="btn-floating accent"><i class="material-icons">clear</i></a></li>
+					</ul>
+				</div>
+				{{!<div id="graph-options-2" class="card-panel" style="display: none;"></div>}}
+			</div>
+			<div class="col s12 m2 l2 center">
+				<div id="graph-btn-3" class="btn emptyGraphData waves-effect waves-light">add</div>
+				<div class="editGraphData-container fixed-action-btn horizontal">
+					<div id="graph-edit-btn-3" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
+					<ul>
+						<li><a class="btn-floating accent"><i class="material-icons">clear</i></a></li>
+					</ul>
+				</div>
+				{{!<div id="graph-options-3" class="card-panel" style="display: none;"></div>}}
+			</div>
 
-</section>
+			<div class="col s12 m2 l2 center">
+				<div id="graph-btn-4" class="btn emptyGraphData waves-effect waves-light">add</div>
+				<div class="editGraphData-container fixed-action-btn horizontal">
+					<div id="graph-edit-btn-4" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
+					<ul>
+						<li><a class="btn-floating accent"><i class="material-icons">clear</i></a></li>
+					</ul>
+				</div>
+				{{!<div id="graph-options-4" class="card-panel" style="display: none;"></div>}}
+			</div>
+
+			<div class="col s12 m2 l2 center">
+				<div id="graph-btn-5" class="btn emptyGraphData waves-effect waves-light">add</div>
+				<div class="editGraphData-container fixed-action-btn horizontal">
+					<div id="graph-edit-btn-5" class="btn editGraphData waves-effect waves-light" style="display: none;">edit</div>
+					<ul>
+						<li><a class="btn-floating accent"><i class="material-icons">clear</i></a></li>
+					</ul>
+				</div>
+				{{!<div id="graph-options-5" class="card-panel" style="display: none;"></div>}}
+			</div>
+
+			<div class="col s12 m2 l2">
+
+			</div>
+		</div>--}}
+		{{!graph}}
+		<p class="flow-text">Graph: </p>
+		<div id="graph-row" class="row">
+			{{!nuevo menu de edicion}}
+			<div id="page-graph-edit-menu" class="row" style="display: none;">
+				<div class="col s12 m2 l2">
+					<div id="graph-options-1"></div>
+				</div>
+				<div class="col s12 m2 l2">
+					<div id="graph-options-2"></div>
+				</div>
+				<div class="col s12 m2 l2">
+					<div id="graph-options-3"></div>
+				</div>
+				<div class="col s12 m2 l2">
+					<div id="graph-options-4"></div>
+				</div>
+				<div class="col s12 m2 l2">
+					<div id="graph-options-5"></div>
+				</div>
+			</div>
+			<canvas id="chart" width="400" height="300"></canvas>
+		</div>
+		{{!graph options}}
+		<div class="row">
+
+		</div>
+
+	</section>

@@ -40,14 +40,11 @@ Please go to getting started/ Setup your air Q. monitor in to the platform.
 ### receiving samples
 I recevived the samples around Jul-13-2016 for the sparkfun pieces and Jul-19-2016, for the shinyei ppd42ns and MICS 2714
 ### Testing Parts:
-* [Arduino Wifi Shield](https://www.sparkfun.com/products/11287) => working, but the firmware is outdated.
-* [Arduino Wifi Shield CC3000]() => working, but it's very inestable, not suitable for this kind of device.
+* [Arduino Wifi Shield](https://www.sparkfun.com/products/11287) => working.
 * [DHT22](https://www.sparkfun.com/products/10167) =>  working.
 * [BMP180](https://www.sparkfun.com/products/11824) => working, but the results are strange. tested another one, getting the same values.
 * [SparkFun Luminosity Sensor Breakout - TSL2561](https://www.sparkfun.com/products/12055) => working.
-* [TSL235R - Light to Frequency Converter] =>working
 * [SparkFun Real Time Clock Module](https://www.sparkfun.com/products/12708) => Sadly, not working.
-* [DS3234 SparkFun DeadOn RTC Breakout](https://www.sparkfun.com/products/10160) => coming soon
 * [shinyei ppd42ns](http://www.seeedstudio.com/wiki/images/4/4c/Grove_-_Dust_sensor.pdf) => working, and responding to PM concentration changes. 
 * [MQ-7 (Carbon Monoxide)](https://www.sparkfun.com/products/9403) => It will need an special circuit
 * [MQ-131 low concentration (Ozone)](http://www.winsen-sensor.com/products/semiconductor-gas-sensor/sensor-mq131.html) => coming soon

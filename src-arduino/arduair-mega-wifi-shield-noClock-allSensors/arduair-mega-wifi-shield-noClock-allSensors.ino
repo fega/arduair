@@ -29,9 +29,15 @@ float pm10,pm25;
 DHT dht(DHTPIN, DHTTYPE); //DHT constructor
 SFE_BMP180 bmp;           //bmp constructor
 SFE_TSL2561 light;        //TSL2561 constructor
+bool zeAvailable=true;
+unsigned long zeCo,zeNO2,zeSO2; //ze sensors serial port
+unsigned int zeCounter;// Ze counter of meausures
 
 void setup() {
   Serial.begin(9600);
+  Serial1.begin(9600); //ZE CO-sensor
+  Serial2.begin(9600); //ZE NO2-sensor
+  Serial3.begin(9600); //ZE SO2-sensor
   Wire.begin();
   dht.begin();
   bmp.begin();
@@ -134,7 +140,7 @@ float mq7Read(){
 /*//////////////////////////////////////////////////////////////////
 SD card begin
 //////////////////////////////////////////////////////////////////*/
-void sdBegin(){
+void sdBegin(){}
   if (!SD.begin(4)) {
     //Serial.println("SD failed!");
     return;
@@ -156,7 +162,22 @@ float mq131Read(){
 ZE03-SO2 winsen sensor
 //////////////////////////////////////////////////////////////////*/
 float zeso2Read(){
+  float c= zeSO2/zeCount;
+  zeSO2=0;
+  return c;
+}
 
+void serialEvent1(){
+  if (zeAvailable==true){
+    String input;
+    while (Serial1.available()){
+      char inChar = (char)Serial.read();
+      input += inChar;
+      if (input.length==8){
+        zeSo2=(input[2]*256+input[3])*0.1;
+      }
+    }
+  }
 }
 /*//////////////////////////////////////////////////////////////////
 ZE03-no2 winsen sensor

@@ -102,9 +102,9 @@ void tableWrite(){
   if (myFile){
     
     int   h = dht.readHumidity();  // 1* medir humedad
-    int   t= dht.readTemperature();// 2* medir temperatura
-    float p= readPressure();       // 3* medir presion
-    float co=mq7Read();            // 4* medir sensor 1 y transformar
+    int   t = dht.readTemperature();// 2* medir temperatura
+    float p = readPressure();       // 3* medir presion
+    float co= mq7Read();            // 4* medir sensor 1 y transformar
     float so2=zeso2Read();    
     float no2=zeno2Read();
     pmRead();
@@ -140,7 +140,7 @@ float mq7Read(){
 /*//////////////////////////////////////////////////////////////////
 SD card begin
 //////////////////////////////////////////////////////////////////*/
-void sdBegin(){}
+void sdBegin(){
   if (!SD.begin(4)) {
     //Serial.println("SD failed!");
     return;
@@ -162,7 +162,7 @@ float mq131Read(){
 ZE03-SO2 winsen sensor
 //////////////////////////////////////////////////////////////////*/
 float zeso2Read(){
-  float c= zeSO2/zeCount;
+  float c= zeSO2/zeCounter;
   zeSO2=0;
   return c;
 }
@@ -173,8 +173,8 @@ void serialEvent1(){
     while (Serial1.available()){
       char inChar = (char)Serial.read();
       input += inChar;
-      if (input.length==8){
-        zeSo2=(input[2]*256+input[3])*0.1;
+      if (input.length()==8){
+        zeSO2=(input[2]*256+input[3])*0.1;
       }
     }
   }

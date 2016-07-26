@@ -4,7 +4,10 @@
 #include <SPI.h>       //for Serial communication (with the SD card)
 #include <SD.h>        //SD card Library
 #include <SFE_BMP180.h>//Sparkfun BMP180 pressure Sensor Library
+#include <SparkFunTSL2561.h>//light sensor library SparkFun TSL2561 Breakout
 #include <WiFi.h>
+#include <Event.h>
+#include <Timer.h>
 
 #define DS1307_ADDRESS 0x68 //clock pin 
 #define DHTPIN 7            //DHT pin
@@ -15,31 +18,42 @@ File myFile;//Defining one file  class
 
 char ssid[] = "yourNetwork"; //  your network SSID (name)
 char pass[] = "secretPassword";    // your network password (use for WPA, or use as key for WEP)
+String device,password;
 int status = WL_IDLE_STATUS;
 
 WiFiClient client;
-
-int arduFrequency; //frecuencia de medicion
-int beginYear, beginMonth, beginDay, beginHour, beginMinute; //inicio y final del muestreo
-int endYear,  endMonth, endDay, endHour,     endMinute;
 float pm10,pm25;
+int second, minute,hour,weekDay,monthDay,month,year;
+
 
 DHT dht(DHTPIN, DHTTYPE); //DHT constructor
 SFE_BMP180 bmp;           //bmp constructor
+SFE_TSL2561 light;        //TSL2561 constructor
+Timer t;
+bool zeAvailable=true;
+unsigned long zeCo,zeNO2,zeSO2; //ze sensors serial port
+unsigned int zeCounter;// Ze counter of meausures
 
 void setup() {
   Serial.begin(9600);
+  Serial1.begin(9600); //ZE CO-sensor
+  Serial2.begin(9600); //ZE NO2-sensor
+  Serial3.begin(9600); //ZE SO2-sensor
   Wire.begin();
   dht.begin();
   bmp.begin();
-  //sdBegin();
+  light.begin();
+  sdBegin();
   wifiBegin();
+  t.every(5*60*1000,arduairRead); // 5 minutes  
 }
 
 void loop() {
-  Serial.print("LOOP");
+  t.update();
 }
-
+void arduairRead(){
+    tableWrite();
+}
 void wifiBegin(){
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
@@ -53,7 +67,7 @@ void wifiBegin(){
   Serial.println("Connected to wifi");
 }
 
-void request(){
+void request(int h,int t,float p,float l,float co,float so2,float no2){
   // close any connection before send a new request.
   // This will free the socket on the WiFi shield
    client.stop();
@@ -61,50 +75,66 @@ void request(){
   // if there's a successful connection:
   if (client.connect(server, 80)) {
     Serial.println("connecting...");
-    // send the HTTP PUT request:
-    client.println("GET /latest.txt HTTP/1.1");
-    client.println("Host: "/*server*/);
+    
+    //String getRequest ="GET"+"hola"+" "
+    // send the HTTP GET request:
+    client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password);
+    // HTTP time
+    client.print(monthDay);client.print(month);client.print(year);client.print(hour);client.print(minute);
+    //http GET end
+    ; client.print(" HTTP/1.1");
+    client.println("");
+    // parameters:
+    client.print("h="); client.print(h); client.print(",");
+    client.print("t="); client.print(t); client.print(",");
+    client.print("l="); client.print(l); client.print(",");
+    client.print("co="); client.print(pm10); client.print(",");
+    client.print("o3="); client.print(pm10); client.print(",");
+    client.print("pm10="); client.print(pm10); client.print(",");
+    client.print("pm25="); client.print(pm25); client.print(",");
+    client.print("so2="); client.print(so2); client.print(",");
+    client.print("no2="); client.print(no2); client.print(",");
+    client.println("");
+    //server
+    client.print("Host: ");client.print(server);
     client.println("User-Agent: Arduair");
     client.println("Connection: close");
     client.println();
   }
  }
+ 
 void tableWrite(){
   //escribe en la SD, la tabla
   
   myFile = SD.open("DATA.txt", FILE_WRITE); //abrir la SD
   if (myFile){
-    int h = dht.readHumidity();   // 1* medir humedad
+    
+    int   h = dht.readHumidity();   // 1* medir humedad
+    int   t = dht.readTemperature();// 2* medir temperatura
+    float p = readPressure();       // 3* medir presion
+    float co= mq7Read();            // 4* medir sensor 1 y transformar
+    float so2=zeso2Read();    
+    float no2=zeno2Read();
+    float l=lightRead();
+    pmRead();
+
     myFile.print(h);
     myFile.print(",");
-    
-    int t= dht.readTemperature(); // 2* medir temperatura
     myFile.print(t);
     myFile.print(",");
-    
-    float p= readPressure();      // 3* medir presion
     myFile.print(p);
     myFile.print(",");
-    
-    float co=mq7Read();           // 4* medir sensor 1 y transformar
     myFile.print(co);
     myFile.print(",");
-    
-    float so2=zeso2Read();
     myFile.print(so2);
     myFile.print(",");
-
-    float no2=zeno2Read();
     myFile.print(no2);
     myFile.print(",");
     
-    struct pm {      float pm10;      float pm25;   };
-    float pm=pmRead();
-    // 7* medir sensor 4 y transformar
-    // 8* medir sensor 5 y transformar
-    //enviar a la tabla
     myFile.println(" ");
     myFile.close();
+    request(h,t,p,l,co,so2,no2);
+    
   }
 }
 /*//////////////////////////////////////////////////////////////////
@@ -143,7 +173,22 @@ float mq131Read(){
 ZE03-SO2 winsen sensor
 //////////////////////////////////////////////////////////////////*/
 float zeso2Read(){
+  float c= zeSO2/zeCounter;
+  zeSO2=0;
+  return c;
+}
 
+void serialEvent1(){
+  if (zeAvailable==true){
+    String input;
+    while (Serial1.available()){
+      char inChar = (char)Serial.read();
+      input += inChar;
+      if (input.length()==8){
+        zeSO2=(input[2]*256+input[3])*0.1;
+      }
+    }
+  }
 }
 /*//////////////////////////////////////////////////////////////////
 ZE03-no2 winsen sensor
@@ -255,5 +300,70 @@ float readPressure(){
   //else Serial.println("error starting temperature measurement\n");
 }
 /*//////////////////////////////////////////////////////////////////
- RTC DeadOn
+ RTC based on http://bildr.org/2011/03/ds1307-arduino/
 //////////////////////////////////////////////////////////////////*/
+byte bcdToDec(byte val)  {
+// Convert binary coded decimal to normal decimal numbers
+  return ( (val/16*10) + (val%16) );
+}
+
+void getDate(){
+  // Reset the register pointer
+  Wire.beginTransmission(DS1307_ADDRESS);
+  byte zero = 0x00;
+  Wire.write(zero);
+  Wire.endTransmission();
+  Wire.requestFrom(DS1307_ADDRESS, 7);
+
+  second = bcdToDec(Wire.read());
+  minute = bcdToDec(Wire.read());
+  hour = bcdToDec(Wire.read() & 0b111111); //24 hour time
+  weekDay = bcdToDec(Wire.read()); //0-6 -> sunday - Saturday
+  monthDay = bcdToDec(Wire.read());
+  month = bcdToDec(Wire.read());
+  year = bcdToDec(Wire.read());
+}
+/*//////////////////////////////////////////////////////////////////
+SparkFun Luminosity Sensor Breakout - TSL2561
+//////////////////////////////////////////////////////////////////*/
+float lightRead(){
+  boolean gain;     // Gain setting, 0 = X1, 1 = X16;
+  unsigned int ms;  // Integration ("shutter") time in milliseconds
+  unsigned char time = 2;
+  light.setTiming(gain,time,ms);
+  light.setPowerUp();
+  delay(ms);
+  unsigned int data0, data1;
+
+  if (light.getData(data0,data1))
+  {
+    // getData() returned true, communication was successful
+    
+    Serial.print("data0: ");
+    Serial.print(data0);
+    Serial.print(" data1: ");
+    Serial.print(data1);
+  
+    // To calculate lux, pass all your settings and readings
+    // to the getLux() function.
+    
+    // The getLux() function will return 1 if the calculation
+    // was successful, or 0 if one or both of the sensors was
+    // saturated (too much light). If this happens, you can
+    // reduce the integration time and/or gain.
+    // For more information see the hookup guide at: https://learn.sparkfun.com/tutorials/getting-started-with-the-tsl2561-luminosity-sensor
+  
+    double lux;    // Resulting lux value
+    boolean good;  // True if neither sensor is saturated
+    
+    // Perform lux calculation:
+
+    good = light.getLux(gain,ms,data0,data1,lux);
+    
+    // Print out the results:
+  
+    Serial.print(" lux: ");
+    Serial.print(lux);
+    if (good) Serial.println(" (good)"); else Serial.println(" (BAD)");
+  }
+}

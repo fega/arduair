@@ -27,6 +27,7 @@ Chart.defaults.global.elements.point.radius=4;
 Chart.defaults.global.elements.point.borderColor='#FF1744';
 //Array lines: contain data. defaults of chat
 var Lines=[{
+  borderColor:'#FF1744',
   label: '',
   data: [],
 },{
@@ -35,19 +36,19 @@ var Lines=[{
   borderDash:[5,5]
 },{
   //backgroundColor:'#2980b9',
-  borderColor:'#2980b9',
+  borderColor:'#2c3e50',
   borderDash:[15,30]
 },{
   //backgroundColor:'#2980b9',
-  borderColor:'#2980b9',
+  borderColor:'#ffab00',
   borderDash:[15,5]
 },{
   //backgroundColor:'#2980b9',
-  borderColor:'#2980b9',
+  borderColor:'#00bfa5',
   borderDash:[2,2]
 },{
   //backgroundColor:'#2980b9',
-  borderColor:'#2980b9',
+  borderColor:'#FF1744',
   borderDash:[3,3,3,15]
 },{
   //backgroundColor:'#2980b9',

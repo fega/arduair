@@ -13,6 +13,8 @@
 #define DHTPIN 7            //DHT pin
 #define DHTTYPE DHT11
 #define server "arduair.herokuapp.com/test/"    // website address
+#define WIFIPIN 4 //Wifi shield ss pin
+#define SDPIN 10  //Sd ss pin
 
 File myFile;//Defining one file  class
 
@@ -105,6 +107,8 @@ void request(int h,int t,float p,float l,float co,float so2,float no2){
  
 void tableWrite(){
   //escribe en la SD, la tabla
+  digitalWrite(WIFIPIN,HIGH); //inactive wifishield
+  digitalWrite(SDPIN,LOW); //active SD
   
   myFile = SD.open("DATA.txt", FILE_WRITE); //abrir la SD
   if (myFile){
@@ -134,8 +138,9 @@ void tableWrite(){
     myFile.println(" ");
     myFile.close();
     request(h,t,p,l,co,so2,no2);
-    
   }
+  digitalWrite(WIFIPIN,LOW); //active wifishield
+  digitalWrite(SDPIN,HIGH); //inactive SD
 }
 /*//////////////////////////////////////////////////////////////////
 MQ-7 CO sensor

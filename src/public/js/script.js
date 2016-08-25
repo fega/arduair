@@ -17,6 +17,9 @@ var arduair={
   },
   activeGraph:[{}],
 
+  line_colors:[{}],
+
+
   aqi_colors:[{
       value: [0,50],
       color: "00c853",//green
@@ -411,7 +414,7 @@ myChart.update();
 function resizeDocIndex(){
   var h= $("#documentation-content").height();
   $('#documentation-index').css({minHeight: h});
-  $('#page-graph-edit-menu').width($('#page-graph-edit-menu').parent().width());
+  //$('#page-graph-edit-menu').width($('#page-graph-edit-menu').parent().width());
 }
 $( window ).resize(resizeDocIndex());
 //search data buttons
@@ -443,6 +446,7 @@ function printMenuGraph(index){
     ind=index+1;
     if(el){
       var content="";
+      content+= '<a  class="btn filledGraphData white-text" style="background-color:'+Lines[index].borderColor+';">'+el.name+'</a>';
       for ( var i in arduair.data[index]){
         if(i=='date' || i=='Location' || i=='pst' || i=='name'){
          }else{
@@ -458,7 +462,7 @@ function printMenuGraph(index){
       $('#graph-options-'+ ind ).html("");
     }
   }) 
-  $('#page-graph-edit-menu').width($('#page-graph-edit-menu').parent().width());
+  //$('#page-graph-edit-menu').width($('#page-graph-edit-menu').parent().width());
 }
 function dataGraphRequest(device){
   var position= false

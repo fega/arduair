@@ -16,37 +16,48 @@ var api = require('./routes/api');
 var mongoose = require('mongoose');
 var db = require('./db/db');
 mongoose.connect(db.url);
-
+//Mongoose error handling
+mongoose.connection.on("error", function(err) {
+  console.log("Could not connect to mongo server!".yellow);
+  return console.log(err.message.red);
+});
+try {
+  mongoose.connect(db.url);
+  console.log("Started connection on " + ("mongodb://" + db.url).cyan + ", waiting for it to open...".grey);
+} catch (err) {
+  console.log(("Setting up failed to connect to " + db.url).red, err.message);
+}
 var app = express();
-app.use(compression());//enables gzip compression
+app.use(compression()); //enables gzip compression
 
 app.use(minifyHTML({
-    override:      false,
+    override: false,
     htmlMinifier: {
-        removeComments:            true,
-        collapseWhitespace:        true,
+        removeComments: true,
+        collapseWhitespace: true,
         collapseBooleanAttributes: true,
-        removeAttributeQuotes:     true,
-        removeEmptyAttributes:     true,
-        minifyJS:                  true
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: true,
+        minifyJS: true
     }
 }));
 //MONTAR HANDLEBARS TEMPLATE ENGINE
 app.engine('handlebars', exphbs({
-  defaultLayout: 'main',
-  partialsDir: path.join(__dirname, "views", "partials"),
-  extname: ".handlebars"
+    defaultLayout: 'main',
+    partialsDir: path.join(__dirname, 'views', 'partials'),
+    extname: '.handlebars'
 }));
 app.set('view engine', 'handlebars');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', routes);
 app.use('/test', test);
 app.use('/api', api);
@@ -54,9 +65,9 @@ app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -64,24 +75,22 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
+    app.use(function(err, req, res) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
     });
-  });
 }
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+app.use(function(err, req, res) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
-
-
 module.exports = app;

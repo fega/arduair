@@ -1,19 +1,20 @@
+/*global page b:true, $, Materialize*/
 var arduair={
   data: [null,null,null,null,null],
   units:{
-    humidity:"%",
-    temperature:"°C",
-    pressure:"mb",
-    Location:"Geo",
-    pst:    "mg/m3",
-    pm10:   "mg/m3",
-    pm25:   "mg/m3",
-    so2:    "ug/m3",
-    no2:    "ug/m3",
-    o3:     "ug/m3",
-    co:     "ug/m3",
-    ch4:    "ug/m3",
-    nh3:    "ug/m3",
+    humidity:'%',
+    temperature:'°C',
+    pressure:'mb',
+    Location:'Geo',
+    pst:    'mg/m3',
+    pm10:   'mg/m3',
+    pm25:   'mg/m3',
+    so2:    'ug/m3',
+    no2:    'ug/m3',
+    o3:     'ug/m3',
+    co:     'ug/m3',
+    ch4:    'ug/m3',
+    nh3:    'ug/m3'
   },
   activeGraph:[{}],
 
@@ -22,185 +23,185 @@ var arduair={
 
   aqi_colors:[{
       value: [0,50],
-      color: "00c853",//green
+      color: '00c853'//green
     },{
       value: [51,100],
-      color: "00c853",//yellow
+      color: '00c853'//yellow
     },{
       value: [101,150],
-      color: "ff9100",//orange
+      color: 'ff9100'//orange
     },{
       value: [151,200],
-      color: "d50000",//red
+      color: 'd50000'//red
     },{
       value: [201,300],
-      color: "d50000",//purple
+      color: 'd50000'//purple
     },{
       value: [301,301],
-      color: "4e342e",//maroon
+      color: '4e342e'//maroon
     },{
       value: [401,500],
-      color: "4e342e",//maroon
+      color: '4e342e'//maroon
    }],
 
   aqi_ranges:{
     o3_8h:[{
       value: [0,50],
-      range: [0,0.059],
+      range: [0,0.059]
     },{
       value: [51,100],
-      range: [0.060,0.075],
+      range: [0.060,0.075]
     },{
       value: [101,150],
-      range: [0.076,0.095],
+      range: [0.076,0.095]
     },{
       value: [151,200],
-      range: [0.096,0.115],
+      range: [0.096,0.115]
     },{
       value: [201,300],
-      range: [0.116,0.374],
+      range: [0.116,0.374]
     },{
       value: [301,301],
-      range: [0.375,100000],
+      range: [0.375,100000]
     },{
       value: [401,500],
-      range: [0,0],
+      range: [0,0]
     }], //ppm,
 
 
     o3_1h:[{
       value: [101,150],
-      range: [0.125,0.164],
+      range: [0.125,0.164]
     },{
       value: [151,200],
-      range: [0.165,0.204],
+      range: [0.165,0.204]
     },{
       value: [201,300],
-      range: [0.205,0.404],
+      range: [0.205,0.404]
     },{
       value: [301,400],
-      range: [0.405,0.504],
+      range: [0.405,0.504]
     },{
       value: [401,500],
-      range: [0.505,0.604],
+      range: [0.505,0.604]
     }], //ppm
 
     pm10_24h:[{
       value: [0,50],
-      range: [0,54],
+      range: [0,54]
     },{
       value: [51,100],
-      range: [55,154],
+      range: [55,154]
     },{
       value: [101,150],
-      range: [155,254],
+      range: [155,254]
     },{
       value: [151,200],
-      range: [255,354],
+      range: [255,354]
     },{
       value: [201,300],
-      range: [355,424],
+      range: [355,424]
     },{
       value: [301,301],
-      range: [425,505],
+      range: [425,505]
     },{
       value: [401,500],
-      range: [505,604],
+      range: [505,604]
     }], //ug/m3
 
     pm25_24h:[{
       value: [0,50],
-      range: [0,12],
+      range: [0,12]
     },{
       value: [51,100],
-      range: [12.1,35.4],
+      range: [12.1,35.4]
     },{
       value: [101,150],
-      range: [35.5,55.4],
+      range: [35.5,55.4]
     },{
       value: [151,200],
-      range: [55.5,150.4],
+      range: [55.5,150.4]
     },{
       value: [201,300],
-      range: [150.5,250.4],
+      range: [150.5,250.4]
     },{
       value: [301,301],
-      range: [250.5,350.4],
+      range: [250.5,350.4]
     },{
       value: [401,500],
-      range: [350.5,500.4],
+      range: [350.5,500.4]
     }], //ug/m3
 
     co_8h:[{
       value: [0,50],
-      range: [0,4.4],
+      range: [0,4.4]
     },{
       value: [51,100],
-      range: [4.5,9.4],
+      range: [4.5,9.4]
     },{
       value: [101,150],
-      range: [9.5,12.4],
+      range: [9.5,12.4]
     },{
       value: [151,200],
-      range: [12.5,15.4],
+      range: [12.5,15.4]
     },{
       value: [201,300],
-      range: [15.5,30.4],
+      range: [15.5,30.4]
     },{
       value: [301,301],
-      range: [30.5,40.4],
+      range: [30.5,40.4]
     },{
       value: [401,500],
-      range: [40.5,50.4],
+      range: [40.5,50.4]
     }],
     so2_24h:[{
       value: [0,50],
-      range: [0,0.035],
+      range: [0,0.035]
     },{
       value: [51,100],
-      range: [0.036,0.075],
+      range: [0.036,0.075]
     },{
       value: [101,150],
-      range: [0.076,0.185],
+      range: [0.076,0.185]
     },{
       value: [151,200],
-      range: [0.186,0.304],
+      range: [0.186,0.304]
     },{
       value: [201,300],
-      range: [0.305,0.604],
+      range: [0.305,0.604]
     },{
       value: [301,301],
-      range: [0.605,0.804],
+      range: [0.605,0.804]
     },{
       value: [401,500],
-      range: [0.805,1.004],
+      range: [0.805,1.004]
     }],
 
     no2_1h:[{
       value: [0,50],
-      range: [0,0.053],
+      range: [0,0.053]
     },{
       value: [51,100],
-      range: [0.054,0.100],
+      range: [0.054,0.100]
     },{
       value: [101,150],
-      range: [0.101,0.360],
+      range: [0.101,0.360]
     },{
       value: [151,200],
-      range: [0.361,0.649],
+      range: [0.361,0.649]
     },{
       value: [201,300],
-      range: [0.650,1.249],
+      range: [0.650,1.249]
     },{
       value: [301,301],
-      range: [1.249,1.649],
+      range: [1.249,1.649]
     },{
       value: [401,500],
-      range: [1.650,2.049],
+      range: [1.650,2.049]
     }]
   }
 }
-//arduair.prototype.ica=function(val,cont,time){ //value, contaminant, time 
+//arduair.prototype.ica=function(val,cont,time){ //value, contaminant, time
 //}
 /*////////////////////
 //page.js config
@@ -234,7 +235,7 @@ function hidding(){
   $("#actionBtn-configure").addClass("hide");
   $("#actionBtn-search").addClass("hide");
   $("#actionBtn-comment").addClass("hide");
-  
+
   $('.button-collapse').sideNav('hide');
 }
 //funcion de mostrar la pestaña main
@@ -266,7 +267,7 @@ function data(){
     $("#actionBtn-search a").removeClass("sync");
     $("#actionBtn-search a").addClass(res.status);
     Materialize.toast(res.message, 4000,'',function(){$("#actionBtn-search a").removeClass(res.status);});
-    
+
     var devices='';//this array contains the html of the device list
     if (res.devices.length>0){
 
@@ -326,15 +327,15 @@ function pageDataGraph(ctx){
 //AJAX Forms
 ////////////////////*/
 //add Device Form
-$(document).ready(function() { 
-  // bind 'addForm' and provide a simple callback function 
+$(document).ready(function() {
+  // bind 'addForm' and provide a simple callback function
   $('#addform').ajaxForm({
     success: formSuccess,    //success Callback
     beforeSubmit: formBefore, //Before Submit Callback
     buttonId:"#actionBtn-add button",
     error: formError
   });
-  // bind '#config-search-form' and provide a simple callback function 
+  // bind '#config-search-form' and provide a simple callback function
   $('#config-search-form').ajaxForm({
     success: configSearchSuccess,    //success Callback
     beforeSubmit: formBefore, //Before Submit Callback
@@ -441,7 +442,7 @@ function checkDataName(until,name){
   return result;
 }
 function printMenuGraph(index){
-  
+
   arduair.data.forEach(function(el,index){
     ind=index+1;
     if(el){
@@ -455,13 +456,13 @@ function printMenuGraph(index){
           content+= '<a  class="btn filledGraphData" data-var="'+i+'" data-units="'+units+'">'+i +' '+units+'</a>';
         }
       }
-    
+
     $('#graph-options-'+ ind ).html(content);
     console.log("remplazado en: "+ind)
     }else{
       $('#graph-options-'+ ind ).html("");
     }
-  }) 
+  })
   //$('#page-graph-edit-menu').width($('#page-graph-edit-menu').parent().width());
 }
 function dataGraphRequest(device){
@@ -520,7 +521,7 @@ function bindFilledGraphData(){
         var oUnits=other.data("units");
         var oValue=other.data("var");
         var oIndex=other.parent().attr("id").replace("graph-options-","")-1;
-        console.log(oIndex);  
+        console.log(oIndex);
 
         if (oUnits===units){ //que tenga las mismas unidades
           other.removeClass("disabled"); //lo dejo disponible
@@ -564,8 +565,8 @@ function bindFilledGraphData(){
             borderDash:line
           });
         }
-        myChart.data.datasets=data; 
-        myChart.data.labels=arduair.data[oIndex].date;       
+        myChart.data.datasets=data;
+        myChart.data.labels=arduair.data[oIndex].date;
         myChart.update(100);
       })
   })
@@ -602,7 +603,7 @@ function GraphChips(){
     console.log("WHA HAPEN?")
     var index = $(this).parent().attr("id").replace('page-edit-chip-','');
     arduair.data.splice(index,1,null);
-    
+
     printMenuGraph(); //imprimo el menu
     bindFilledGraphData();
     GraphChips();
@@ -621,10 +622,10 @@ Array.prototype.checkNewData = function(name){
       result=index;
     }
   }
-})
+});
   return result;
-}
+};
 //funcion que devuelve el index del primer nulo
 Array.prototype.firstNull = function(){
   return arduair.data.indexOf(null);
-}
+};

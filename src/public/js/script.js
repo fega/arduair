@@ -1,6 +1,18 @@
-/*global page b:true, $, Materialize*/
+/*global page $, Materialize*/
+// TODO: add data combinator function.
+// TODO: add AQI calculator function
+// TODO: put all functions on arduair prototype
+/**
+ * La variable global Arduair guarda la configuracion del cliente.
+ *   arduair.data <Array>: Guarda los datos de los dispositivos para su
+ *   posterior uso, su valor inicial es [null]
+ *   arduair.units: unidades de los dispositivos por defecto.
+ *   aqi_colors <Array>: array de objetos con los colores de cada etapa del Air Quality Index.
+ *   aqi_ranges <array>: array de objetos, donde estan los valores de concentracion del AQI.
+ * @type {Object}
+ */
 var arduair={
-  data: [null,null,null,null,null],
+  data: [null],
   units:{
     humidity:'%',
     temperature:'°C',
@@ -19,7 +31,6 @@ var arduair={
   activeGraph:[{}],
 
   line_colors:[{}],
-
 
   aqi_colors:[{
       value: [0,50],
@@ -200,7 +211,7 @@ var arduair={
       range: [1.650,2.049]
     }]
   }
-}
+};
 //arduair.prototype.ica=function(val,cont,time){ //value, contaminant, time
 //}
 /*////////////////////
@@ -220,7 +231,6 @@ page();
 /*////////////////////
 //Routing functions
 ////////////////////*/
-
 //funcion que oculta todas las pestañas
 function hidding(){
   $("#main").addClass("hide");
@@ -609,6 +619,7 @@ function GraphChips(){
     GraphChips();
   })
 }
+
 //funcion que checkea si array is null
 Array.prototype.isNull = function (){
   return this.join().replace(/,/g,'').length === 0;

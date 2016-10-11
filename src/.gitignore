@@ -32,3 +32,6 @@ npm-debug.log
 #Bower components
 public/components/*
 bower_components/*
+
+#imDoneConfig
+.imdone

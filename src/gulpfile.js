@@ -19,7 +19,7 @@ function plumberit(errTitle) {
 return plumber({
 errorHandler: notify.onError({
     title: errTitle || "Error running Gulp",
-    message: "Error: <%= error.message %>",
+    message: "Error: <%= error.message %>"
     })
 });
 }
@@ -65,7 +65,7 @@ Browser-Sync
 gulp.task('browser-sync', ['nodemon'], function () {
   browserSync({
     proxy: 'http://localhost:3000',
-    port: 4000,
+    port: 4000
    });
 });
 gulp.task('bs-reload', function () {
@@ -80,7 +80,7 @@ gulp.task('js',  function () {
     .pipe(concat('js.min.js'))
     .pipe(uglify({preserveComments:"license"}))
     .pipe(gulp.dest('./public/js'))
-    .pipe(browserSync.reload({ stream: true }));  
+    .pipe(browserSync.reload({ stream: true }));
 });
 
 gulp.task('css', function () {

@@ -1,56 +1,94 @@
 # arduAIR
 
-Air Quality Monitor in Arduino. controlled by a Node Server. So, you can build your own monitor and upload the data to this server (or your own) 
+Air Quality Monitor in Arduino. controlled by a Node Server. So, you can build your own monitor and upload the data to this server (or your own)
 
-This project it's currently in development, I will be happy if you want to contribute.
+This project's currently in development, I will be happy if you want to contribute.
 
 ## Getting started:
 
 ### building your own air quality monitor
-First of all, you will need to build your own Arduino Quality monitor, it could be as simple or complex that you want, the most simple model can be composed of:
-* 1 arduino (uno, mega or whatever)
-* 1 air Quality sensor (in this category we have a lot of options, like):
- * [MQ sensors]():
-   * [MQ]()
-   * [MQ-2]()
-   * [MQ-4]()
-   * [MQ-121]()
- * Dust optical sensor:
-   * [Shinyei ppd]()
-*  
 
+First of all, you will need to build your own Arduino Quality monitor, it could be as simple or complex that you want.
 
-### Setup your air Q. monitor in to the platform.
-Now, I supose that you have your air quality monitor, (complete or incomplete) you can subscribe it in the platform, it's pretty easy:
+#### equipment
 
-1) go to: [arduair.herokuapp.com](arduair.herokuapp.com) (provisional URL)
-2) click on "add" tab and fill the form.
-3) if you are using the arduair config system, click on "add config file";
-4) click on submit.
-5) enjoy it.
+Currently, this project uses:
 
-## How to use the arduair Platform
-### Subscribing a device:
-Please go to getting started/ Setup your air Q. monitor in to the platform.
-### Deleting a device
+- 1 Arduino (MEGA)
+- 1 Sparkfun DS1307 real time Clock module
+- 1 SparkFun BMP180 pressure sensor Module
+- 1 SparkFun TSL2561 Light sensor Module
+- 1 Arduino wifi Shield (with SD socket)
+- 1 micro SD
+- 1 DHT22 Humidity/temperature sensor
+- A set of Air quality sensor, in this case, we use sensors for criteria pollutants.
+  - shinyei ppd42ns Dust sensor
+  - MQ-131 low concentration, and Pololu Breakout
+  - MQ-7 Carbon Monoxide Sensor
+  - ME03-CO: Carbon Monoxide Sensor
+  - ME03-SO2: SO2 Sensor
+  - ME03-NO2: NO2 Sensor
+  - Here we have a couple of alternatives, also AQICN.com have another bunch of references with some experimentation.
+- some Resistances and transistors
+- 1 2200 mAh 7.4v 35c Hi-Lithium polimer battery
+- 3 lm317 for supply regulation
 
-**Instructions coming soon**
+#### Instructions
 
-## Project State:
-### receiving samples
-I recevived the samples around Jul-13-2016 for the sparkfun pieces and Jul-19-2016, for the shinyei ppd42ns and MICS 2714
-### Testing Parts:
-* [Arduino Wifi Shield](https://www.sparkfun.com/products/11287) => working.
-* [DHT22](https://www.sparkfun.com/products/10167) =>  working.
-* [BMP180](https://www.sparkfun.com/products/11824) => working, but the results are strange. tested another one, getting the same values.
-* [SparkFun Luminosity Sensor Breakout - TSL2561](https://www.sparkfun.com/products/12055) => working.
-* [SparkFun Real Time Clock Module](https://www.sparkfun.com/products/12708) => Sadly, not working.
-* [shinyei ppd42ns](http://www.seeedstudio.com/wiki/images/4/4c/Grove_-_Dust_sensor.pdf) => working, and responding to PM concentration changes. 
-* [MQ-7 (Carbon Monoxide)](https://www.sparkfun.com/products/9403) => It will need an special circuit
-* [MQ-131 low concentration (Ozone)](http://www.winsen-sensor.com/products/semiconductor-gas-sensor/sensor-mq131.html) => coming soon
-* [MICS 2714]() => it will need an special circuit (and special ensambling)
-* [ZE03-CO](http://www.winsen-sensor.com/products/co-module/ze03-co.html) => (thanks to ([Winsen](http://www.winsen-sensor.com/) for the calibration, they made an special 0-50 ppm for US), coming soon
-* [ZE03-NO2]() => coming soon.
-* [ZE03-SO2]() => coming soon.
+See here to open the building instructions. (coming soon).
 
- 
+### Setup your air Q. monitor into the platform.
+
+Now, I suppose that you have your air quality monitor, (complete or incomplete) you can subscribe it in the platform, it's pretty easy:
+
+1. Go to: <arduair.herokuapp.com> (provisional URL)
+2. Click on "add" tab and fill the form.
+3. If you are using the Arduair config system, click on "add config file";
+4. click on submit.
+5. enjoy it.
+
+## platform API
+
+We built a very simple API with some non-rest request, because it's easy to perform GET request from arduino.
+
+### Send data without date
+
+```
+GET api/:device/:password/timezone
+```
+
+name     | type   | description
+-------- | ------ | ------------------
+device   | string | target Device ID
+password | string | target device pass
+
+### Send data with date
+
+```
+GET api/:device/:password/:day/:month/:year/:hour/:minute
+```
+
+name     | type   | description
+-------- | ------ | ------------------
+device   | string | target Device ID
+password | string | target device pass
+day      | number | (1-30)Set day
+month    | number | (1-12) Set month
+year     | number | (0-9999) set year
+hour     | number | (0-24) set hour
+minute   | number | (0-60) set minute
+
+### Get all device data
+
+```
+GET /:device
+```
+
+### Get device data
+
+```
+GET /device/:device
+```
+name     | type   | description
+-------- | ------ | ------------------
+device   | string | target Device ID

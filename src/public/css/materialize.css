@@ -348,7 +348,7 @@ textarea {
 
 /**
  * Don't inherit the `font-weight` (applied by a rule above).
- * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.
+ *
  */
 optgroup {
   font-weight: bold; }
@@ -1125,11 +1125,11 @@ nav ul a span.badge {
       .row .col.m1 {
         width: 8.33333%;
         margin-left: 0; }
-      
+
       .row .col.m2 {
         width: 16.66667%;
         margin-left: 0; }
-      
+
       .row .col.m3 {
         width: 25%;
         margin-left: 0; }

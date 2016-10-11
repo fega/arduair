@@ -5,13 +5,13 @@
 #include <SD.h>        //SD card Library
 #include <SFE_BMP180.h>//Sparkfun BMP180 pressure Sensor Library
 #include <SparkFunTSL2561.h>//light sensor library SparkFun TSL2561 Breakout
-#include <WiFi.h>
+#include <WiFi.h>      //wifi shield Library
 #include <Event.h>
-#include <Timer.h>
+#include <Timer.h>     //arduino timer library
 
-#define DS1307_ADDRESS 0x68 //clock pin 
+#define DS1307_ADDRESS 0x68 //clock pin
 #define DHTPIN 7            //DHT pin
-#define DHTTYPE DHT11
+#define DHTTYPE DHT11       //dht type
 #define server "arduair.herokuapp.com/test/"    // website address
 #define WIFIPIN 4 //Wifi shield ss pin
 #define SDPIN 10  //Sd ss pin
@@ -47,7 +47,7 @@ void setup() {
   light.begin();
   sdBegin();
   wifiBegin();
-  t.every(5*60*1000,arduairRead); // 5 minutes  
+  t.every(5*60*1000,arduairRead); // 5 minutes
 }
 
 void loop() {
@@ -77,7 +77,7 @@ void request(int h,int t,float p,float l,float co,float so2,float no2){
   // if there's a successful connection:
   if (client.connect(server, 80)) {
     Serial.println("connecting...");
-    
+
     //String getRequest ="GET"+"hola"+" "
     // send the HTTP GET request:
     client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password);
@@ -104,20 +104,20 @@ void request(int h,int t,float p,float l,float co,float so2,float no2){
     client.println();
   }
  }
- 
+
 void tableWrite(){
-  //escribe en la SD, la tabla
-  digitalWrite(WIFIPIN,HIGH); //inactive wifishield
+  //write data in SD
+  digitalWrite(WIFIPIN,HIGH); //inactive wifi-shield
   digitalWrite(SDPIN,LOW); //active SD
-  
-  myFile = SD.open("DATA.txt", FILE_WRITE); //abrir la SD
+
+  myFile = SD.open("DATA.txt", FILE_WRITE); //open SD data.txt file
   if (myFile){
-    
+
     int   h = dht.readHumidity();   // 1* medir humedad
     int   t = dht.readTemperature();// 2* medir temperatura
     float p = readPressure();       // 3* medir presion
     float co= mq7Read();            // 4* medir sensor 1 y transformar
-    float so2=zeso2Read();    
+    float so2=zeso2Read();          // 5* Meaus
     float no2=zeno2Read();
     float l=lightRead();
     pmRead();
@@ -134,7 +134,7 @@ void tableWrite(){
     myFile.print(",");
     myFile.print(no2);
     myFile.print(",");
-    
+
     myFile.println(" ");
     myFile.close();
     request(h,t,p,l,co,so2,no2);
@@ -152,16 +152,6 @@ float mq7Read(){
 
   float finalValue =sensorValue;
   return finalValue;
-}
-/*//////////////////////////////////////////////////////////////////
-SD card begin
-//////////////////////////////////////////////////////////////////*/
-void sdBegin(){
-  if (!SD.begin(4)) {
-    //Serial.println("SD failed!");
-    return;
-  }
-  //Serial.println("SD done.");
 }
 /*//////////////////////////////////////////////////////////////////
 MQ-131 O3 low concentration sensor
@@ -182,7 +172,6 @@ float zeso2Read(){
   zeSO2=0;
   return c;
 }
-
 void serialEvent1(){
   if (zeAvailable==true){
     String input;
@@ -221,7 +210,7 @@ float pmRead(){
   float ratioP10 = 0, ratioP25 = 0;
   unsigned long sampletime_ms = 30000;
   float countP10, countP25;
-  
+
   for( ; ; ){
     P10 = digitalRead(9);
     P25 = digitalRead(8);
@@ -252,7 +241,7 @@ float pmRead(){
   countP25 = 1.1*pow(ratioP25,3)-3.8*pow(ratioP25,2)+520*ratioP25+0.62;
   float PM10count = countP10; ////confirmmm!!!
   float PM25count = countP25 - countP10;
-  
+
   // first, PM10 count to mass concentration conversion
   double r10 = 2.6*pow(10,-6);
   double pi = 3.14159;
@@ -261,7 +250,7 @@ float pmRead(){
   double mass10 = density*vol10;
   double K = 3531.5;
   float concLarge = (PM10count)*K*mass10;
-  
+
   // next, PM2.5 count to mass concentration conversion
   double r25 = 0.44*pow(10,-6);
   double vol25 = (4/3)*pi*pow(r25,3);
@@ -293,7 +282,7 @@ float readPressure(){
           //Serial.print("absolute pressure: ");
           Serial.print(P*0.750061561303,2);
           //Serial.println(" mmHg");
-          
+
           return P;
         }
         //else Serial.println("error retrieving pressure measurement\n");
@@ -305,10 +294,54 @@ float readPressure(){
   //else Serial.println("error starting temperature measurement\n");
 }
 /*//////////////////////////////////////////////////////////////////
+SparkFun Luminosity Sensor Breakout - TSL2561
+//////////////////////////////////////////////////////////////////*/
+float lightRead(){
+  boolean gain;     // Gain setting, 0 = X1, 1 = X16;
+  unsigned int ms;  // Integration ("shutter") time in milliseconds
+  unsigned char time = 2;
+  light.setTiming(gain,time,ms);
+  light.setPowerUp();
+  delay(ms);
+  unsigned int data0, data1;
+
+  if (light.getData(data0,data1))
+  {
+    // getData() returned true, communication was successful
+
+    Serial.print("data0: ");
+    Serial.print(data0);
+    Serial.print(" data1: ");
+    Serial.print(data1);
+
+    // To calculate lux, pass all your settings and readings
+    // to the getLux() function.
+
+    // The getLux() function will return 1 if the calculation
+    // was successful, or 0 if one or both of the sensors was
+    // saturated (too much light). If this happens, you can
+    // reduce the integration time and/or gain.
+    // For more information see the hookup guide at: https://learn.sparkfun.com/tutorials/getting-started-with-the-tsl2561-luminosity-sensor
+
+    double lux;    // Resulting lux value
+    boolean good;  // True if neither sensor is saturated
+
+    // Perform lux calculation:
+
+    good = light.getLux(gain,ms,data0,data1,lux);
+
+    // Print out the results:
+
+    Serial.print(" lux: ");
+    Serial.print(lux);
+    if (good) Serial.println(" (good)"); else Serial.println(" (BAD)");
+  }
+}
+/*//////////////////////////////////////////////////////////////////
  RTC based on http://bildr.org/2011/03/ds1307-arduino/
 //////////////////////////////////////////////////////////////////*/
 byte bcdToDec(byte val)  {
-// Convert binary coded decimal to normal decimal numbers
+  // Convert binary coded decimal to normal decimal numbers
   return ( (val/16*10) + (val%16) );
 }
 
@@ -329,46 +362,12 @@ void getDate(){
   year = bcdToDec(Wire.read());
 }
 /*//////////////////////////////////////////////////////////////////
-SparkFun Luminosity Sensor Breakout - TSL2561
+SD card begin
 //////////////////////////////////////////////////////////////////*/
-float lightRead(){
-  boolean gain;     // Gain setting, 0 = X1, 1 = X16;
-  unsigned int ms;  // Integration ("shutter") time in milliseconds
-  unsigned char time = 2;
-  light.setTiming(gain,time,ms);
-  light.setPowerUp();
-  delay(ms);
-  unsigned int data0, data1;
-
-  if (light.getData(data0,data1))
-  {
-    // getData() returned true, communication was successful
-    
-    Serial.print("data0: ");
-    Serial.print(data0);
-    Serial.print(" data1: ");
-    Serial.print(data1);
-  
-    // To calculate lux, pass all your settings and readings
-    // to the getLux() function.
-    
-    // The getLux() function will return 1 if the calculation
-    // was successful, or 0 if one or both of the sensors was
-    // saturated (too much light). If this happens, you can
-    // reduce the integration time and/or gain.
-    // For more information see the hookup guide at: https://learn.sparkfun.com/tutorials/getting-started-with-the-tsl2561-luminosity-sensor
-  
-    double lux;    // Resulting lux value
-    boolean good;  // True if neither sensor is saturated
-    
-    // Perform lux calculation:
-
-    good = light.getLux(gain,ms,data0,data1,lux);
-    
-    // Print out the results:
-  
-    Serial.print(" lux: ");
-    Serial.print(lux);
-    if (good) Serial.println(" (good)"); else Serial.println(" (BAD)");
+void sdBegin(){
+  if (!SD.begin(4)) {
+    //Serial.println("SD failed!");
+    return;
   }
+  //Serial.println("SD done.");
 }

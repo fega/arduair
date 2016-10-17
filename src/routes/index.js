@@ -35,8 +35,7 @@ router.post('/config',getBody,getDeviceToConfig,(req,res)=>{
 /*//////////////////
 /* GET home page. */
 //////////////////*/
-router.get(['/documentation','/data
-','data/*','/add','/configure','/'], (req, res)=> {
+router.get(['/documentation','/data','data/*','/add','/configure','/'], (req, res)=> {
   res.render('index', { title: 'Arduair' });
 });
 module.exports = router;

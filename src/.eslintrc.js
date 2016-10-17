@@ -26,6 +26,9 @@ module.exports = {
         "no-mixed-requires":["error"],
         "no-new-require":["error"],
         "no-path-concat":["error"],
-        "prefer-arrow-callback":["warn"]
+        "prefer-arrow-callback":["warn"],
+        "no-new-object":["error"],
+        "object-shorthand":["error"],
+        "prefer-const":["warn"]
     }
 };

@@ -1,3 +1,4 @@
+//TODO: delete this file
 //libraries...
 #include "Wire.h"      //for I2C communication
 #include "DHT.h"       //for dht sensor
@@ -11,19 +12,19 @@
 //#include <string.h>
 
 //define...
-#define DS1307_ADDRESS 0x68 //clock pin 
+#define DS1307_ADDRESS 0x68 //clock pin
 #define DHTPIN 7            //DHT pin
 #define DHTTYPE DHT11
 #define ALTITUDE 1655.0
 
 #define ADAFRUIT_CC3000_IRQ   3  //CC3000 config
-#define ADAFRUIT_CC3000_VBAT  5 
+#define ADAFRUIT_CC3000_VBAT  5
 #define ADAFRUIT_CC3000_CS    10
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,SPI_CLOCK_DIVIDER);
 #define WLAN_SSID       "myNetwork"           // cannot be longer than 32 characters!
 #define WLAN_PASS       "myPassword"
 #define WLAN_SECURITY   WLAN_SEC_WPA2
-#define IDLE_TIMEOUT_MS  3000 
+#define IDLE_TIMEOUT_MS  3000
 #define WEBSITE      "arduair.herokuapp.com"
 #define WEBPAGE      "/test/"
 uint32_t ip; //it is for the CC3000 but I don't know what it does.
@@ -59,25 +60,25 @@ void loop() {
 
 void tableWrite(){
   //escribe en la SD, la tabla
-  
+
   myFile = SD.open("DATA.txt", FILE_WRITE); //abrir la SD
   if (myFile){
     int h = dht.readHumidity();   // 1* medir humedad
     myFile.print(h);
     myFile.print(",");
-    
+
     int t= dht.readTemperature(); // 2* medir temperatura
     myFile.print(t);
     myFile.print(",");
-    
+
     float p= readPressure();      // 3* medir presion
     myFile.print(p);
     myFile.print(",");
-    
+
     float co=mq7Read();           // 4* medir sensor 1 y transformar
     myFile.print(co);
     myFile.print(",");
-    
+
     // 5* medir sensor 2 y transformar
     // 6* medir sensor 3 y transformar
     // 7* medir sensor 4 y transformar
@@ -162,7 +163,7 @@ float readPressure(){
           //Serial.print("absolute pressure: ");
           Serial.print(P*0.750061561303,2);
           //Serial.println(" mmHg");
-          
+
           return P;
         }
         //else Serial.println("error retrieving pressure measurement\n");
@@ -173,7 +174,7 @@ float readPressure(){
   }
   //else Serial.println("error starting temperature measurement\n");
 
-  delay(5000);  // Pause for 5 seconds. 
+  delay(5000);  // Pause for 5 seconds.
 }
 /////                   MQ7Sensor                   /////
 float mq7Read(){
@@ -233,7 +234,7 @@ void sdBegin(){
 //    character = myFile.read();
 //    }
 //    if(character == ']'){
-//    
+//
 //    /*
 //    //Debuuging Printing
 //    Serial.print("Name:");
@@ -241,7 +242,7 @@ void sdBegin(){
 //    Serial.print("Value :");
 //    Serial.println(settingValue);
 //    */
-//    
+//
 //    // Apply the value to the parameter
 //    //applySetting(settingName,settingValue);
 //    // Reset Strings
@@ -250,7 +251,7 @@ void sdBegin(){
 //    }
 //    }
 //    // close the file:
-//    myFile.close(); 
+//    myFile.close();
 //  }
 //}
 
@@ -263,7 +264,7 @@ void sdBegin(){
 //  //begin parameters
 //  else if (set == "beginYear") {
 //    beginYear=val;
-//  }  
+//  }
 //  else if (set == "beginMonth") {
 //    beginMonth=val;
 //  }
@@ -280,7 +281,7 @@ void sdBegin(){
 //  //end parameters
 //  else if (set == "endYear") {
 //    endYear=val;
-//  }  
+//  }
 //  else if (set == "endMonth") {
 //    endMonth=val;
 //  }
@@ -296,7 +297,7 @@ void sdBegin(){
 //  else{
 //    //Serial.println("the value " + set +" doesn´t exist in the config file");
 //  }
-//  
+//
 //}
 void wifiBegin(){
   //CC3000 Initializing..
@@ -313,15 +314,15 @@ void wifiBegin(){
     while(1);
   }
   //Serial.println(F("Connected!"));
-  
+
   /* Wait for DHCP to complete */
   //Serial.println(F("Request DHCP"));
   while (!cc3000.checkDHCP())
   {
     delay(100); // ToDo: Insert a DHCP timeout!
-  }  
+  }
 
-  /* Display the IP address DNS, Gateway, etc. */  
+  /* Display the IP address DNS, Gateway, etc. */
 
   ip = 0;
   // Try looking up the website's IP address
@@ -346,10 +347,10 @@ void wifiSend(){
     www.fastrprint(F("\r\n"));
     www.println();
   } else {
-    //Serial.println(F("Connection failed"));    
+    //Serial.println(F("Connection failed"));
     return;
   }
-  /* Read data until either the connection is closed, or the idle timeout is reached. */ 
+  /* Read data until either the connection is closed, or the idle timeout is reached. */
   unsigned long lastRead = millis();
   while (www.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS)) {
     while (www.available()) {
@@ -362,4 +363,3 @@ void wifiSend(){
   //cc3000.disconnect();
  delay(10000);
 }
-

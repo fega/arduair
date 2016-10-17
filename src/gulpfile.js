@@ -3,13 +3,13 @@
 var gulp = require('gulp');
 var csso = require('gulp-csso');
 var concat = require('gulp-concat');
-var csslint = require('gulp-csslint');
 var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 var uglify = require('gulp-uglify');
-var jshint = require('gulp-jshint');
 var plumber = require('gulp-plumber');
 var notify = require('gulp-notify');
+var fs = require('fs');
+var jsdoc2md = require('jsdoc-to-markdown');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;// we'd need a slight delay to reload browsers, connected to browser-sync after restarting nodemon
 /*///////////////////////////////////////
@@ -24,66 +24,66 @@ errorHandler: notify.onError({
 });
 }
 /*///////////////////////////////////////
+docs generation
+///////////////////////////////////////*/
+gulp.task('documentation', () => {
+  return jsdoc2md.render({ files: './public/js/script.js' })
+    .then(output => fs.writeFileSync('../docs/front.md', output));
+});
+/*///////////////////////////////////////
 Nodemon
 ///////////////////////////////////////*/
-gulp.task('nodemon', function (cb) {
+gulp.task('nodemon',(cb) => {
   var called = false;
   return nodemon({
     script: 'bin/www',// nodemon our expressjs server
     //watch: [''] // watch core server file(s) that require server restart on change
     ignore:['public/*','gulpfile.js']
   })
-    .on('start', function onStart() {
-      if (!called) { cb(); }// ensure start only got called once
+    .on('start', () => {
+      if (!called) { return cb(); }// ensure start only got called once
       called = true;
     })
-    .on('restart', function onRestart() {
-      setTimeout(function reload() {// reload connected browsers after a slight delay
+    .on('restart', () => {
+      setTimeout(() => {// reload connected browsers after a slight delay
         browserSync.reload({stream: false });
       }, BROWSER_SYNC_RELOAD_DELAY);
     });
 });
 /*///////////////////////////////////////
-Linters
-///////////////////////////////////////*/
-gulp.task('jslint', function() {
-  return gulp.src(['**/*.js','!./node_modules/**/*.js',"./public/js/init.js","!./public/js/*.min.js","!./public/js/jquer*.js","!./public/js/page.js","!./public/js/chart.js","!./public/js/moment.js"])
-    .pipe(plumberit('JsLint Error'))
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
-});
-
-gulp.task('csslint', function() {
-  return gulp.src(['./public/css/style.css','./public/css/plataforma.css'])
-    .pipe(plumberit('Build Error'))
-    .pipe(csslint())
-    .pipe(csslint.reporter());
-});
-/*///////////////////////////////////////
 Browser-Sync
 ///////////////////////////////////////*/
-gulp.task('browser-sync', ['nodemon'], function () {
+gulp.task('browser-sync', ['nodemon'],  () => {
   browserSync({
     proxy: 'http://localhost:3000',
     port: 4000
    });
 });
-gulp.task('bs-reload', function () {
+gulp.task('bs-reload', () => {
   browserSync.reload();
 });
 /*///////////////////////////////////////
 Build
 ///////////////////////////////////////*/
-gulp.task('js',  function () {
-  return gulp.src(['./public/js/jquery.js','./public/js/materialize.min.js','./public/js/jqueryform.js','./public/js/moment.js','./public/js/chart.js','./public/js/init.js','./public/js/page.js','./public/js/script.js','./public/js/scriptChart.js','!./public/js/js.min.js'])
+gulp.task('js',  () => {
+  return gulp.src(
+    ['./public/js/jquery.js',
+    './public/js/materialize.min.js',
+    './public/js/jqueryform.js',
+    './public/js/moment.js',
+    './public/js/chart.js',
+    './public/js/init.js',
+    './public/js/page.js',
+    './public/js/script.js',
+    './public/js/scriptChart.js'])
     .pipe(plumberit('JS build Error'))
     .pipe(concat('js.min.js'))
-    .pipe(uglify({preserveComments:"license"}))
+    //.pipe(uglify({preserveComments:"license"}))
     .pipe(gulp.dest('./public/js'))
     .pipe(browserSync.reload({ stream: true }));
 });
 
-gulp.task('css', function () {
+gulp.task('css', () => {
   return gulp.src(['./public/css/materialize.css','./public/css/*.css','!./public/css/*.min.css'])
         .pipe(plumberit('CSS build Error'))
         .pipe(csso())
@@ -95,8 +95,8 @@ gulp.task('css', function () {
 /*///////////////////////////////////////
 Browser-Sync
 ///////////////////////////////////////*/
-gulp.task('default', ['browser-sync','css','js'], function () {
-  gulp.watch('public/**/*.js',   ['js', 'jslint']);
+gulp.task('default', ['browser-sync','css','js'], () => {
+  gulp.watch('public/**/*.js',   ['js','documentation']);
   gulp.watch('public/**/*.css',  ['css']);
   gulp.watch('public/**/*.html', ['bs-reload']);
   gulp.watch('views/**/*.handlebars', ['bs-reload']);

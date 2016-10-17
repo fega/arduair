@@ -1,4 +1,14 @@
-module.exports=function(req,res,next){
+
+
+module.exports=datecheck;
+/**
+ * checkquea que los parametros ingresados al request sean una decha valida
+ * @param  {Object} req    the request
+ * @param  {Object} res    the response
+ * @param  {Function} next the callback function
+ * @return {Function}      return an error or the next() callback
+ */
+function datecheck(req,res,next){
 	console.log('DAY: '+ req.params.day);
 	console.log('MONTH: '+ req.params.month);
 	console.log('YEAR: '+ req.params.year);

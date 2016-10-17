@@ -1,3 +1,4 @@
+//DOING: including documentation
 //libraries...
 #include "Wire.h"      //for I2C communication
 #include "DHT.h"       //for dht sensor
@@ -10,11 +11,11 @@
 #include <Timer.h>     //arduino timer library
 
 #define DS1307_ADDRESS 0x68 //clock pin
-#define DHTPIN 7            //DHT pin
-#define DHTTYPE DHT11       //dht type
+#define DHTPIN 7       //DHT pin
+#define DHTTYPE DHT11  //dht type
 #define server "arduair.herokuapp.com/test/"    // website address
-#define WIFIPIN 4 //Wifi shield ss pin
-#define SDPIN 10  //Sd ss pin
+#define WIFIPIN 4      //Wifi shield ss pin
+#define SDPIN 10       //Sd ss pin
 
 File myFile;//Defining one file  class
 
@@ -35,7 +36,9 @@ Timer t;
 bool zeAvailable=true;
 unsigned long zeCo,zeNO2,zeSO2; //ze sensors serial port
 unsigned int zeCounter;// Ze counter of meausures
-
+/**
+ * Arduair configuration initialitation
+ */
 void setup() {
   Serial.begin(9600);
   Serial1.begin(9600); //ZE CO-sensor
@@ -49,7 +52,6 @@ void setup() {
   wifiBegin();
   t.every(5*60*1000,arduairRead); // 5 minutes
 }
-
 void loop() {
   t.update();
 }
@@ -145,7 +147,7 @@ void tableWrite(){
 /*//////////////////////////////////////////////////////////////////
 MQ-7 CO sensor
 //////////////////////////////////////////////////////////////////*/
-float mq7Read(){
+float mq7Read(h){
   int sensorValue = analogRead(0);       // read analog input pin 0
   Serial.println(sensorValue, DEC);  // prints the value read
   delay(100);// wait 100ms for next reading
@@ -340,8 +342,12 @@ float lightRead(){
 /*//////////////////////////////////////////////////////////////////
  RTC based on http://bildr.org/2011/03/ds1307-arduino/
 //////////////////////////////////////////////////////////////////*/
+/**
+ * Convert binary coded decimal to normal decimal numbers
+ * @param  val byte value to be converteted
+ * @return     Resulting DEC Value
+ */
 byte bcdToDec(byte val)  {
-  // Convert binary coded decimal to normal decimal numbers
   return ( (val/16*10) + (val%16) );
 }
 

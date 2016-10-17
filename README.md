@@ -37,7 +37,7 @@ Currently, this project uses:
 
 See here to open the building instructions. (coming soon).
 
-### Setup your air Q. monitor into the platform.
+## Setup your air Q. monitor into the platform.
 
 Now, I suppose that you have your air quality monitor, (complete or incomplete) you can subscribe it in the platform, it's pretty easy:
 

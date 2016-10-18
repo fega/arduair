@@ -4,6 +4,7 @@ Air Quality Monitor in Arduino. controlled by a Node Server. So, you can build y
 
 This project's currently in development, I will be happy if you want to contribute.
 
+![Arduair screenshot](https://lh3.googleusercontent.com/n5DMal5MwRDozlpnW49EXgYQDbvq39EygwUUXoNwcXKT7U1Ys_4ugA6NnGjbhOQRFY5IhGNsufVo555OuExD0CHivVf-lpzqsD1wEeBmtf5SXPHdYcxEqIFx0hNo6G2qsvZPhx4xgXebkyKA7lD9mKPMS0HugMAi_3bbGt7SLCAaYWy6HTNJ69gANxLJ8lvDBvfZu-idVGM0lgRWwKp01by0gD2WkMlUTx96PYtHEZmPIUOfO-dyn6GNmMmkb-yCURblqtIIz1HQR4uervb-cn6l5sFw-8mJnVzsm1Rvx7zl3MkKe3BR0vghUzwXs6vTBozuzx6svWtWT1ZTunGCy-BvHV9-BNxybk1103pTjneWZYsyxRccRW456pV0Z_H9Ng42aIEwej9-ZXBpOkKYYhEEC_QG_NkkAkvuFlO0ZkjcGxltKhy_JnbJHAFzaJxGevFPgwkZzR1Qo-LyCejmXDiEMguqCSsMF4SFFIE03SuF_il-x9vf12pLn_tmoJKQKVCnPfwLvYJeLrkhmmabxL0SdTGRBMz7V9FTFSQFPyKjbdlTURkH5beaYCnw6NuN6jdMrM_M6YuiEdBW8ymE9orCn8l3MbRcBHf16RZqmLN5reuU4w=w960-h635-no)
 ## Getting started:
 
 ### building your own air quality monitor

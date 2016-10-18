@@ -2,10 +2,10 @@
 
 <dl>
 <dt><a href="#arduair">arduair</a></dt>
-<dd><p>Global array for client configuration</p>
+<dd><p>Global Object with arduair default configuration and methods</p>
 </dd>
 <dt><a href="#chartctx">chartctx</a></dt>
-<dd><p>Chart contex, necesary  generate the graph</p>
+<dd><p>Chart context, necessary  generate the graph</p>
 </dd>
 <dt><a href="#myChart">myChart</a></dt>
 <dd><p>Chart configuration, to get more info look in <a href="http://www.chartjs.org/">chart.js</a></p>
@@ -53,7 +53,7 @@
 <a name="arduair"></a>
 
 ## arduair
-Global array for client configuration
+Global Object with arduair default configuration and methods
 
 **Kind**: global variable  
 **Properties**
@@ -67,10 +67,21 @@ Global array for client configuration
 | arduair.aqi_ranges | <code>Array</code> | Ranges used to calculate te aqi_ranges |
 | arduair.line_style | <code>Array</code> | Set the default apereance for the lines in the graph |
 
+<a name="arduair.generateDeviceList"></a>
+
+### arduair.generateDeviceList(res) ⇒ <code>undefined</code>
+Generates the table with devices gotten by a request
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| res | <code>Json</code> | Response object |
+
 <a name="chartctx"></a>
 
 ## chartctx
-Chart contex, necesary  generate the graph
+Chart context, necessary  generate the graph
 
 **Kind**: global variable  
 <a name="myChart"></a>

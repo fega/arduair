@@ -102,15 +102,15 @@ footer {
 	color: #ff1744 !important;
 }
 input[type=text]:focus:not([readonly]) + label,
-input[type=password]:focus:not([readonly]) + label, 
-input[type=email]:focus:not([readonly]) + label, 
-input[type=url]:focus:not([readonly]) + label, 
-input[type=time]:focus:not([readonly]) + label, 
-input[type=date]:focus:not([readonly]) + label, 
-input[type=datetime-local]:focus:not([readonly]) + label, 
-input[type=tel]:focus:not([readonly]) + label, 
-input[type=number]:focus:not([readonly]) + label, 
-input[type=search]:focus:not([readonly]) + label, 
+input[type=password]:focus:not([readonly]) + label,
+input[type=email]:focus:not([readonly]) + label,
+input[type=url]:focus:not([readonly]) + label,
+input[type=time]:focus:not([readonly]) + label,
+input[type=date]:focus:not([readonly]) + label,
+input[type=datetime-local]:focus:not([readonly]) + label,
+input[type=tel]:focus:not([readonly]) + label,
+input[type=number]:focus:not([readonly]) + label,
+input[type=search]:focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label{
 	color:#2980b9;
 }
@@ -183,7 +183,7 @@ textarea:focus {
 	-webkit-font-feature-settings: 'liga';
 	-webkit-font-smoothing: antialiased;
 	line-height: 57px;
-	font-size: 1.6rem;	
+	font-size: 1.6rem;
 }
 .btn-floating.done:after{
 	content:'done';
@@ -239,7 +239,7 @@ nav .button-collapse{
 }
 
 /*! Project Style
-* 
+*
 */
 .waves-effect.waves-pink .waves-ripple {
       background-color: rgba(255, 28, 68, 0.65);
@@ -289,22 +289,22 @@ nav .button-collapse{
   color:#606c71;
 }
 .fixed-action-btn.editGraphData-container{
-    position: relative; 
+    position: relative;
     right: 0px;
     padding: 0 0 0 0px !important;
     bottom:0px;
 
 }
-a.filledGraphData{
+a.filledGraphData, .filledGraphDataMaster{
   margin-top:6px;
   background-color: #eceff1;
   color:#606c71;
   width:100%;
   padding: 2px;
-  font-size: 10px;  
+  font-size: 10px;
 }
 a.filledGraphData.active{
-  background-color: #2980b9; 
+  background-color: #2980b9;
   color:white;
 }
 
@@ -317,11 +317,11 @@ a.filledGraphData.active{
       height: 100%;
       left: initial;
       width: 500px;
-      /*width 100% only goes to width of button container */ 
+      /*width 100% only goes to width of button container */
     }
 .fixed-action-btn.horizontal ul li {
         display: inline-block;
-        margin: 15px 15px 0 0; 
+        margin: 15px 15px 0 0;
 }
 
 #page-graph-chips .chip, #page-graph-chips a{

@@ -4,12 +4,6 @@
 <dt><a href="#arduair">arduair</a></dt>
 <dd><p>Global Object with arduair default configuration and methods</p>
 </dd>
-<dt><a href="#chartctx">chartctx</a></dt>
-<dd><p>Chart context, necessary  generate the graph</p>
-</dd>
-<dt><a href="#myChart">myChart</a></dt>
-<dd><p>Chart configuration, to get more info look in <a href="http://www.chartjs.org/">chart.js</a></p>
-</dd>
 </dl>
 
 ## Functions
@@ -39,15 +33,6 @@
 <dt><a href="#pageDataGraph">pageDataGraph()</a> ⇒ <code>undefined</code></dt>
 <dd><p>Show graph</p>
 </dd>
-<dt><a href="#printMenuGraph">printMenuGraph(index)</a> ⇒ <code>undefined</code></dt>
-<dd><p>This function create a menu for the graph</p>
-</dd>
-<dt><a href="#dataGraphRequest">dataGraphRequest(device)</a> ⇒ <code>undefined</code></dt>
-<dd><p>Request a device data and put it in arduair.data array</p>
-</dd>
-<dt><a href="#GraphChips">GraphChips()</a></dt>
-<dd><p>Generates chips for each device loaded</p>
-</dd>
 </dl>
 
 <a name="arduair"></a>
@@ -67,9 +52,17 @@ Global Object with arduair default configuration and methods
 | arduair.aqi_ranges | <code>Array</code> | Ranges used to calculate te aqi_ranges |
 | arduair.line_style | <code>Array</code> | Set the default apereance for the lines in the graph |
 
+
+* [arduair](#arduair)
+    * [.generateDeviceList(res)](#arduair.generateDeviceList)
+    * [.generateGraphChips()](#arduair.generateGraphChips)
+    * [.saveDataRequested()](#arduair.saveDataRequested)
+    * [.generateGraphMenu()](#arduair.generateGraphMenu)
+    * [.bindMenuButtonBehavior()](#arduair.bindMenuButtonBehavior)
+
 <a name="arduair.generateDeviceList"></a>
 
-### arduair.generateDeviceList(res) ⇒ <code>undefined</code>
+### arduair.generateDeviceList(res)
 Generates the table with devices gotten by a request
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
@@ -78,18 +71,30 @@ Generates the table with devices gotten by a request
 | --- | --- | --- |
 | res | <code>Json</code> | Response object |
 
-<a name="chartctx"></a>
+<a name="arduair.generateGraphChips"></a>
 
-## chartctx
-Chart context, necessary  generate the graph
+### arduair.generateGraphChips()
+Generates chips for each device loaded
 
-**Kind**: global variable  
-<a name="myChart"></a>
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.saveDataRequested"></a>
 
-## myChart
-Chart configuration, to get more info look in [chart.js](http://www.chartjs.org/)
+### arduair.saveDataRequested()
+Save a requested data in the correct place of arduair.data
 
-**Kind**: global variable  
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.generateGraphMenu"></a>
+
+### arduair.generateGraphMenu()
+Generates a options menu for each data array.
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.bindMenuButtonBehavior"></a>
+
+### arduair.bindMenuButtonBehavior()
+This function controls the filledGraphData buttons behavior
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="hidding"></a>
 
 ## hidding() ⇒ <code>undefined</code>
@@ -136,33 +141,5 @@ Show debug tab
 
 ## pageDataGraph() ⇒ <code>undefined</code>
 Show graph
-
-**Kind**: global function  
-<a name="printMenuGraph"></a>
-
-## printMenuGraph(index) ⇒ <code>undefined</code>
-This function create a menu for the graph
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| index | <code>Number</code> | the index to construct their menu |
-
-<a name="dataGraphRequest"></a>
-
-## dataGraphRequest(device) ⇒ <code>undefined</code>
-Request a device data and put it in arduair.data array
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| device | <code>String</code> | Device name |
-
-<a name="GraphChips"></a>
-
-## GraphChips()
-Generates chips for each device loaded
 
 **Kind**: global function  

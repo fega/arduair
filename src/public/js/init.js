@@ -26,3 +26,29 @@ Chart.defaults.global.elements.line.borderColor = '#FF1744';
 Chart.defaults.global.elements.point.backgroundColor = 'rgba(255, 255, 255, 0.1)';
 Chart.defaults.global.elements.point.radius = 4;
 Chart.defaults.global.elements.point.borderColor = '#FF1744';
+/**
+ * Chart configuration, to get more info look in [chart.js](http://www.chartjs.org/)
+ */
+var myChart = new Chart($("#chart"), {
+    type: 'line',
+    data: {
+        labels: [0],
+        datasets: [{
+            label: '0',
+            data: [0]
+        }]
+    },
+    options: {
+        defaultColor: '#FF1744',
+        scales: {
+            type: 'time',
+            xAxes: [{
+                type: "time"
+            }]
+        }
+    }
+});
+//myChart.update();
+//to update the points use:
+//myChart.data.datasets[0].data
+//myLineChart.update();

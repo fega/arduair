@@ -1,7 +1,7 @@
  var Device = require('./device');
 
 module.exports = function (req,res,next){
-	Device.find({},function(err,devices){
+	Device.find({},(err,devices)=>{
 
 		if (err){
 			console.log('Handled error: ' + err);
@@ -14,15 +14,15 @@ module.exports = function (req,res,next){
 			return next();
 		}
 		if (devices){
-			console.log('Devices Sended' + devices);
-			if(devices.length > 0){   
-				req.result ={status:"done",message:"Devices Loaded",devices:devices};
+			console.log('Devices Sended'.green );
+			if(devices.length > 0){
+				req.result ={status:"done",message:"Devices Loaded",devices};
 				return next();
 			}else{
-				req.result ={status:"error",message:"No Devices in dataBase",devices:devices};
+				req.result ={status:"error",message:"No Devices in dataBase",devices};
 				return next();
 			}
-			
+
 		}
 	});
 };

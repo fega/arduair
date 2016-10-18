@@ -9,9 +9,9 @@ module.exports=datecheck;
  * @return {Function}      return an error or the next() callback
  */
 function datecheck(req,res,next){
-	console.log('DAY: '+ req.params.day);
-	console.log('MONTH: '+ req.params.month);
-	console.log('YEAR: '+ req.params.year);
+	//console.log('DAY: '+ req.params.day);
+	//console.log('MONTH: '+ req.params.month);
+	//console.log('YEAR: '+ req.params.year);
 
 	if(!req.params.day || req.params.day>31 || req.params.day<0 || isNaN(req.params.day)){
 		req.message+='Problemas el parametro dia, <br>';
@@ -30,7 +30,7 @@ function datecheck(req,res,next){
 	if(!req.params.minute || req.params.minute>60 || req.params.minute<0 || isNaN(req.params.minute)){
 		req.message+='Problemas el parametro minuto, <br>';
 	}
-	console.log(req.message);
+	//console.log(req.message);
 	if (isEmpty(req.message)){
 		return next();
 	}else{

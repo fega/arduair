@@ -29,7 +29,7 @@ router.get('/device/:device/:password/status',(req,res)=>{
 //});
 /*POST: device and password combination exist?, to config the device?*/
 router.post('/config',getBody,getDeviceToConfig,(req,res)=>{
-	console.log(req.body);
+	//console.log(req.body);
 	res.send(req.result);
 });
 /*//////////////////

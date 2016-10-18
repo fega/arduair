@@ -244,6 +244,7 @@ var arduair = {
         borderColor: '#2980b9'
     }]
 };
+arduair.prototype
 /*
  * Page.js Routing
  */
@@ -353,8 +354,7 @@ function data() {
  * @function
  * @return {undefined}
  */
-function pageAdd(res) {
-    console.log(res);
+function pageAdd() {
     hidding();
     $("#add").removeClass("hide");
     $("#actionBtn-add").removeClass("hide");
@@ -383,9 +383,9 @@ function pageDataGraph(ctx) {
 //AJAX Forms
 ////////////////////*/
 //add Device Form
-$(document).ready(function() {
+$(document).ready(()=>{ // TODO: check if the arrow function breaks the code
     $('#addform').ajaxForm({
-        success: formSuccess, //success Callback
+        success: addFormSuccess, //success Callback
         beforeSubmit: formBefore, //Before Submit Callback
         buttonId: "#actionBtn-add button",
         error: formError
@@ -398,7 +398,7 @@ $(document).ready(function() {
         error: formError
     });
     //this function is triggered when a addform is sended successful
-    function formSuccess(res) {
+    function addFormSuccess(res) {
         //res.status= status sended by the server
         //res.message= message sended by the sever, for human reading
         var status = res.status;
@@ -433,7 +433,6 @@ $(document).ready(function() {
         Materialize.toast(res.message, 4000, '', () => {
             $(btn).removeClass(status);
         });
-
         if (res.status == "done") {
             $('#config-device-founded').slideDown(700);
         }
@@ -539,12 +538,8 @@ function printMenuGraph(index) {
  */
 function dataGraphRequest(device) {
     var position = false;
-        //console.log("dataGraph:"+position)
-    var pos = -1;
+    //var pos = -1;
     $.get('/device/' + device, (res)=> {
-        //console.log("IMPRIMIR:");
-        //console.log(arduair.data);
-
         var name = res.data.name;
         if (res.status === 'error') { // si el resultado es un error, imprimo el error
             Materialize.toast(res.message, 4000, '', () => {
@@ -675,11 +670,9 @@ function bindFilledGraphData() {
  * Generates chips for each device loaded
  */
 function GraphChips() {
-    var content = ""; //GENERO LOS CHIPS
-    var firstNull = arduair.data.firstNull();
-    console.log(firstNull);
-    var i = 0;
-    for (i; i < firstNull; i++) {
+    var content = ""; //namespace
+    var firstNull = arduair.data.firstNull(); // how many chips will be created
+    for (var i=0; i < firstNull; i++) {
         var el = arduair.data[i];
         content += '<div class="chip page-edit-chip" id="page-edit-chip-' + i + '">' + el.name + '<i class="material-icons">close</i></div>';
     }
@@ -746,5 +739,4 @@ Array.prototype.firstNull = function() {
   }else{
     return arduair.data.indexOf(null);
   }
-
 };

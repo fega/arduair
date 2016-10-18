@@ -444,7 +444,7 @@ $(document).ready(function() {
 //CHART
 ////////////////////*/
 /**
- * Chart contex, necesary  generate the graph
+ * Chart context, necessary  generate the graph
  */
 var chartctx = $("#chart");
 var chartData = [0];

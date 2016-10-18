@@ -1,4 +1,4 @@
-# Sensor Liss
+# Sensor List
 In this document, we have a little collection of air quality sensor references, with a bunch of useful documents.
 
 

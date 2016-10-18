@@ -30,7 +30,7 @@ Currently, this project uses:
   - ME03-NO2: NO2 Sensor
   - Here we have a couple of alternatives, also AQICN.com have another bunch of references with some experimentation.
 - some Resistances and transistors
-- 1 2200 mAh 7.4v 35c Hi-Lithium polimer battery
+- 1 2200 mAh 7.4v 35c Hi-Lithium polymer battery
 - 3 lm317 for supply regulation
 
 #### Instructions
@@ -49,7 +49,7 @@ Now, I suppose that you have your air quality monitor, (complete or incomplete) 
 
 ## platform API
 
-We built a very simple API with some non-rest request, because it's easy to perform GET request from arduino.
+We built a very simple API with some non-rest request, because it's easy to perform GET request from Arduino.
 
 ### Send data without date
 
@@ -92,3 +92,6 @@ GET /device/:device
 name     | type   | description
 -------- | ------ | ------------------
 device   | string | target Device ID
+
+## Documentation
+yo can consult

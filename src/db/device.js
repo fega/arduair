@@ -10,7 +10,7 @@ module.exports =mongoose.model('device',{
     email:String, //owner email
 
     lastRegister: {type: Date, default: Date.now}, //last time of a measure was sended
-    
+
     date:   [Date], //array with measure dates
     humidity:   [Number], //humidity in %
     temperature:[Number],//temperature in °C
@@ -23,8 +23,8 @@ module.exports =mongoose.model('device',{
     no2:    [Number], //NO2
     o3:     [Number], //O3
     co:     [Number], //CO
-    ch4:    [Number], //CH (non criteria pollutant)
-    nh3:    [Number]  //NH3 (non criteria pollutant)
+    //ch4:    [Number], //CH (non criteria pollutant)
+    //nh3:    [Number]  //NH3 (non criteria pollutant)
 });
 
 
@@ -43,7 +43,7 @@ module.exports =mongoose.model('device',{
 9   [   NO2     ]
 10  [   O3      ]
 11  [   CO      ]
-//Non Criteria pollutants   
+//Non Criteria pollutants
 12  [   CH4     ]
 13  [   NH3     ]
 14  [   CH4     ]

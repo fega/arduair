@@ -12,6 +12,13 @@ MaterializeCSS initialization
             selectMonths: true, // Creates a dropdown to control month
             selectYears: 15 // Creates a dropdown of 15 years to control year
         });
+        //search data buttons
+        $('#actionBtn-search').click(() => {
+            $('#modalSearch').openModal();
+        });
+        $('#actionBtn-SearchClose').click(() => {
+            $('#modalSearch').closeModal();
+        });
     }); // end of document ready
 })(jQuery); // end of jQuery name space
 /*///////////////////////////////////////

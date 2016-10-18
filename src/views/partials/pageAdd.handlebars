@@ -38,7 +38,8 @@
 			</div>
 		</div>
 		{{!DEVICE CONFIG FILE GENERATION}}
-		<div id="config-file" style="display: none;">
+		{{!deprecated}}
+		{{!-- <div id="config-file" style="display: none;">
 			<div class="row">
 				<h3>device config:</h3>
 			</div>
@@ -137,14 +138,23 @@
 					</select>
 				</div>
 			</div>
-		</div>
+		</div> --}}
 		{{!sensor end}}
 	</form>
 	</div>
 	<div class="divider"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col s12 m12	l12 center">
+				<p>If you need a configuration file to put in your SD root, download it here:</p>
+				<a href="/download/config-template" class="waves-effect waves-teal btn primary darken">download config file template</a>
+			</div>
+		</div>
+	</div>
+
 	{{!generate a config file buttons}}
 	<br>
-	<div class="row">
+	{{!-- <div class="row">
 		<div class="col s12 m12	l12 center">
 			<a id="config-file-btn"class="waves-effect waves-teal btn-large primary darken">¿generate config file?</a>
 		</div>
@@ -152,6 +162,6 @@
 			<a id="no-config-file-btn"class="hide waves-effect waves-teal btn-large primary darken"
 			>No, I dont want a config file</a>
 		</div>
-	</div>
+	</div> --}}
 	<br>
 </section>

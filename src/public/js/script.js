@@ -585,24 +585,6 @@ $(document).ready(() => { // TODO: check if the arrow function breaks the code
 /*////////////////////
 //Other stuff
 ////////////////////*/
-//search data buttons
-$('#actionBtn-search').click(() => {
-    $('#modalSearch').openModal();
-});
-$('#actionBtn-SearchClose').click(() => {
-    $('#modalSearch').closeModal();
-});
-//GENERATE A CONFIG-FILE?
-$("#config-file-btn").click(() => {
-    $("#config-file").slideDown(500);
-    $("#config-file-btn").addClass('hide');
-    $("#no-config-file-btn").removeClass('hide');
-});
-$("#no-config-file-btn").click(() => {
-    $("#config-file").slideUp(500);
-    $("#no-config-file-btn").addClass('hide');
-    $("#config-file-btn").removeClass('hide');
-});
 /**
  * Check
  * @return {Boolean} [description]

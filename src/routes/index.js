@@ -1,12 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
-var getBody = bodyParser.urlencoded({extended: true});
-var addDevice = require('../db/addDevice');
-var getDevice = require('../db/getDeviceAll');
-var getData = require ('../db/getDeviceData');
-var getDeviceToConfig = require('../db/getDeviceToConfig');
-
+const express = require('express');
+const path = require('path');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const getBody = bodyParser.urlencoded({extended: true});
+const addDevice = require('../db/addDevice');
+const getDevice = require('../db/getDeviceAll');
+const getData = require ('../db/getDeviceData');
+const getDeviceToConfig = require('../db/getDeviceToConfig');
+/*//////////////////
+/* API 						*/
+//////////////////*/
 /*POST addDevice*/
 router.post('/device',getBody,addDevice,(req,res)=>{
 	res.send(req.result);
@@ -23,13 +26,8 @@ router.get('/device/:device',getBody,getData,(req,res)=>{
 router.get('/device/:device/:password/status',(req,res)=>{
 	res.send('device status');
 });
-/* GET test page*/
-//router.get('/test',function(req,res,next){
-//	res.send('Server and Device OK :)');
-//});
 /*POST: device and password combination exist?, to config the device?*/
 router.post('/config',getBody,getDeviceToConfig,(req,res)=>{
-	//console.log(req.body);
 	res.send(req.result);
 });
 /*//////////////////
@@ -38,4 +36,11 @@ router.post('/config',getBody,getDeviceToConfig,(req,res)=>{
 router.get(['/documentation','/data','/data/*','/add','/configure','/'], (req, res)=> {
   res.render('index', { title: 'Arduair' });
 });
+/*////////////////////////////
+/* Download Config template */
+////////////////////////////*/
+router.get('/download/config-template',(req,res) =>{
+	res.download(path.join(__dirname,'../', 'public', 'files','config.txt'));
+});
+
 module.exports = router;

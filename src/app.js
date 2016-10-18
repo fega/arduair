@@ -65,7 +65,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/test', test);
 app.use('/api', api);
-//app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -75,26 +74,27 @@ app.use((req, res, next) => {
 });
 
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use((err, req, res) => {
+    app.use((err, req, res, next) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
-            error: err
+            error: err,
+            layout: 'error'
         });
     });
 }
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
-        error: {}
+        error: {},
+        layout: 'error'
     });
 });
 module.exports = app;

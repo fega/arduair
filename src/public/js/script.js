@@ -3,7 +3,7 @@
 // TODO: add AQI calculator function
 // TODO: put all functions on arduair prototype
 /**
- * Global array for client configuration
+ * Global Object with arduair default configuration and methods
  * @global
  * @property {Array} arduair.data Data retrieved from server, by default is null
  * @property {Object} arduiair.units Units used in the graphs
@@ -242,9 +242,44 @@ var arduair = {
     }, {
         //backgroundColor:'#2980b9',
         borderColor: '#2980b9'
-    }]
+    }],
+    /**
+     * Generates the table with devices gotten by a request
+     * @param  {Json} res Response object
+     * @return {undefined}
+     */
+    generateDeviceList(res){
+      console.log(res);
+      $("#actionBtn-search a").removeClass("sync");
+      $("#actionBtn-search a").addClass(res.status);
+      Materialize.toast(res.message, 4000, '', () => {
+          $("#actionBtn-search a").removeClass(res.status);
+      });
+
+      var devices = ''; //this array contains the html of the device list
+      if (res.devices.length > 0) {
+
+          for (var i = 0; i < res.devices.length; i++) {
+              devices += '<li class="collection-item avatar">';
+              devices += '<a href="data/' + res.devices[i].name + '">';
+              devices += ' <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">';
+              devices += '<span class="primary-text title">' + res.devices[i].name + '</span>';
+              devices += '<p>Owner:' + res.devices[i].owner + '</p>';
+              devices += '<p>Last register:' + res.devices[i].lastRegister + '</p>';
+              //devices +='<p>Measure:'+res.devices[i].owner+'</p>';
+              //devices +='<p>Last Location:'+res.devices[i].owner+'</p>';
+              devices += '</a>';
+              devices += '</li>';
+          }
+
+      } else {
+          devices += '<div class="col s12 center"><p class="error-text">'; //if data is not retrieved
+          devices += res.message;
+          devices += '</p> </div>';
+      }
+      $('#deviceCollection').html(devices);
+    }
 };
-arduair.prototype
 /*
  * Page.js Routing
  */
@@ -318,35 +353,7 @@ function data() {
     $("#actionBtn-search a").addClass("sync");
     //send AJAX request to get devices data
     $.get('/device', (res) => {
-        console.log(res);
-        $("#actionBtn-search a").removeClass("sync");
-        $("#actionBtn-search a").addClass(res.status);
-        Materialize.toast(res.message, 4000, '', () => {
-            $("#actionBtn-search a").removeClass(res.status);
-        });
-
-        var devices = ''; //this array contains the html of the device list
-        if (res.devices.length > 0) {
-
-            for (var i = 0; i < res.devices.length; i++) {
-                devices += '<li class="collection-item avatar">';
-                devices += '<a href="data/' + res.devices[i].name + '">';
-                devices += ' <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">';
-                devices += '<span class="primary-text title">' + res.devices[i].name + '</span>';
-                devices += '<p>Owner:' + res.devices[i].owner + '</p>';
-                devices += '<p>Last register:' + res.devices[i].lastRegister + '</p>';
-                //devices +='<p>Measure:'+res.devices[i].owner+'</p>';
-                //devices +='<p>Last Location:'+res.devices[i].owner+'</p>';
-                devices += '</a>';
-                devices += '</li>';
-            }
-
-        } else {
-            devices += '<div class="col s12 center"><p class="error-text">'; //if data is not retrieved
-            devices += res.message;
-            devices += '</p> </div>';
-        }
-        $('#deviceCollection').html(devices);
+      arduair.generateDeviceList(res);
     });
 }
 /**
@@ -495,21 +502,12 @@ $("#no-config-file-btn").click(()=>{
     $("#no-config-file-btn").addClass('hide');
     $("#config-file-btn").removeClass('hide');
 });
-// function checkDataName(until,name){
-//   var result=true
-//   for (var i=0; i<until;i++){
-//     if (arduair.data[i].name==name){
-//       result= false;
-//     }
-//   }
-//   return result;
-// }
 /**
  * This function create a menu for the graph
  * @param  {Number} index the index to construct their menu
  * @return {undefined}
  */
-function printMenuGraph(index) {
+function printMenuGraph() {
     arduair.data.forEach((el, index) => {
             var ind = index + 1;
             if (el) {
@@ -705,8 +703,10 @@ function GraphChips() {
         GraphChips();
     });
 }
-
-//funcion que checkea si array is null
+/**
+ * Check
+ * @return {Boolean} [description]
+ */
 Array.prototype.isNull = function() {
     return this.join().replace(/,/g, '').length === 0;
 };

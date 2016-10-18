@@ -5,13 +5,13 @@ var dateCheck = require('../lib/datecheck');
 /*GET test:
 *CC3000 : PASS
 */
-router.get('/:device/:password/timezone/' ,isServerTime,store,function(req,res){
+router.get('/:device/:password/timezone/' ,isServerTime,store,(req,res)=>{
 	res.send(req.result);
 });
-router.get('/:device/:password/servertime' ,isServerTime,store,function(req,res){
+router.get('/:device/:password/servertime' ,isServerTime,store,(req,res)=>{
 	res.send(req.result);
 });
-router.get('/:device/:password/:day/:month/:year/:hour/:minute',dateCheck,store,function(req,res){
+router.get('/:device/:password/:day/:month/:year/:hour/:minute',dateCheck,store,(req,res)=>{
 	res.send(req.result);
 });
 module.exports = router;

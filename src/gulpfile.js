@@ -78,7 +78,7 @@ gulp.task('js',  () => {
     './public/js/scriptChart.js'])
     .pipe(plumberit('JS build Error'))
     .pipe(concat('js.min.js'))
-    //.pipe(uglify({preserveComments:"license"}))
+    //.pipe(uglify())
     .pipe(gulp.dest('./public/js'))
     .pipe(browserSync.reload({ stream: true }));
 });

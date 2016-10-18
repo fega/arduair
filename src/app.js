@@ -11,7 +11,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var minifyHTML = require('express-minify-html');
-
+var colors = require('colors');
 var routes = require('./routes/index');
 var test = require('./routes/test');
 var api = require('./routes/api');
@@ -30,6 +30,7 @@ try {
 } catch (err) {
   console.log(("Setting up failed to connect to " + db.url).red, err.message);
 }
+
 var app = express();
 app.use(compression()); //enables gzip compression
 

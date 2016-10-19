@@ -1,5 +1,3 @@
-
-
 module.exports=datecheck;
 /**
  * checkquea que los parametros ingresados al request sean una decha valida
@@ -36,7 +34,7 @@ function datecheck(req,res,next){
 	}else{
 		res.send(req.message);
 	}
-};
+}
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }

@@ -23,14 +23,13 @@ module.exports = function(req, res, next) {
                 return next();
             } else {
                 var newDevice = new Device();
-
                 newDevice.name = req.body.addname;
                 newDevice.macAddress = req.body.macAddress;
                 newDevice.owner = req.body.addowner;
                 newDevice.email = req.body.addemail;
                 newDevice.password = req.body.addpassword;
                 newDevice.description = req.body.adddescription;
-                newDevice.save((err)=> {
+                newDevice.save((err) => {
                     if (err) {
                         console.log('error saving the device');
                         req.result = {

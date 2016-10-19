@@ -1,15 +1,16 @@
 /*jslint node: true */
 'use strict';
-var gulp = require('gulp');
-var csso = require('gulp-csso');
-var concat = require('gulp-concat');
-var browserSync = require('browser-sync');
-var nodemon = require('gulp-nodemon');
-var uglify = require('gulp-uglify');
-var plumber = require('gulp-plumber');
-var notify = require('gulp-notify');
-var fs = require('fs');
-var jsdoc2md = require('jsdoc-to-markdown');
+const gulp = require('gulp');
+const csso = require('gulp-csso');
+const concat = require('gulp-concat');
+const browserSync = require('browser-sync');
+const nodemon = require('gulp-nodemon');
+const uglify = require('gulp-uglify');
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
+const fs = require('fs');
+const jsdoc2md = require('jsdoc-to-markdown');
+const deleteComments = require('gulp-decomment');
 
 var BROWSER_SYNC_RELOAD_DELAY = 500;// we'd need a slight delay to reload browsers, connected to browser-sync after restarting nodemon
 /*///////////////////////////////////////
@@ -77,8 +78,11 @@ gulp.task('js',  () => {
     './public/js/script.js',
     './public/js/scriptChart.js'])
     .pipe(plumberit('JS build Error'))
-    .pipe(concat('js.min.js'))
+    .pipe(deleteComments({trim: true}))
     //.pipe(uglify())
+    .pipe(concat('js.min.js'))
+
+
     .pipe(gulp.dest('./public/js'))
     .pipe(browserSync.reload({ stream: true }));
 });

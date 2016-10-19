@@ -1,6 +1,6 @@
 var Device = require('./device');
 module.exports = function (req,res,next){
-	Device.findOne(req.body,function(err,device){
+	Device.findOne(req.body,(err,device)=>{
 		if(err){
 				console.log('Handled error: ' + err);
 				req.result ={status:"error",message:"Search error, please try again"};
@@ -13,7 +13,7 @@ module.exports = function (req,res,next){
 			}
 			if (device){
 				console.log('Devices matched');
-				req.result ={status:"done",message:"Device Found",device:device};
+				req.result ={status:"done",message:"Device Found",device};
 				return next();
 			}
 	});

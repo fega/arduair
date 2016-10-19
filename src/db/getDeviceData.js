@@ -1,10 +1,10 @@
 var Device = require('./device');
 module.exports = function(req,res,next){
-	Device.findOne({name : req.params.device},function(err,device){
+	Device.findOne({name : req.params.device},(err,device)=>{
 		if(err){
 			console.log ('getDeviceData Handled Error: '+ err);
 			req.result ={status:'error', message:'Search error, please try again'};
-			return next();			
+			return next();
 		}
 		if (!device){
 			console.log('getDeviceData no device found');
@@ -12,7 +12,7 @@ module.exports = function(req,res,next){
 			return next();
 		}
 		if (device){
-			console.log('Device Data retrieved'+ device);
+			console.log('Device Data retrieved'.green);
 			var data= {
 				name: device.name,
 				date : device.date ,
@@ -30,7 +30,7 @@ module.exports = function(req,res,next){
 				ch4 : device.ch4 ,
 				nh3 : device.nh3
 			};
-			req.result={status:'done', message:'Device data retrieved',data:data};
+			req.result={status:'done', message:'Device data retrieved', data};
 			return next();
 		}
 	});

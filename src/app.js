@@ -35,7 +35,7 @@ var app = express();
 app.use(compression()); //enables gzip compression
 
 app.use(minifyHTML({
-    override: false,
+    override: true,
     htmlMinifier: {
         removeComments: true,
         collapseWhitespace: true,

@@ -14,30 +14,24 @@
     "debug": "~2.2.0",
     "express": "~4.13.1",
     "express-handlebars": "^3.0.0",
-    "express-minify-html": "^0.4.0",
-    "marked": "^0.3.5",
+    "express-minify-html": "^0.6.0",
     "mongoose": "^4.4.12",
     "morgan": "~1.6.1",
-    "pretty-error": "^2.0.0",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "browser-sync": "^2.12.3",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
-    "gulp-csslint": "^0.3.0",
     "gulp-csso": "^2.0.0",
+    "gulp-decomment": "^0.1.3",
     "gulp-documentation": "^2.2.0",
-    "gulp-gzip": "^1.2.0",
-    "gulp-imagemin": "^2.4.0",
-    "gulp-jshint": "^2.0.0",
-    "gulp-jslint": "^1.0.1",
+    "gulp-imagemin": "^3.0.3",
     "gulp-nodemon": "^2.2.1",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.5.3",
-    "jsdoc-to-markdown": "^2.0.0",
-    "jshint": "^2.9.2"
+    "gulp-uglify": "^2.0.0",
+    "jsdoc-to-markdown": "^2.0.0"
   }
 }

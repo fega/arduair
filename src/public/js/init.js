@@ -1,4 +1,5 @@
-/*global Chart, Jquery*/
+/*global Chart, jQuery $ myChart*/
+/* exported myChart*/
 /*///////////////////////////////////////
 MaterializeCSS initialization
 ///////////////////////////////////////*/
@@ -46,6 +47,7 @@ var myChart = new Chart($("#chart"), {
         }]
     },
     options: {
+        spanGaps:true,
         defaultColor: '#FF1744',
         scales: {
             type: 'time',

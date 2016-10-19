@@ -9,11 +9,11 @@
 ## Functions
 
 <dl>
-<dt><a href="#hidding">hidding()</a> ⇒ <code>undefined</code></dt>
-<dd><p>This function hide all tabs and special buttons</p>
+<dt><a href="#hiding">hiding()</a> ⇒ <code>undefined</code></dt>
+<dd><p>This function hides all tabs and special buttons</p>
 </dd>
 <dt><a href="#main">main()</a> ⇒ <code>undefined</code></dt>
-<dd><p>Show main tab</p>
+<dd><p>Show the main tab</p>
 </dd>
 <dt><a href="#configure">configure()</a> ⇒ <code>undefined</code></dt>
 <dd><p>Show configuration tab and configure action button</p>
@@ -45,20 +45,44 @@ Global Object with arduair default configuration and methods
 
 | Name | Type | Description |
 | --- | --- | --- |
-| arduair.data | <code>Array</code> | Data retrieved from server, by default is null |
-| arduiair.units | <code>Object</code> | Units used in the graphs |
-| arduair.activeGraph | <code>Array</code> |  |
+| arduair.data | <code>Array</code> | Data retrieved from the server, by default is null |
+| arduair.normalizedData | <code>Array</code> | A copy of arduair.data after normalization process |
+| arduair.units | <code>Object</code> | Units used in the graphs |
 | arduair.aqi_colors | <code>Array</code> | Colors of every range of the Air Quality index |
 | arduair.aqi_ranges | <code>Array</code> | Ranges used to calculate te aqi_ranges |
 | arduair.line_style | <code>Array</code> | Set the default apereance for the lines in the graph |
 
 
 * [arduair](#arduair)
+    * [.data](#arduair.data) : <code>Array</code>
     * [.generateDeviceList(res)](#arduair.generateDeviceList)
     * [.generateGraphChips()](#arduair.generateGraphChips)
     * [.saveDataRequested()](#arduair.saveDataRequested)
     * [.generateGraphMenu()](#arduair.generateGraphMenu)
+    * [.normalizeData()](#arduair.normalizeData) ⇒ <code>Array</code>
+        * [~dateSort(date1, date2)](#arduair.normalizeData..dateSort) ⇒ <code>Number</code>
+        * [~dateConcat()](#arduair.normalizeData..dateConcat) ⇒ <code>Array</code>
+        * [~checkAndNormalize(dates)](#arduair.normalizeData..checkAndNormalize) ⇒ <code>Array</code>
+        * [~removeDuplicate(arr)](#arduair.normalizeData..removeDuplicate) ⇒ <code>Array</code>
     * [.bindMenuButtonBehavior()](#arduair.bindMenuButtonBehavior)
+
+<a name="arduair.data"></a>
+
+### arduair.data : <code>Array</code>
+Data retrieved from server, by default is null, it could store until 5spaces, each data contains at least a name and date properties.
+
+**Kind**: static property of <code>[arduair](#arduair)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>String</code> | The name of the device |
+| date | <code>Array</code> | Array with date objects |
+| location | <code>Array</code> | Array with location coordinates, for now, Arduair doesn't make use of this parameter but you could use it to extends functionalities |
+| humidity | <code>Array</code> | Array with humidity data, in % |
+| temperature | <code>Array</code> | Array with temperature data in °C |
+| pressure | <code>Array</code> | Array with pressure data, in mb // TODO: check units |
+| others: | <code>Array</code> | others attributes measured, in this categories, can be grouped 'pm10' and 'pm2.5' in mg/m3, and 'CO', 'O3', 'NO2' and 'SO2' in ug/m3 |
 
 <a name="arduair.generateDeviceList"></a>
 
@@ -89,22 +113,80 @@ Save a requested data in the correct place of arduair.data
 Generates a options menu for each data array.
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.normalizeData"></a>
+
+### arduair.normalizeData() ⇒ <code>Array</code>
+This method organizes into a form appropriate for graphjs.mainly, this method put all dates (X axis of the graph)in one array and organizes all the measures (Y data) consequently
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+**Returns**: <code>Array</code> - Array with the data normalized  
+
+* [.normalizeData()](#arduair.normalizeData) ⇒ <code>Array</code>
+    * [~dateSort(date1, date2)](#arduair.normalizeData..dateSort) ⇒ <code>Number</code>
+    * [~dateConcat()](#arduair.normalizeData..dateConcat) ⇒ <code>Array</code>
+    * [~checkAndNormalize(dates)](#arduair.normalizeData..checkAndNormalize) ⇒ <code>Array</code>
+    * [~removeDuplicate(arr)](#arduair.normalizeData..removeDuplicate) ⇒ <code>Array</code>
+
+<a name="arduair.normalizeData..dateSort"></a>
+
+#### normalizeData~dateSort(date1, date2) ⇒ <code>Number</code>
+Sorting date function comparator from https://gist.github.com/onpubcom/1772996
+
+**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Returns**: <code>Number</code> - Comparison Returns Comparison result.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| date1 | <code>Date</code> | First date object to compare |
+| date2 | <code>Date</code> | Second date object to compare |
+
+<a name="arduair.normalizeData..dateConcat"></a>
+
+#### normalizeData~dateConcat() ⇒ <code>Array</code>
+Concat each arduair.data.date
+
+**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Returns**: <code>Array</code> - Concatenated_Dates concatenated dates array  
+<a name="arduair.normalizeData..checkAndNormalize"></a>
+
+#### normalizeData~checkAndNormalize(dates) ⇒ <code>Array</code>
+Check all data from dates provided if arduair.data.datecontains this date, if true, puts every arduair.data key in thecorresponding place of the date checked. it seems to be a very slowfunction and should be corrected for another better implementation.
+
+**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Returns**: <code>Array</code> - myArray normalized copy objects from arduair.data  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dates | <code>Date</code> | array of dates, mainly concatenated dates from dateArray.sort(dateSort()); |
+
+<a name="arduair.normalizeData..removeDuplicate"></a>
+
+#### normalizeData~removeDuplicate(arr) ⇒ <code>Array</code>
+Remove duplicates in an array
+
+**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Returns**: <code>Array</code> - Array without duplicates  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arr | <code>Array</code> | Array to remove their duplicates |
+
 <a name="arduair.bindMenuButtonBehavior"></a>
 
 ### arduair.bindMenuButtonBehavior()
 This function controls the filledGraphData buttons behavior
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
-<a name="hidding"></a>
+<a name="hiding"></a>
 
-## hidding() ⇒ <code>undefined</code>
-This function hide all tabs and special buttons
+## hiding() ⇒ <code>undefined</code>
+This function hides all tabs and special buttons
 
 **Kind**: global function  
 <a name="main"></a>
 
 ## main() ⇒ <code>undefined</code>
-Show main tab
+Show the main tab
 
 **Kind**: global function  
 <a name="configure"></a>

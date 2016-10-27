@@ -1,7 +1,7 @@
 /*global page $, Materialize, myChart*/
-// DOING: add data combinator function.
+// DONE:10 add data combinator function.
 // TODO: add AQI calculator function
-// DONE: put all functions on arduair prototype
+// DONE:0 put all functions on arduair prototype
 /**
  * Global Object with arduair default configuration and methods
  * @global
@@ -346,7 +346,7 @@ var arduair = {
             $("#actionBtn-search a").removeClass(res.status);
         }); //le aviso al usuario que paso
         arduair.data[position] = res.data; //ubico el array recibido en el array
-        var normalized = arduair.normalizeData();
+        var normalized = arduair.normalizeDeviceData();
         arduair.normalizedData=normalized.data;
         arduair.normalizedDates=normalized.dates;
     },
@@ -381,7 +381,7 @@ var arduair = {
      * in one array and organizes all the measures (Y data) consequently
      * @return {Array} Array with the data normalized
      */
-    normalizeData() {
+    normalizeDeviceData() {
         // 1) concat arrays
         var dateArray = dateConcat();
         // 2) sort array
@@ -518,7 +518,10 @@ var arduair = {
             });
         });
     },
-    updateChart() {
+    /**
+     * Calculate the air Quality index
+     */
+    calculateAQI(){
 
     }
 };

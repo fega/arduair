@@ -59,12 +59,13 @@ Global Object with arduair default configuration and methods
     * [.generateGraphChips()](#arduair.generateGraphChips)
     * [.saveDataRequested()](#arduair.saveDataRequested)
     * [.generateGraphMenu()](#arduair.generateGraphMenu)
-    * [.normalizeData()](#arduair.normalizeData) ⇒ <code>Array</code>
-        * [~dateSort(date1, date2)](#arduair.normalizeData..dateSort) ⇒ <code>Number</code>
-        * [~dateConcat()](#arduair.normalizeData..dateConcat) ⇒ <code>Array</code>
-        * [~checkAndNormalize(dates)](#arduair.normalizeData..checkAndNormalize) ⇒ <code>Array</code>
-        * [~removeDuplicate(arr)](#arduair.normalizeData..removeDuplicate) ⇒ <code>Array</code>
+    * [.normalizeDeviceData()](#arduair.normalizeDeviceData) ⇒ <code>Array</code>
+        * [~dateSort(date1, date2)](#arduair.normalizeDeviceData..dateSort) ⇒ <code>Number</code>
+        * [~dateConcat()](#arduair.normalizeDeviceData..dateConcat) ⇒ <code>Array</code>
+        * [~checkAndNormalize(dates)](#arduair.normalizeDeviceData..checkAndNormalize) ⇒ <code>Array</code>
+        * [~removeDuplicate(arr)](#arduair.normalizeDeviceData..removeDuplicate) ⇒ <code>Array</code>
     * [.bindMenuButtonBehavior()](#arduair.bindMenuButtonBehavior)
+    * [.calculateAQI()](#arduair.calculateAQI)
 
 <a name="arduair.data"></a>
 
@@ -113,26 +114,26 @@ Save a requested data in the correct place of arduair.data
 Generates a options menu for each data array.
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
-<a name="arduair.normalizeData"></a>
+<a name="arduair.normalizeDeviceData"></a>
 
-### arduair.normalizeData() ⇒ <code>Array</code>
+### arduair.normalizeDeviceData() ⇒ <code>Array</code>
 This method organizes into a form appropriate for graphjs.mainly, this method put all dates (X axis of the graph)in one array and organizes all the measures (Y data) consequently
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 **Returns**: <code>Array</code> - Array with the data normalized  
 
-* [.normalizeData()](#arduair.normalizeData) ⇒ <code>Array</code>
-    * [~dateSort(date1, date2)](#arduair.normalizeData..dateSort) ⇒ <code>Number</code>
-    * [~dateConcat()](#arduair.normalizeData..dateConcat) ⇒ <code>Array</code>
-    * [~checkAndNormalize(dates)](#arduair.normalizeData..checkAndNormalize) ⇒ <code>Array</code>
-    * [~removeDuplicate(arr)](#arduair.normalizeData..removeDuplicate) ⇒ <code>Array</code>
+* [.normalizeDeviceData()](#arduair.normalizeDeviceData) ⇒ <code>Array</code>
+    * [~dateSort(date1, date2)](#arduair.normalizeDeviceData..dateSort) ⇒ <code>Number</code>
+    * [~dateConcat()](#arduair.normalizeDeviceData..dateConcat) ⇒ <code>Array</code>
+    * [~checkAndNormalize(dates)](#arduair.normalizeDeviceData..checkAndNormalize) ⇒ <code>Array</code>
+    * [~removeDuplicate(arr)](#arduair.normalizeDeviceData..removeDuplicate) ⇒ <code>Array</code>
 
-<a name="arduair.normalizeData..dateSort"></a>
+<a name="arduair.normalizeDeviceData..dateSort"></a>
 
-#### normalizeData~dateSort(date1, date2) ⇒ <code>Number</code>
+#### normalizeDeviceData~dateSort(date1, date2) ⇒ <code>Number</code>
 Sorting date function comparator from https://gist.github.com/onpubcom/1772996
 
-**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
 **Returns**: <code>Number</code> - Comparison Returns Comparison result.  
 
 | Param | Type | Description |
@@ -140,31 +141,31 @@ Sorting date function comparator from https://gist.github.com/onpubcom/1772996
 | date1 | <code>Date</code> | First date object to compare |
 | date2 | <code>Date</code> | Second date object to compare |
 
-<a name="arduair.normalizeData..dateConcat"></a>
+<a name="arduair.normalizeDeviceData..dateConcat"></a>
 
-#### normalizeData~dateConcat() ⇒ <code>Array</code>
+#### normalizeDeviceData~dateConcat() ⇒ <code>Array</code>
 Concat each arduair.data.date
 
-**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
 **Returns**: <code>Array</code> - Concatenated_Dates concatenated dates array  
-<a name="arduair.normalizeData..checkAndNormalize"></a>
+<a name="arduair.normalizeDeviceData..checkAndNormalize"></a>
 
-#### normalizeData~checkAndNormalize(dates) ⇒ <code>Array</code>
+#### normalizeDeviceData~checkAndNormalize(dates) ⇒ <code>Array</code>
 Check all data from dates provided if arduair.data.datecontains this date, if true, puts every arduair.data key in thecorresponding place of the date checked. it seems to be a very slowfunction and should be corrected for another better implementation.
 
-**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
 **Returns**: <code>Array</code> - myArray normalized copy objects from arduair.data  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | dates | <code>Date</code> | array of dates, mainly concatenated dates from dateArray.sort(dateSort()); |
 
-<a name="arduair.normalizeData..removeDuplicate"></a>
+<a name="arduair.normalizeDeviceData..removeDuplicate"></a>
 
-#### normalizeData~removeDuplicate(arr) ⇒ <code>Array</code>
+#### normalizeDeviceData~removeDuplicate(arr) ⇒ <code>Array</code>
 Remove duplicates in an array
 
-**Kind**: inner method of <code>[normalizeData](#arduair.normalizeData)</code>  
+**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
 **Returns**: <code>Array</code> - Array without duplicates  
 
 | Param | Type | Description |
@@ -175,6 +176,12 @@ Remove duplicates in an array
 
 ### arduair.bindMenuButtonBehavior()
 This function controls the filledGraphData buttons behavior
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.calculateAQI"></a>
+
+### arduair.calculateAQI()
+Calculate the air Quality index
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="hiding"></a>

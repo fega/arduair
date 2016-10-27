@@ -1,45 +1,86 @@
-//DOING: including documentation
-//libraries...
-#include "Wire.h"      //for I2C communication
-#include "DHT.h"       //for dht sensor
-#include <SPI.h>       //for Serial communication (with the SD card)
+ /******************************************************************************
+Arduair project
+Fabian Gutierrez @ Universidad Pontificia Bolivariana
+https://github.com/fega/arduair
+
+Arduair project source code.
+
+# Wiring Scheme.
+## Arduino
+Pin   Feature
+2     LED Red
+3     LED Green
+4     WiFiShield Pin
+5     DHT Pin
+7     WifiShield Pin
+8     Shinyei Pin 1
+9     Shinyei Pin 2 //TODO: check what pin is
+10    SD/SS Pin
+S1    Ze-Co  Sensor
+S2    Ze-NO2 Sensor
+S3    Ze-SO2 Sensor
+
+## Shinyei PPD42ns
+1     Ground
+2     P2 OutPut
+3     Input 5v
+4     P1 Output
+******************************************************************************/
+//libraries
+#include "Wire.h"      //I2C communication
+#include "DHT.h"       //DHT sensor
+#include <SPI.h>       //Serial communication (with the SD card)
 #include <SD.h>        //SD card Library
 #include <SFE_BMP180.h>//Sparkfun BMP180 pressure Sensor Library
 #include <SparkFunTSL2561.h>//light sensor library SparkFun TSL2561 Breakout
 #include <WiFi.h>      //wifi shield Library
 #include <Event.h>
-#include <Timer.h>     //arduino timer library
 
-#define DS1307_ADDRESS 0x68 //clock pin
-#define DHTPIN 7       //DHT pin
+//Default configuration
+#define RED_LED_PIN 2
+#define GREEN_LED_PIN 3
+#define DS1307_ADDRESS 0x68 //clock ADRESS
+#define DHTPIN 20
 #define DHTTYPE DHT11  //dht type
-#define server "arduair.herokuapp.com/test/"    // website address
-#define WIFIPIN 4      //Wifi shield ss pin
-#define SDPIN 10       //Sd ss pin
+#define WIFIPIN 4
+#define SDPIN 10
+#define SHINYEI_P1 8
+#define SHINYEI_P2 9
+#define CO  1 //
+#define NO2 2
+#define SO2 3
+unsigned int zeCo=19;
+unsigned int zeNO2=20;
+unsigned int zeSO2=21;
+bool zeAvailable=true;
+unsigned int zeCounter;    // Ze counter of meausures
 
-File myFile;//Defining one file  class
-
-char ssid[] = "yourNetwork"; //  your network SSID (name)
-char pass[] = "secretPassword";    // your network password (use for WPA, or use as key for WEP)
-String device,password;
-int status = WL_IDLE_STATUS;
-
-WiFiClient client;
-float pm10,pm25;
-int second, minute,hour,weekDay,monthDay,month,year;
-
-
+//Constructors
+File myFile;              //FIle constructor
+WiFiClient client;        //WiFiClient Constructor
 DHT dht(DHTPIN, DHTTYPE); //DHT constructor
 SFE_BMP180 bmp;           //bmp constructor
 SFE_TSL2561 light;        //TSL2561 constructor
-Timer t;
-bool zeAvailable=true;
-unsigned long zeCo,zeNO2,zeSO2; //ze sensors serial port
-unsigned int zeCounter;// Ze counter of meausures
+
+//Wifi and device config
+char ssid[] = "FABIAN"; //  your network SSID (name)
+char pass[] = "63856199";    // your network password (use for WPA, or use as key for WEP)
+char server[] = "arduair.herokuapp.com/test/";
+char device[] = "DeviceName";
+char password[] = "devicePassword";
+int status = WL_IDLE_STATUS;
+
+//Global variables for measuring
+float pm10,pm25;
+float p,h,t,l;
+float co,o3,so2,no2;
+unsigned int second, minute,hour,weekDay,monthDay,month,year;
+
 /**
  * Arduair configuration initialitation
  */
 void setup() {
+  digitalWrite(GREEN_LED_PIN,HIGH);
   Serial.begin(9600);
   Serial1.begin(9600); //ZE CO-sensor
   Serial2.begin(9600); //ZE NO2-sensor
@@ -49,80 +90,103 @@ void setup() {
   bmp.begin();
   light.begin();
   sdBegin();
+  digitalWrite(WIFIPIN,HIGH); //active wifishield
+  digitalWrite(SDPIN,LOW); //inactive SD
   wifiBegin();
-  t.every(5*60*1000,arduairRead); // 5 minutes
+  arduairSetup();
+  digitalWrite(GREEN_LED_PIN,LOW);
 }
+/**
+ * Arduair measuring cycle, it control all measuring cycle and ends writing the
+ * results in a SD card and sending a request to the server
+ * the measuring order is:
+ * 2) 30 s :   measuring PM10 and PM2.5.
+ * 3) 30 s :   measuring O3
+ * 4) 30 s :   measuring light, humidity, temperature and Pressure
+ * 5) 1 s :   detach Winsen sensor interrups (to avoid unnespected results during SD writing and http request)
+ * 6) 1 m :   writing in the SD and senging the recuest
+ * 7) 1 s :   clear variables
+ * Also, asynchronously, Arduair handles the interrupt for the Winsen sensors,
+ * thats comes every second per sensor.
+ *
+ */
 void loop() {
-  t.update();
+  //2
+  pmRead();
+  //3
+  mq131Read();
+  //4
+  meteorologyRead();
+  //5
+  winsenRead(CO);
+  winsenRead(NO2);
+  winsenRead(SO2);
+  //6
+  getDate();
+  tableWrite();
+  request(h,t,p,l,co,so2,no2);
 }
-void arduairRead(){
-    tableWrite();
-}
-void wifiBegin(){
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to SSID: ");
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-    status = WiFi.begin(ssid, pass);
-
-    // wait 10 seconds for connection:
-    delay(10000);
-  }
-  Serial.println("Connected to wifi");
-}
-
+/**
+ * Perform a request to the given server variable. in the form:
+ * http://myserver.com/device/password/monthDay/month/year/hour/minute
+ * ?h=humidity&t=temperature&p=pressure&l=luminosity&co=[co]&o3=[o3]&&
+ * @param h   [description]
+ * @param t   [description]
+ * @param p   [description]
+ * @param l   [description]
+ * @param co  [description]
+ * @param so2 [description]
+ * @param no2 [description]
+ */
 void request(int h,int t,float p,float l,float co,float so2,float no2){
   // close any connection before send a new request.
   // This will free the socket on the WiFi shield
-   client.stop();
+  client.stop();
 
-  // if there's a successful connection:
-  if (client.connect(server, 80)) {
-    Serial.println("connecting...");
+ // if there's a successful connection:
+ if (client.connect(server, 80)) {
+   Serial.println("connecting...");
 
-    //String getRequest ="GET"+"hola"+" "
-    // send the HTTP GET request:
-    client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password);
-    // HTTP time
-    client.print(monthDay);client.print(month);client.print(year);client.print(hour);client.print(minute);
-    //http GET end
-    ; client.print(" HTTP/1.1");
-    client.println("");
-    // parameters:
-    client.print("h="); client.print(h); client.print(",");
-    client.print("t="); client.print(t); client.print(",");
-    client.print("l="); client.print(l); client.print(",");
-    client.print("co="); client.print(pm10); client.print(",");
-    client.print("o3="); client.print(pm10); client.print(",");
-    client.print("pm10="); client.print(pm10); client.print(",");
-    client.print("pm25="); client.print(pm25); client.print(",");
-    client.print("so2="); client.print(so2); client.print(",");
-    client.print("no2="); client.print(no2); client.print(",");
-    client.println("");
-    //server
-    client.print("Host: ");client.print(server);
-    client.println("User-Agent: Arduair");
-    client.println("Connection: close");
-    client.println();
-  }
+   //String getRequest ="GET"+"hola"+" "
+   // send the HTTP GET request:
+   client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password);
+   // HTTP time
+   client.print(monthDay);client.print(month);client.print(year);client.print(hour);client.print(minute);
+   //http GET end
+   ; client.print(" HTTP/1.1");
+   client.println("");
+   // parameters:
+   client.print("h="); client.print(h); client.print(",");
+   client.print("t="); client.print(t); client.print(",");
+   client.print("l="); client.print(l); client.print(",");
+   client.print("co="); client.print(pm10); client.print(",");
+   client.print("o3="); client.print(pm10); client.print(",");
+   client.print("pm10="); client.print(pm10); client.print(",");
+   client.print("pm25="); client.print(pm25); client.print(",");
+   client.print("so2="); client.print(so2); client.print(",");
+   client.print("no2="); client.print(no2); client.print(",");
+   client.println("");
+   //server
+   client.print("Host: ");client.print(server);
+   client.println("User-Agent: Arduair");
+   client.println("Connection: close");
+   client.println();
  }
-
+ }
+/**
+ * Writes the data in the SD.
+ * This function act in the following form: first, inactive the wifi-shield
+ * and active the SD shield, next writes the data in the SD and inactive
+ * the SD.
+ */
 void tableWrite(){
   //write data in SD
   digitalWrite(WIFIPIN,HIGH); //inactive wifi-shield
   digitalWrite(SDPIN,LOW); //active SD
 
   myFile = SD.open("DATA.txt", FILE_WRITE); //open SD data.txt file
-  if (myFile){
 
-    int   h = dht.readHumidity();   // 1* medir humedad
-    int   t = dht.readTemperature();// 2* medir temperatura
-    float p = readPressure();       // 3* medir presion
-    float co= mq7Read();            // 4* medir sensor 1 y transformar
-    float so2=zeso2Read();          // 5* Meaus
-    float no2=zeno2Read();
-    float l=lightRead();
-    pmRead();
+  if (myFile){
 
     myFile.print(h);
     myFile.print(",");
@@ -139,25 +203,15 @@ void tableWrite(){
 
     myFile.println(" ");
     myFile.close();
-    request(h,t,p,l,co,so2,no2);
   }
   digitalWrite(WIFIPIN,LOW); //active wifishield
   digitalWrite(SDPIN,HIGH); //inactive SD
-}
-/*//////////////////////////////////////////////////////////////////
-MQ-7 CO sensor
-//////////////////////////////////////////////////////////////////*/
-float mq7Read(h){
-  int sensorValue = analogRead(0);       // read analog input pin 0
-  Serial.println(sensorValue, DEC);  // prints the value read
-  delay(100);// wait 100ms for next reading
 
-  float finalValue =sensorValue;
-  return finalValue;
 }
-/*//////////////////////////////////////////////////////////////////
-MQ-131 O3 low concentration sensor
-//////////////////////////////////////////////////////////////////*/
+/**
+ * read  MQ-131 O3 low concentration sensor
+ * @return [description]
+ */
 float mq131Read(){
   int sensorValue = analogRead(0);       // read analog input pin 0
   Serial.println(sensorValue, DEC);  // prints the value read
@@ -166,54 +220,44 @@ float mq131Read(){
   float finalValue =sensorValue;
   return finalValue;
 }
-/*//////////////////////////////////////////////////////////////////
-ZE03-SO2 winsen sensor
-//////////////////////////////////////////////////////////////////*/
-float zeso2Read(){
+/**
+ * Read ZE03-SO2 winsen sensor
+ */
+void zeso2Read(){
   float c= zeSO2/zeCounter;
   zeSO2=0;
-  return c;
 }
-void serialEvent1(){
-  if (zeAvailable==true){
-    String input;
-    while (Serial1.available()){
-      char inChar = (char)Serial.read();
-      input += inChar;
-      if (input.length()==8){
-        zeSO2=(input[2]*256+input[3])*0.1;
-      }
-    }
-  }
+/**
+ * Read ZE03-no2 winsen sensor
+ * @return no2 concentration
+ */
+void zeno2Read(){
+  //hey
 }
-/*//////////////////////////////////////////////////////////////////
-ZE03-no2 winsen sensor
-//////////////////////////////////////////////////////////////////*/
-float zeno2Read(){
+/**
+ * Read ZE03-co winsen sensor
+ * @return co concentration
+ */
+void zecoRead(){
+  //hey
+}
+/**
+ * Read pm10 and pm2.5 concentration from Shinyei PPD42,, this function is
+ * based on the dustduino project
+ */
+void pmRead(){
+  Serial.println("Started  PM read");
 
-}
-/*//////////////////////////////////////////////////////////////////
-ZE03-co winsen sensor
-//////////////////////////////////////////////////////////////////*/
-float ze03_co(){
-
-}
-/*//////////////////////////////////////////////////////////////////
-Shinyei PPD42: dust sensor
-based on dustduino project
-//////////////////////////////////////////////////////////////////*/
-float pmRead(){
-  unsigned long starttime;
 
   unsigned long triggerOnP10, triggerOffP10, pulseLengthP10, durationP10;
   boolean P10 = HIGH, triggerP10 = false;
   unsigned long triggerOnP25, triggerOffP25, pulseLengthP25, durationP25;
   boolean P25 = HIGH, triggerP25 = false;
   float ratioP10 = 0, ratioP25 = 0;
-  unsigned long sampletime_ms = 30000;
+  unsigned long sampletime_ms = 60000;
   float countP10, countP25;
-
-  for( ; ; ){
+  unsigned long starttime=millis();
+  for( ;sampletime_ms > millis() - starttime; ){
     P10 = digitalRead(9);
     P25 = digitalRead(8);
     if(P10 == LOW && triggerP10 == false){
@@ -258,11 +302,17 @@ float pmRead(){
   double vol25 = (4/3)*pi*pow(r25,3);
   double mass25 = density*vol25;
   float concSmall = (PM25count)*K*mass25;
+
+  pm10 = concLarge;
+  pm25 = concSmall;
+
+  Serial.println("Ended  PM read");
 }
-/*//////////////////////////////////////////////////////////////////
- BMP180 Pressure Sensor
-//////////////////////////////////////////////////////////////////*/
-float readPressure(){
+/**
+ * Read pressure from BMP pressure Sensor
+ * @return pressure
+ */
+float pressureRead(){
  char state;
  double T,P,p0,a;
   // Loop here getting pressure readings every 10 seconds.
@@ -284,7 +334,6 @@ float readPressure(){
           //Serial.print("absolute pressure: ");
           Serial.print(P*0.750061561303,2);
           //Serial.println(" mmHg");
-
           return P;
         }
         //else Serial.println("error retrieving pressure measurement\n");
@@ -295,9 +344,9 @@ float readPressure(){
   }
   //else Serial.println("error starting temperature measurement\n");
 }
-/*//////////////////////////////////////////////////////////////////
-SparkFun Luminosity Sensor Breakout - TSL2561
-//////////////////////////////////////////////////////////////////*/
+/**
+ * Reads the Luminosity sensor TSL2561 and calculates the Lux units
+ */
 float lightRead(){
   boolean gain;     // Gain setting, 0 = X1, 1 = X16;
   unsigned int ms;  // Integration ("shutter") time in milliseconds
@@ -336,12 +385,23 @@ float lightRead(){
 
     Serial.print(" lux: ");
     Serial.print(lux);
-    if (good) Serial.println(" (good)"); else Serial.println(" (BAD)");
+
+    if (good) l=lux; else l="undefined";
+    return l;
   }
 }
-/*//////////////////////////////////////////////////////////////////
- RTC based on http://bildr.org/2011/03/ds1307-arduino/
-//////////////////////////////////////////////////////////////////*/
+/**
+ * Reads Temperature from DHT
+ */
+float temperatureRead(){
+  return dht.readTemperature()
+}
+/**
+ * Reads Temperature from DHT
+ */
+float humidityRead(){
+  return dht.readHumidity()
+}
 /**
  * Convert binary coded decimal to normal decimal numbers
  * @param  val byte value to be converteted
@@ -350,14 +410,17 @@ float lightRead(){
 byte bcdToDec(byte val)  {
   return ( (val/16*10) + (val%16) );
 }
-
-void getDate(){
+/**
+ * This code Get the date from DS1307_ADDRESS,  RTC based on http://bildr.org/2011/03/ds1307-arduino/
+ * @param {int} adress Adress of DS1307 real time clock
+ */
+void getDate(int adress){
   // Reset the register pointer
-  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.beginTransmission(adress);
   byte zero = 0x00;
   Wire.write(zero);
   Wire.endTransmission();
-  Wire.requestFrom(DS1307_ADDRESS, 7);
+  Wire.requestFrom(adress, 7);
 
   second = bcdToDec(Wire.read());
   minute = bcdToDec(Wire.read());
@@ -367,13 +430,114 @@ void getDate(){
   month = bcdToDec(Wire.read());
   year = bcdToDec(Wire.read());
 }
-/*//////////////////////////////////////////////////////////////////
-SD card begin
-//////////////////////////////////////////////////////////////////*/
+/**
+ * SD card begin function
+ */
 void sdBegin(){
   if (!SD.begin(4)) {
-    //Serial.println("SD failed!");
+    Serial.println("SD failed!");
     return;
   }
-  //Serial.println("SD done.");
+  Serial.println("SD done.");
+}
+/**
+ * Meteorology read function
+ */
+void meteorologyRead(){
+  p = readPressure();
+  l = lightRead();
+  h = humidityRead();  // 1* medir humedad
+  t = temperatureRead();// 2* medir temperatura
+}
+/**
+ * Setup all of the configuration from the SD to the arduair
+ */
+void arduairSetup(){
+ //
+}
+/**
+ * This function begin wifi connection
+ */
+void wifiBegin(){
+    // check for the presence of the shield:
+    if (WiFi.status() == WL_NO_SHIELD) {
+    Serial.println("WiFi shield not present");
+    // don't continue:
+    while (true);
+  }
+
+  String fv = WiFi.firmwareVersion();
+  if (fv != "1.1.0") {
+    Serial.println("Please upgrade the firmware");
+  }
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to SSID: ");
+    Serial.println(ssid);
+    status = WiFi.begin(ssid, pass);// Connect to WPA/WPA2 network. Change this line if using open or WEP network
+    delay(10000);// wait 10 seconds for connection
+  }
+  Serial.println("Connected to wifi");
+}
+void serialEvent1(){
+  if (zeAvailable==true){
+    String input;
+    while (Serial1.available()){
+      char inChar = (char)Serial.read();
+      input += inChar;
+      if (input.length()==8){
+        zeSO2=(input[2]*256+input[3])*0.1;
+      }
+    }
+  }
+}
+/**
+ * Disables automatic concentration of ZE sensors to prevent unexpectects behaviors from interrupts
+ */
+void winsenBegin(){
+  byte message[] = {0xFF,0x01, 0x78, 0x04, 0x00, 0x00, 0x00, 0x00, 0x83};//TODO: change bye array to "manual form"
+  Serial1.write(message,siseof(message));
+  Serial2.write(message,siseof(message));
+  Serial3.write(message,siseof(message));
+}
+/**
+ * Reads the given contaminant from their respective Winsen Sensor
+ * @param cont Contaminant to be read, could be CO, NO2 or SO2
+ */
+void winsenRead(int cont){
+  byte message[] = {0xFF,0x01, 0x78, 0x03, 0x00, 0x00, 0x00, 0x00, 0x84};
+  unsigned long sampletime_ms = 30000;
+  unsigned long starttime=millis();
+  unsigned long starttime=millis();
+  switch (var) {
+    case 1:
+      Serial1.write(message,siseof(message));
+      //for(;sampletime_ms > millis() - starttime;){
+      if (Serial1.available() > 0) {
+        byte measure[8];
+        Serial1.readBytes(measure,9);
+        incomingByte = Serial1.read();
+        int ppm = measure[2]*256+measure[3];
+      }
+      //}
+      break;
+    case 2:
+      Serial2.write(message,siseof(message));
+      if (Serial2.available() > 0) {
+        byte measure[8];
+        Serial2.readBytes(measure,9);
+        incomingByte = Serial2.read();
+        unsigned float ppm = (measure[2]*256+measure[3])*0.1;
+      }
+      break;
+    case 3:
+      Serial1.write(message,siseof(message));
+      if (Serial3.available() > 0) {
+        byte measure[8];
+        Serial3.readBytes(measure,9);
+        incomingByte = Serial3.read();
+        unsigned float  ppm = (measure[2]*256+measure[3])*0.1;
+      }
+    break;
+  }
+  winsenBegin(); //disable sensors.
 }

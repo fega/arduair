@@ -40,8 +40,8 @@ SDA/SCL BMP180, RTC, Light Module
 #define RED_LED_PIN 2
 #define GREEN_LED_PIN 3
 #define DS1307_ADDRESS 0x68 //clock ADRESS
-#define DHTPIN 20
-#define DHTTYPE DHT11  //dht type
+#define DHTPIN 5
+#define DHTTYPE DHT22  //dht type
 #define WIFIPIN 4
 #define SDPIN 10
 #define SHINYEI_P1 8
@@ -54,7 +54,7 @@ unsigned int zeCounter;    // Ze counter of measures
 //Constructors
 File myFile;              //FIle constructor
 WiFiClient client;        //WiFiClient Constructor
-DHT dht(DHTPIN, DHTTYPE); //DHT constructor , m 
+DHT dht(DHTPIN, DHTTYPE); //DHT constructor , m
 SFE_BMP180 bmp;           //bmp constructor
 SFE_TSL2561 light;        //TSL2561 constructor
 
@@ -89,7 +89,6 @@ void setup() {
   digitalWrite(SDPIN,LOW); //inactive SD
   wifiBegin();
   winsenBegin();
-  arduairSetup();
   digitalWrite(GREEN_LED_PIN,LOW); // Setup Light Off
 }
 /**
@@ -109,29 +108,22 @@ void setup() {
 void loop() {
 
   pmRead();          //1
-  mq131Read();       //2
+  //mq131Read();       //2
   meteorologyRead(); //3
   winsenRead(CO);    //4
   winsenRead(NO2);
   winsenRead(SO2);
   getDate(DS1307_ADDRESS);         //5
   tableWrite();
-  request(h,t,p,l,co,so2,no2);
+  request();
   //6
 }
 /**
  * Perform a request to the given server variable. in the form:
  * http://myserver.com/device/password/monthDay/month/year/hour/minute
  * ?h=humidity&t=temperature&p=pressure&l=luminosity&co=[co]&o3=[o3]&&
- * @param h   [description]
- * @param t   [description]
- * @param p   [description]
- * @param l   [description]
- * @param co  [description]
- * @param so2 [description]
- * @param no2 [description]
  */
-void request(int h,int t,float p,float l,float co,float so2,float no2){
+void request(){
   // close any connection before send a new request.This will free the socket on the WiFi shield
   client.stop();
 
@@ -179,19 +171,33 @@ void tableWrite(){
   myFile = SD.open("DATA.txt", FILE_WRITE); //open SD data.txt file
 
   if (myFile){
+    //write ISO date ex: 1994-11-05T08:15:30-05:00
 
-    myFile.print(h);
-    myFile.print(",");
-    myFile.print(t);
-    myFile.print(",");
-    myFile.print(p);
-    myFile.print(",");
-    myFile.print(co);
-    myFile.print(",");
-    myFile.print(so2);
-    myFile.print(",");
-    myFile.print(no2);
-    myFile.print(",");
+    // myFile.print(year);myFile.print("-");
+    // myFile.print(month);myFile.print("-");
+    // myFile.print(monthDay);myFile.print("T");
+    // myFile.print(hour);myFile.print(":");
+    // myFile.print(minute);myFile.print(":");
+    // myFile.print(second);
+    // myFile.print("+5:00,");
+
+    myFile.print(year);  myFile.print(",");
+    myFile.print(month); myFile.print(",");
+    myFile.print(monthDay);myFile.print(",");
+    myFile.print(hour);  myFile.print(",");
+    myFile.print(minute);myFile.print(",");
+    myFile.print(second);myFile.print(",");
+
+    myFile.print(h);    myFile.print(",");
+    myFile.print(t);    myFile.print(",");
+    myFile.print(p);    myFile.print(",");
+    myFile.print(l);    myFile.print(",");
+    myFile.print(co);   myFile.print(",");
+    myFile.print(so2);  myFile.print(",");
+    myFile.print(no2);  myFile.print(",");
+    myFile.print(pm10); myFile.print(",");
+    myFile.print(pm25); myFile.print(",");
+
 
     myFile.println(" ");
     myFile.close();
@@ -225,7 +231,7 @@ void pmRead(){
   unsigned long triggerOnP25, triggerOffP25, pulseLengthP25, durationP25;
   boolean P25 = HIGH, triggerP25 = false;
   float ratioP10 = 0, ratioP25 = 0;
-  unsigned long sampletime_ms = 60000;
+  unsigned long sampletime_ms = 30000;
   float countP10, countP25;
   unsigned long starttime=millis();
   for( ;sampletime_ms > millis() - starttime; ){
@@ -278,6 +284,10 @@ void pmRead(){
   pm25 = concSmall;
 
   Serial.println("Ended  PM read");
+  Serial.print("PM 10: ");
+  Serial.println(pm10);
+  Serial.print("PM 2.5: ");
+  Serial.println(pm25);
 }
 /**
  * Reads pressure from BMP pressure Sensor
@@ -303,7 +313,7 @@ float pressureRead(){
         {
           // Print out the measurement:
           //Serial.print("absolute pressure: ");
-          Serial.print(P*0.750061561303,2);
+          //Serial.print(P*0.750061561303,2);
           //Serial.println(" mmHg");
           return P;
         }
@@ -331,10 +341,10 @@ float lightRead(){
   {
     // getData() returned true, communication was successful
 
-    Serial.print("data0: ");
-    Serial.print(data0);
-    Serial.print(" data1: ");
-    Serial.print(data1);
+    //    Serial.print("data0: ");
+    //    Serial.print(data0);
+    //    Serial.print(" data1: ");
+    //    Serial.print(data1);
 
     // To calculate lux, pass all your settings and readings
     // to the getLux() function.
@@ -352,11 +362,6 @@ float lightRead(){
 
     good = light.getLux(gain,ms,data0,data1,lux);
 
-    // Print out the results:
-
-    Serial.print(" lux: ");
-    Serial.print(lux);
-
     if (good) l=lux; else l=-99;
     return l;
   }
@@ -372,6 +377,7 @@ float temperatureRead(){
  */
 float humidityRead(){
   return dht.readHumidity();
+
 }
 /**
  * Convert binary coded decimal to normal decimal numbers
@@ -386,6 +392,7 @@ byte bcdToDec(byte val)  {
  * @param {int} adress Adress of DS1307 real time clock
  */
 void getDate(int adress){
+  Serial.println("Getting Date");
   // Reset the register pointer
   Wire.beginTransmission(adress);
   byte zero = 0x00;
@@ -416,16 +423,111 @@ void sdBegin(){
  */
 void meteorologyRead(){
   p = pressureRead();
+  Serial.print("p: ");
+  Serial.println(p);
   l = lightRead();
-  h = humidityRead();  // 1* medir humedad
-  t = temperatureRead();// 2* medir temperatura
+  Serial.print("l: ");
+  Serial.println(l);
+  h = humidityRead();
+  Serial.print("h: ");
+  Serial.println(h);
+  t = temperatureRead();
+  Serial.print("t: ");
+  Serial.println(t);
 }
 /**
  * Setup all of the configuration from the SD to the arduair
  */
-void arduairSetup(){
- //
-}
+//void arduairSetup(){
+//  char character;
+//  String settingName;
+//  String settingValue;
+//  myFile = SD.open("settings.txt");
+//  if (myFile) {
+//  while (myFile.available()) {
+//  character = myFile.read();
+//  while((myFile.available()) && (character != '[')){
+//  character = myFile.read();
+//  }
+//  character = myFile.read();
+//  while((myFile.available()) && (character != '=')){
+//  settingName = settingName + character;
+//  character = myFile.read();
+//  }
+//  character = myFile.read();
+//  while((myFile.available()) && (character != ']')){
+//  settingValue = settingValue + character;
+//  character = myFile.read();
+//  }
+//  if(character == ']'){
+//
+//  /*
+//  //Debuuging Printing
+//  Serial.print("Name:");
+//  Serial.println(settingName);
+//  Serial.print("Value :");
+//  Serial.println(settingValue);
+//  */
+//
+//  // Apply the value to the parameter
+//  applySetting(settingName,settingValue);
+//  // Reset Strings
+//  settingName = "";
+//  settingValue = "";
+//  }
+//  }
+//  // close the file:
+//  myFile.close();
+//  } else {
+//  // if the file didn't open, print an error:
+//  Serial.println("error opening settings.txt");
+//  }
+//}
+///**
+// * [applySetting description]
+// * @param settingName  [description]
+// * @param settingValue [description]
+// */
+//void applySetting(String settingName, String settingValue) {
+//  if(settingName == "exINT") {
+//  exINT=settingValue.toInt();
+//  }
+//  if(settingName == "exFloat") {
+//  exFloat=toFloat(settingValue);
+//  }
+//  if(settingName == "exBoolean") {
+//  exBoolean=toBoolean(settingValue);
+//  }
+//  if(settingName == "exLong") {
+//  exLong=toLong(settingValue);
+//  }
+//  }
+//
+//  // converting string to Float
+//  float toFloat(String settingValue){
+//  char floatbuf[settingValue.length()+1];
+//  settingValue.toCharArray(floatbuf, sizeof(floatbuf));
+//  float f = atof(floatbuf);
+//  return f;
+//  }
+//
+//  long toLong(String settingValue){
+//  char longbuf[settingValue.length()+1];
+//  settingValue.toCharArray(longbuf, sizeof(longbuf));
+//  long l = atol(longbuf);
+//  return l;
+//  }
+//
+//  // Converting String to integer and then to boolean
+//  // 1 = true
+//  // 0 = false
+//  boolean toBoolean(String settingValue) {
+//  if(settingValue.toInt()==1){
+//  return true;
+//  } else {
+//  return false;
+//  }
+//}
 /**
  * This function begins wifi connection
  */
@@ -450,63 +552,103 @@ void wifiBegin(){
   Serial.println("Connected to wifi");
 }
 /**
- * Disables automatic concentration of ZE sensors to prevent unexpectects behaviors from interrupts
+ * Disables automatic concentration of ZE sensors and flushes Serials Buffers to prevent unexpectects behaviors from interrupts
  */
 void winsenBegin(){
+  Serial.println("disabling sensors");
   byte message[] = {0xFF,0x01, 0x78, 0x04, 0x00, 0x00, 0x00, 0x00, 0x83};//TODO: change bye array to "manual form"
   Serial1.write(message,sizeof(message));
   Serial2.write(message,sizeof(message));
   Serial3.write(message,sizeof(message));
+  delay(1000);//Avoid problems with sensors response
+  while(Serial1.available()>0){
+    byte c = Serial1.read();
+  }
+  while(Serial2.available()>0){
+    byte c = Serial2.read();
+  }
+  while(Serial3.available()>0){
+    byte c = Serial3.read();
+  }
+  delay(1000);
 }
 /**
  * Reads the given contaminant from their respective Winsen Sensor
  * @param cont Contaminant to be read, could be CO, NO2 or SO2
  */
 void winsenRead(int cont){
+  Serial.println("Winsen Sensor Reading");
+
   byte message[] = {0xFF,0x01, 0x78, 0x03, 0x00, 0x00, 0x00, 0x00, 0x84};
   unsigned long sampletime_ms = 30000;
   unsigned long starttime=millis();
+  byte measure[8]={0x00,0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+  float ppm=0;
   switch (cont) {
     case 1:
       Serial1.write(message,sizeof(message));
+      delay(2000);
       //for(;sampletime_ms > millis() - starttime;){
       if (Serial1.available() > 0) {
-        byte measure[8];
         Serial1.readBytes(measure,9);
-        float ppm = measure[2]*256+measure[3];
+        if (measure[0]==0xff && measure[1]==0x78){
+          Serial1.readBytes(measure,9);
+        }
+        if (measure[0]==0xff && measure[1]==0x86){
+          ppm = measure[2]*256+measure[3];
+          co=ppm;
+          Serial.print("[CO]: ");
+          Serial.println(ppm);
+        }else{
+          co=-1;
+        }
       }
-      //}
       break;
     case 2:
       Serial2.write(message,sizeof(message));
+      delay(2000);
+      //for(;sampletime_ms > millis() - starttime;){
       if (Serial2.available() > 0) {
-        byte measure[8];
         Serial2.readBytes(measure,9);
-        float ppm = (measure[2]*256+measure[3])*0.1;
+        if (measure[0]==0xff && measure[1]==0x78){
+          Serial2.readBytes(measure,9);
+        }
+        if (measure[0]==0xff && measure[1]==0x86){
+          ppm = measure[2]*256+measure[3];
+          no2=ppm;
+          Serial.print("[NO2]: ");
+          Serial.println(ppm);
+        }else{
+          no2=-1;
+        }
       }
       break;
     case 3:
-      Serial1.write(message,sizeof(message));
-      if (Serial3.available() > 0) {
-        byte measure[8];
+    Serial3.write(message,sizeof(message));
+    delay(2000);
+    //for(;sampletime_ms > millis() - starttime;){
+    if (Serial3.available() > 0) {
+      Serial3.readBytes(measure,9);
+      if (measure[0]==0xff && measure[1]==0x78){
         Serial3.readBytes(measure,9);
-        float  ppm = (measure[2]*256+measure[3])*0.1;
       }
+      if (measure[0]==0xff && measure[1]==0x86){
+        ppm = measure[2]*256+measure[3];
+        so2=ppm;
+        Serial.print("[SO2]: ");
+        Serial.println(ppm);
+      }else{
+        so2=-1;
+      }
+    }
     break;
   }
   winsenBegin(); //disable sensors.
 }
 /**
- * Perform a simple reques
- * @param h   [description]
- * @param t   [description]
- * @param p   [description]
- * @param l   [description]
- * @param co  [description]
- * @param so2 [description]
- * @param no2 [description]
+ * Perform a simple requesto
  */
-void simple_request(int h,int t,float p,float l,float co,float so2,float no2){
+void simple_request(){
   // close any connection before send a new request.
   // This will free the socket on the WiFi shield
    client.stop();

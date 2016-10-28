@@ -1,21 +1,12 @@
 [ID=0001]
-[Name=ArduiAir]
+[network=ArduiAir]
+[networkpass=ArduiAir]
 
-[sensorName1=]
-[sensorName2=]
-[sensorName3=]
+[server=ArduiAir]
+[device=]
+[password=]
 [sensorName4=]
 [sensorName5=]
-
-[sensorID1=]
-[sensorID2=]
-[sensorID3=]
-[sensorID4=]
-[sensorID5=]
-
-
-
-[arduFrecuency=10]
 
 [beginYear=2100]
 [beginDay=1]

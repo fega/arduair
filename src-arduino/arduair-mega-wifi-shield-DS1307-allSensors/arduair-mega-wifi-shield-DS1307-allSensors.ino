@@ -1,4 +1,4 @@
- /******************************************************************************
+  /******************************************************************************
 Arduair project
 Fabian Gutierrez @ Universidad Pontificia Bolivariana
 https://github.com/fega/arduair
@@ -35,7 +35,7 @@ SDA/SCL BMP180, RTC, Light Module
 #include <SFE_BMP180.h>//Sparkfun BMP180 pressure Sensor Library
 #include <SparkFunTSL2561.h>//light sensor library SparkFun TSL2561 Breakout
 #include <WiFi.h>      //wifi shield Library
-
+#define DEVMODE true
 //Default configuration
 #define RED_LED_PIN 2
 #define GREEN_LED_PIN 3
@@ -49,7 +49,6 @@ SDA/SCL BMP180, RTC, Light Module
 #define CO  1 //
 #define NO2 2
 #define SO2 3
-unsigned int zeCounter;    // Ze counter of measures
 
 //Constructors
 File myFile;              //FIle constructor
@@ -59,11 +58,13 @@ SFE_BMP180 bmp;           //bmp constructor
 SFE_TSL2561 light;        //TSL2561 constructor
 
 //Wifi and device config
-char ssid[] = "FABIAN"; //  your network SSID (name)
-char pass[] = "63856199";    // your network password (use for WPA, or use as key for WEP)
-char server[] = "arduair.herokuapp.com/test/";
-char device[] = "device1";
-char password[] = "pass1";
+char ssid[20]; //  your network SSID (name)
+char pass[20];    // your network password (use for WPA, or use as key for WEP)
+char server[20];
+char device[20];
+char password[20];
+bool wifi = true;
+bool resetClock=false;
 int status = WL_IDLE_STATUS;
 
 //Global variables for measuring
@@ -75,8 +76,14 @@ unsigned int second, minute,hour,weekDay,monthDay,month,year;
  * Arduair configuration initialization
  */
 void setup() {
+  
   digitalWrite(GREEN_LED_PIN,HIGH); // Setup Light On
+  getDate(DS1307_ADDRESS);
+  sdBegin();
+  #if defined(DEVMODE)
   Serial.begin(9600);
+  arduairSetup();
+  #endif
   Serial1.begin(9600); //ZE CO-sensor
   Serial2.begin(9600); //ZE NO2-sensor
   Serial3.begin(9600); //ZE SO2-sensor
@@ -84,10 +91,8 @@ void setup() {
   dht.begin();
   bmp.begin();
   light.begin();
-  sdBegin();
-  digitalWrite(WIFIPIN,HIGH); //active wifishield
-  digitalWrite(SDPIN,LOW); //inactive SD
-  wifiBegin();
+  
+  if (wifi){wifiBegin();}
   winsenBegin();
   digitalWrite(GREEN_LED_PIN,LOW); // Setup Light Off
 }
@@ -106,17 +111,15 @@ void setup() {
  *
  */
 void loop() {
-
-  pmRead();          //1
-  //mq131Read();       //2
-  meteorologyRead(); //3
-  winsenRead(CO);    //4
+  pmRead();
+  //mq131Read();
+  meteorologyRead();
+  winsenRead(CO);
   winsenRead(NO2);
   winsenRead(SO2);
-  getDate(DS1307_ADDRESS);         //5
+  getDate(DS1307_ADDRESS);
   tableWrite();
-  request();
-  //6
+  if(wifi){request();}
 }
 /**
  * Perform a request to the given server variable. in the form:
@@ -129,8 +132,9 @@ void request(){
 
  // if there's a successful connection:
  if (client.connect(server, 80)) {
+   #if defined(DEVMODE)
    Serial.println("connecting...");
-
+   #endif
    //String getRequest ="GET"+"hola"+" "
    // send the HTTP GET request:
    client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password);
@@ -155,6 +159,9 @@ void request(){
    client.println("User-Agent: Arduair");
    client.println("Connection: close");
    client.println();
+   #if defined(DEVMODE)
+   Serial.println("Request done");
+   #endif
  }
  }
 /**
@@ -211,9 +218,13 @@ void tableWrite(){
  * @return [description]
  */
 float mq131Read(){
-  int sensorValue = analogRead(0);       // read analog input pin 0
-  Serial.println(sensorValue, DEC);  // prints the value read
+  int sensorValue = analogRead(0);// read analog input pin 0
   delay(100);// wait 100ms for next reading
+
+  #if defined(DEVMODE)
+  Serial.print("[O3]: ");
+  Serial.println(sensorValue, DEC);
+  #endif
 
   float finalValue =sensorValue;
   return finalValue;
@@ -223,7 +234,10 @@ float mq131Read(){
  * based on the dustduino project
  */
 void pmRead(){
+  #if defined(DEVMODE)
   Serial.println("Started  PM read");
+  #endif
+
 
 
   unsigned long triggerOnP10, triggerOffP10, pulseLengthP10, durationP10;
@@ -234,6 +248,7 @@ void pmRead(){
   unsigned long sampletime_ms = 30000;
   float countP10, countP25;
   unsigned long starttime=millis();
+
   for( ;sampletime_ms > millis() - starttime; ){
     P10 = digitalRead(9);
     P25 = digitalRead(8);
@@ -283,11 +298,13 @@ void pmRead(){
   pm10 = concLarge;
   pm25 = concSmall;
 
+  #if defined(DEVMODE)
   Serial.println("Ended  PM read");
   Serial.print("PM 10: ");
   Serial.println(pm10);
   Serial.print("PM 2.5: ");
   Serial.println(pm25);
+  #endif
 }
 /**
  * Reads pressure from BMP pressure Sensor
@@ -317,13 +334,21 @@ float pressureRead(){
           //Serial.println(" mmHg");
           return P;
         }
-        //else Serial.println("error retrieving pressure measurement\n");
+        #if defined(DEVMODE)
+        else Serial.println("error retrieving pressure measurement\n");
+        #endif defined(DEVMODE)
       }
-      //else Serial.println("error starting pressure measurement\n");
+      #if defined(DEVMODE)
+      else Serial.println("error starting pressure measurement\n");
+      #endif
     }
-    //else Serial.println("error retrieving temperature measurement\n");
+    #if defined(DEVMODE)
+    else Serial.println("error retrieving temperature measurement\n");
+    #endif
   }
-  //else Serial.println("error starting temperature measurement\n");
+  #if defined(DEVMODE)
+  else Serial.println("error starting temperature measurement\n");
+  #endif
 }
 /**
  * Reads the Luminosity sensor TSL2561 and calculates the Lux units
@@ -362,7 +387,8 @@ float lightRead(){
 
     good = light.getLux(gain,ms,data0,data1,lux);
 
-    if (good) l=lux; else l=-99;
+    if (good) l=lux; else l=-1;
+
     return l;
   }
 }
@@ -392,7 +418,10 @@ byte bcdToDec(byte val)  {
  * @param {int} adress Adress of DS1307 real time clock
  */
 void getDate(int adress){
+  #if defined(DEVMODE)
   Serial.println("Getting Date");
+  #endif
+
   // Reset the register pointer
   Wire.beginTransmission(adress);
   byte zero = 0x00;
@@ -413,149 +442,209 @@ void getDate(int adress){
  */
 void sdBegin(){
   if (!SD.begin(4)) {
-    Serial.println("SD failed!");
+    log("SD failed!");warn();
     return;
   }
-  Serial.println("SD done.");
+  log("SD done.");
+  #if defined(DEVMODE)
+  Serial.println("SD done");
+  #endif
 }
 /**
  * Meteorology read function
  */
 void meteorologyRead(){
   p = pressureRead();
+  l = lightRead();
+  h = humidityRead();
+  t = temperatureRead();
+  #if defined(DEVMODE)
   Serial.print("p: ");
   Serial.println(p);
-  l = lightRead();
   Serial.print("l: ");
   Serial.println(l);
-  h = humidityRead();
   Serial.print("h: ");
   Serial.println(h);
-  t = temperatureRead();
   Serial.print("t: ");
   Serial.println(t);
+  #endif
 }
 /**
  * Setup all of the configuration from the SD to the arduair
  */
-//void arduairSetup(){
-//  char character;
-//  String settingName;
-//  String settingValue;
-//  myFile = SD.open("settings.txt");
-//  if (myFile) {
-//  while (myFile.available()) {
-//  character = myFile.read();
-//  while((myFile.available()) && (character != '[')){
-//  character = myFile.read();
-//  }
-//  character = myFile.read();
-//  while((myFile.available()) && (character != '=')){
-//  settingName = settingName + character;
-//  character = myFile.read();
-//  }
-//  character = myFile.read();
-//  while((myFile.available()) && (character != ']')){
-//  settingValue = settingValue + character;
-//  character = myFile.read();
-//  }
-//  if(character == ']'){
-//
-//  /*
-//  //Debuuging Printing
-//  Serial.print("Name:");
-//  Serial.println(settingName);
-//  Serial.print("Value :");
-//  Serial.println(settingValue);
-//  */
-//
-//  // Apply the value to the parameter
-//  applySetting(settingName,settingValue);
-//  // Reset Strings
-//  settingName = "";
-//  settingValue = "";
-//  }
-//  }
-//  // close the file:
-//  myFile.close();
-//  } else {
-//  // if the file didn't open, print an error:
-//  Serial.println("error opening settings.txt");
-//  }
-//}
-///**
-// * [applySetting description]
-// * @param settingName  [description]
-// * @param settingValue [description]
-// */
-//void applySetting(String settingName, String settingValue) {
-//  if(settingName == "exINT") {
-//  exINT=settingValue.toInt();
-//  }
-//  if(settingName == "exFloat") {
-//  exFloat=toFloat(settingValue);
-//  }
-//  if(settingName == "exBoolean") {
-//  exBoolean=toBoolean(settingValue);
-//  }
-//  if(settingName == "exLong") {
-//  exLong=toLong(settingValue);
-//  }
-//  }
-//
-//  // converting string to Float
-//  float toFloat(String settingValue){
-//  char floatbuf[settingValue.length()+1];
-//  settingValue.toCharArray(floatbuf, sizeof(floatbuf));
-//  float f = atof(floatbuf);
-//  return f;
-//  }
-//
-//  long toLong(String settingValue){
-//  char longbuf[settingValue.length()+1];
-//  settingValue.toCharArray(longbuf, sizeof(longbuf));
-//  long l = atol(longbuf);
-//  return l;
-//  }
-//
-//  // Converting String to integer and then to boolean
-//  // 1 = true
-//  // 0 = false
-//  boolean toBoolean(String settingValue) {
-//  if(settingValue.toInt()==1){
-//  return true;
-//  } else {
-//  return false;
-//  }
-//}
+void arduairSetup(){
+ #if defined(DEVMODE)
+ Serial.println("Applying Settings...");
+ #endif
+ char character;
+ String settingName;
+ String settingValue;
+ myFile = SD.open("CONFIG.txt");
+ if (myFile) {
+   while (myFile.available()) {
+     character = myFile.read();
+       while((myFile.available()) && (character != '[')){
+         character = myFile.read();
+        }
+      character = myFile.read();
+      while((myFile.available()) && (character != '=')){
+        settingName = settingName + character;
+        character = myFile.read();
+      }
+      character = myFile.read();
+      while((myFile.available()) && (character != ']')){
+        settingValue = settingValue + character;
+        character = myFile.read();
+      }
+      if(character == ']'){
+
+      #if defined(DEVMODE)
+      //Debuuging Printing
+      Serial.print("Name:");
+      Serial.println(settingName);
+      Serial.print("Value :");
+      Serial.println(settingValue);
+      #endif
+
+
+       // Apply the value to the parameter
+       applySetting(settingName,settingValue);
+       // Reset Strings
+       settingName = "";
+       settingValue = "";
+     }
+   }
+ // close the file:
+ myFile.close();
+ } else {
+ // if the file didn't open, print an error:
+ #if defined(DEVMODE)
+ Serial.println("error opening settings.txt");
+ #endif
+
+ log("error opening settings.txt");
+ warn();
+ }
+ #if defined(DEVMODE)
+ Serial.println("End ArduairSetup");
+ #endif
+}
+/**
+* [applySetting description]
+* @param settingName  [description]
+* @param settingValue [description]
+*/
+void applySetting(String settingName, String settingValue) {
+  if (settingName=="network"){
+    settingValue.toCharArray(ssid,20); 
+  }
+  if (settingName=="networkpass"){
+    settingValue.toCharArray(pass,20);
+  }
+  if (settingName=="server"){
+    settingValue.toCharArray(server,20);
+  }
+  if (settingName="device"){
+    settingValue.toCharArray(device,20);
+  }
+  if (settingName=="password"){
+    settingValue.toCharArray(password,20);
+  }
+  if (settingName=="wifi"){
+    wifi==toBoolean(settingValue);
+  }
+  if (settingName=="resetclock"){
+    resetClock=toBoolean(settingValue);
+  }
+  if (settingName=="year"){
+    year=settingValue.toInt();
+  }
+  if (settingName=="month"){
+    month=settingValue.toInt();
+  }
+  if (settingName=="day"){
+    monthDay=settingValue.toInt();
+  }
+  if (settingName=="hour"){
+    hour=settingValue.toInt();
+  }
+  if (settingName=="minute"){
+    minute=settingValue.toInt();
+  }
+  if (settingName=="second"){
+    second=settingValue.toInt();
+  }
+ }
+
+ // converting string to Float
+ float toFloat(String settingValue){
+ char floatbuf[settingValue.length()+1];
+ settingValue.toCharArray(floatbuf, sizeof(floatbuf));
+ float f = atof(floatbuf);
+ return f;
+ }
+
+ long toLong(String settingValue){
+ char longbuf[settingValue.length()+1];
+ settingValue.toCharArray(longbuf, sizeof(longbuf));
+ long l = atol(longbuf);
+ return l;
+ }
+
+ // Converting String to integer and then to boolean
+ // 1 = true
+ // 0 = false
+ boolean toBoolean(String settingValue) {
+ if(settingValue.toInt()==1){
+ return true;
+ } else {
+ return false;
+ }
+}
 /**
  * This function begins wifi connection
  */
 void wifiBegin(){
+    digitalWrite(WIFIPIN,HIGH); //active wifishield
+    digitalWrite(SDPIN,LOW); //inactive SD
     // check for the presence of the shield:
     if (WiFi.status() == WL_NO_SHIELD) {
+    #if defined(DEVMODE)
     Serial.println("WiFi shield not present");
-    // don't continue:
+    #endif
+    log("WiFi shield not present");
+    warn();
     while (true);
   }
 
   String fv = WiFi.firmwareVersion();
   if (fv != "1.1.0") {
+    #if defined(DEVMODE)
     Serial.println("Please upgrade the firmware");
+    #endif
+    warn();
+    log("Please upgrade the firmware");
   }
   while (status != WL_CONNECTED) {
+    #if defined(DEVMODE)
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
+    #endif
+
     status = WiFi.begin(ssid, pass);// Connect to WPA/WPA2 network. Change this line if using open or WEP network
     delay(10000);// wait 10 seconds for connection
   }
+  #if defined(DEVMODE)
   Serial.println("Connected to wifi");
+  #endif
 }
 /**
  * Disables automatic concentration of ZE sensors and flushes Serials Buffers to prevent unexpectects behaviors from interrupts
  */
 void winsenBegin(){
+  #if defined(DEVMODE)
   Serial.println("disabling sensors");
+  #endif
   byte message[] = {0xFF,0x01, 0x78, 0x04, 0x00, 0x00, 0x00, 0x00, 0x83};//TODO: change bye array to "manual form"
   Serial1.write(message,sizeof(message));
   Serial2.write(message,sizeof(message));
@@ -577,7 +666,11 @@ void winsenBegin(){
  * @param cont Contaminant to be read, could be CO, NO2 or SO2
  */
 void winsenRead(int cont){
+  #if defined(DEVMODE)
   Serial.println("Winsen Sensor Reading");
+  #endif
+
+
 
   byte message[] = {0xFF,0x01, 0x78, 0x03, 0x00, 0x00, 0x00, 0x00, 0x84};
   unsigned long sampletime_ms = 30000;
@@ -597,8 +690,11 @@ void winsenRead(int cont){
         if (measure[0]==0xff && measure[1]==0x86){
           ppm = measure[2]*256+measure[3];
           co=ppm;
+          #if defined(DEVMODE)
           Serial.print("[CO]: ");
           Serial.println(ppm);
+          #endif
+
         }else{
           co=-1;
         }
@@ -616,8 +712,11 @@ void winsenRead(int cont){
         if (measure[0]==0xff && measure[1]==0x86){
           ppm = measure[2]*256+measure[3];
           no2=ppm;
+
+          #if defined(DEVMODE)
           Serial.print("[NO2]: ");
           Serial.println(ppm);
+          #endif
         }else{
           no2=-1;
         }
@@ -635,8 +734,11 @@ void winsenRead(int cont){
       if (measure[0]==0xff && measure[1]==0x86){
         ppm = measure[2]*256+measure[3];
         so2=ppm;
+
+        #if defined(DEVMODE)
         Serial.print("[SO2]: ");
         Serial.println(ppm);
+        #endif
       }else{
         so2=-1;
       }
@@ -655,7 +757,9 @@ void simple_request(){
    String timezone;
   // if there's a successful connection:
   if (client.connect(server, 80)) {
+    #if defined(DEVMODE)
     Serial.println("connecting...");
+    #endif
 
     //String getRequest ="GET"+"hola"+" "
     // send the HTTP GET request:
@@ -680,3 +784,37 @@ void simple_request(){
     client.println();
   }
  }
+/**
+ * Log function, it writes a message in a log file.
+ * @param message Message to be
+ */
+void log(String message){
+  digitalWrite(WIFIPIN,HIGH); //inactive wifi-shield
+  digitalWrite(SDPIN,LOW); //active SD
+
+
+  if (myFile){
+    //write ISO date ex: 1994-11-05T08:15:30-05:00
+    myFile.print(year);myFile.print("-");
+    myFile.print(month);myFile.print("-");
+    myFile.print(monthDay);myFile.print("T");
+    myFile.print(hour);myFile.print(":");
+    myFile.print(minute);myFile.print(":");
+    myFile.print(second);
+    myFile.print("+5:00,   ");
+
+    myFile.print(message);
+
+    myFile.println(" ");
+    myFile.close();
+  }
+  digitalWrite(WIFIPIN,LOW); //active wifishield
+  digitalWrite(SDPIN,HIGH); //inactive SD
+
+}
+/**
+ * turn the warning light on
+ */
+void warn(){
+    digitalWrite(RED_LED_PIN,HIGH);
+}

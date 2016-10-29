@@ -1,20 +1,16 @@
-[ID=0001]
-[network=ArduiAir]
-[networkpass=ArduiAir]
+[network=] => Wi-fi network
+[networkpass=] => Wifi network password
 
-[server=ArduiAir]
-[device=]
-[password=]
-[sensorName4=]
-[sensorName5=]
+[server=arduair.herokuapp.com] => Server to be connected
+[device=demotest1]
+[password=demodemo]
 
-[beginYear=2100]
-[beginDay=1]
-[beginHour=1]
-[beginMinute=1]
+[wifi=true] => enable wifi
 
-
-[endYear=2100]
-[endDay=1]
-[endHour=1]
-[endMinute=1]
+[resetclock=false] => if its true it reset the clock with the following parameters
+[year=1]
+[month=1]
+[day=1]
+[hour=1]
+[minute=1]
+[second=1]

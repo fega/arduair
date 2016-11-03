@@ -1,54 +1,36 @@
-# arduAIR
+# ArduAIR
 
-Air Quality Monitor in Arduino. controlled by a Node Server. So, you can build your own monitor and upload the data to this server (or your own)
+Air Quality Monitor in Arduino. where the interface is a node Server.
 
-This project's currently in development, I will be happy if you want to contribute.
+### Features:
+* Measure Air Criteria pollutants and meteorology variables
+* Nice and responsive web UI.
+* DebugMode and error log.
+* Technical documentation and diagrams
 
 ![Arduair screenshot](https://lh3.googleusercontent.com/n5DMal5MwRDozlpnW49EXgYQDbvq39EygwUUXoNwcXKT7U1Ys_4ugA6NnGjbhOQRFY5IhGNsufVo555OuExD0CHivVf-lpzqsD1wEeBmtf5SXPHdYcxEqIFx0hNo6G2qsvZPhx4xgXebkyKA7lD9mKPMS0HugMAi_3bbGt7SLCAaYWy6HTNJ69gANxLJ8lvDBvfZu-idVGM0lgRWwKp01by0gD2WkMlUTx96PYtHEZmPIUOfO-dyn6GNmMmkb-yCURblqtIIz1HQR4uervb-cn6l5sFw-8mJnVzsm1Rvx7zl3MkKe3BR0vghUzwXs6vTBozuzx6svWtWT1ZTunGCy-BvHV9-BNxybk1103pTjneWZYsyxRccRW456pV0Z_H9Ng42aIEwej9-ZXBpOkKYYhEEC_QG_NkkAkvuFlO0ZkjcGxltKhy_JnbJHAFzaJxGevFPgwkZzR1Qo-LyCejmXDiEMguqCSsMF4SFFIE03SuF_il-x9vf12pLn_tmoJKQKVCnPfwLvYJeLrkhmmabxL0SdTGRBMz7V9FTFSQFPyKjbdlTURkH5beaYCnw6NuN6jdMrM_M6YuiEdBW8ymE9orCn8l3MbRcBHf16RZqmLN5reuU4w=w960-h635-no)
+
 ## Getting started:
 
-### building your own air quality monitor
+### Building your own air quality monitor
 
-First of all, you will need to build your own Arduino Quality monitor, it could be as simple or complex that you want.
+You will need to build your own arduair device, here you can found the official sketch, but you can change and propose what you want. (coming soon)
 
-#### equipment
+### Setup the server
 
-Currently, this project uses:
+You can use the server hosted  [http://arduair.herokuapp.com](here), or deploy your own copy. to achieve that, follow this tutorial (coming soon)
 
-- 1 Arduino (MEGA)
-- 1 Sparkfun DS1307 real time Clock module
-- 1 SparkFun BMP180 pressure sensor Module
-- 1 SparkFun TSL2561 Light sensor Module
-- 1 Arduino wifi Shield (with SD socket)
-- 1 micro SD
-- 1 DHT22 Humidity/temperature sensor
-- A set of Air quality sensor, in this case, we use sensors for criteria pollutants.
-  - shinyei ppd42ns Dust sensor
-  - MQ-131 low concentration, and Pololu Breakout
-  - MQ-7 Carbon Monoxide Sensor
-  - ME03-CO: Carbon Monoxide Sensor
-  - ME03-SO2: SO2 Sensor
-  - ME03-NO2: NO2 Sensor
-  - Here we have a couple of alternatives, also AQICN.com have another bunch of references with some experimentation.
-- some Resistances and transistors
-- 1 2200 mAh 7.4v 35c Hi-Lithium polymer battery
-- 3 lm317 for supply regulation
-
-#### Instructions
-
-See here to open the building instructions. (coming soon).
-
-## Setup your air Q. monitor into the platform.
+### Setup your air Q. monitor into the platform.
 
 Now, I suppose that you have your air quality monitor, (complete or incomplete) you can subscribe it in the platform, it's pretty easy:
 
 1. Go to: <arduair.herokuapp.com> (provisional URL)
 2. Click on "add" tab and fill the form.
 3. If you are using the Arduair config system, click on "add config file";
-4. click on submit.
-5. enjoy it.
+4. Click on submit.
+5. Enjoy it.
 
-## platform API
+## Platform API
 
 We built a very simple API with some non-rest request, because it's easy to perform GET request from Arduino.
 
@@ -93,6 +75,3 @@ GET /device/:device
 name     | type   | description
 -------- | ------ | ------------------
 device   | string | target Device ID
-
-## Documentation
-yo can consult

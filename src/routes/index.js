@@ -40,7 +40,7 @@ router.get(['/documentation','/data','/data/*','/add','/configure','/'], (req, r
 /* Download Config template */
 ////////////////////////////*/
 router.get('/download/config-template',(req,res) =>{
-	res.download(path.join(__dirname,'../', 'public', 'files','config.txt'));
+	res.download(path.join(__dirname,'../', 'public', 'files','CONFIG.txt'));
 });
 
 module.exports = router;

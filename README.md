@@ -14,8 +14,8 @@ Air Quality Monitor in Arduino. where the interface is a node Server.
 
 ### Building your own air quality monitor
 
-You will need to build your own arduair device, here you can found the official sketch, but you can change and propose what you want. (coming soon)
-
+To build an Arduair device,[follow this guide](https://github.com/fega/arduair/blob/master/docs/build-an-Arduair-device.md). if you have questions, doubts or suggestions, open an issue or  a pull request  
+|
 ### Setup the server
 
 You can use the server hosted  [http://arduair.herokuapp.com](here), or deploy your own copy. to achieve that, follow this tutorial (coming soon)
@@ -32,7 +32,7 @@ Now, I suppose that you have your air quality monitor, (complete or incomplete) 
 
 ## Platform API
 
-We built a very simple API with some non-rest request, because it's easy to perform GET request from Arduino.
+We built a very simple API with some non-rest request because it's easy to perform GET request from Arduino.
 
 ### Send data without date
 
@@ -55,11 +55,11 @@ name     | type   | description
 -------- | ------ | ------------------
 device   | string | target Device ID
 password | string | target device pass
-day      | number | (1-30)Set day
-month    | number | (1-12) Set month
-year     | number | (0-9999) set year
-hour     | number | (0-24) set hour
-minute   | number | (0-60) set minute
+day      | number | (1-30)Set the day
+month    | number | (1-12) Set the month
+year     | number | (0-9999) set the year
+hour     | number | (0-24) set the hour
+minute   | number | (0-60) set the minute
 
 ### Get all device data
 

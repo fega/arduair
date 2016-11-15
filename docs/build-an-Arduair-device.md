@@ -41,9 +41,11 @@ The Arduair project uses a bunch of libraries provides with Arduino, Adafruit an
 - SparkFunTSL2561.h, [zip version available here](https://github.com/sparkfun/SparkFun_TSL2561_Arduino_Library).
 
 ## Testing components
-Is always a good idea test every component alone to ensure that it works (and you know how to wire it). [in this folder](https://github.com/fega/arduair/tree/master/src-arduino/component%20tests) you will find the testing sketches for all of the components.
+Is always a good idea test every component alone to ensure that it works (and you know how to wire it). [in this folder](https://github.com/fega/arduair/tree/master/src-arduino/component%20tests), you will find the testing sketches for all of the components.
 ## Ensemble
-You will need to ensemble the following sketch, if you want to open it on fritzing, check the files. You should also, add [This file]() in the root of the SD (with the same name)
+Use the following sketch to Ensemble your device [or download the fritzing sketch](https://github.com/fega/arduair/tree/master/src-arduino/sketch) . You should also, add [the CONFIG.txt file](https://github.com/fega/arduair/tree/master/src-arduino/root%20SD) in the root of the SD.
+
+![Arduair sketch](https://lh3.googleusercontent.com/QHjYxmVoCSXsbSaYdrpfCHCEfmgpXjc3KybgEWBMX46FK03miwRCAc5JHcDxaXDkfA2vxw4AwN86Ag5jrlTd6SZ0Le0aBgd0bIWzBtFvCdiiDq_DUkIBk0gcPH97G5Py2_-E0vhmNzfiD8EAAQoB7S5mQDduV48uTD5TbPde1sIkR7tq7xCBzu6hkCYO6tnAwF6azfwM0On9OtA2025sccEdAte9AllgMVda5-SIbioB1w7GMS5u7RFqOSXoRvJB1O_gSF45vDsZAyHO74TylJu9F3DzlPc2ruL-T-G2EzuxrahEPpadM2q6vlE_3AqnAvT9JGx7FbUvxsbHZjHnAeZRFdEAqMbzBd36oLtT9RgZVKehUsN8Xggk9ry1eciQYem9OsxL122ZdwmHY7oPKi0irfBX9WYLqY2V19e7PodQd3s1oSBxSB0Dk56XJ1GCAm7rNVBlq0t8NpHp33vAOVijiYqjBE-Da2TOMv1bySljrQ1cE1qzRStcpF96GKXnXFFYQ7fdyt6mYdVZF_O535QMwg8rzUOZDjsLke8NSB_7EZaFi7nZAvWYHPRDKdcD-zAL_Yb0frXrqlks9IQczh9UKmSLOs_yW6zXMPV3-MSKs1oLbQ=w1238-h956-no)
 
 ## Testing your Arduair
 After you build your device, you should check if it is working, achieve that you can upload the [source code]() to the Arduino. If you observe the code carefully, you will see some weird statements like this:
@@ -69,23 +71,24 @@ Don't forget to update your SD config.txt file with your configuration
 
 ## Deploying your own copy of the server.
 
-In order to achieve that, you will need to install [Node.js](https://nodejs.org/es/), and download this repo.
+In order to achieve that, you will need to install [Node.js](https://nodejs.org/es/) and download this repo.
 
-After that you will need to install [Gulp]() globally with:
+After that you will need to install [Gulp](http://gulpjs.com/) globally with:
 
 ```
 $ npm install gulp -g
 ```
 
-And install the prtoject's dependencies
+And install the project's  dependencies
 
 ```
 $ cd src
 
 $ npm install
 ```
-And run the server with Gulp
-
+And run the server with.
 ```
 $ gulp
 ```
+
+by default, the server is connected to a mongoDB database hosted in [mlab](https://mlab.com/), this is going to change in the future, so I recommend  switch for your own database (with mlab is very easy.)

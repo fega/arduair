@@ -4,11 +4,11 @@ Don't care about this file. it's only to organize my thoughts.
 
 ## Book
 
-- [ ] Write an abstract
-- [ ] Write an introduction
-- [ ] Write the aknowlements
+- [x] Write an abstract
+- [x] Write an introduction
+- [x] Write the acknowledgments
 - [ ] Finish NowCast section
-- [ ] Finish instantCast Section
+- [x] Finish instantCast Section
 - [ ] Write Calibration Section
 - [ ] Add references for "monitoreo de calidad de aire section"
 - [ ] Add references for "monitoreo fijo"
@@ -35,18 +35,21 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] AQI chart mode
 - [ ] AQI lines for chart
 - [ ] Total AQI
+
 ## Documentation
 
 - [ ] Finish Fritzing Sketch
 - [ ] User Manual
-- [ ] Tecnical Documentation
+- [ ] Technical Documentation
 
 ## Hardware
 
 - [ ] Insert calibration function
 - [ ] Add "get configuration" feature
 - [ ] Add MQ 131 support
+- [ ] Create the container box
 
 ## others
 
 - [ ] fill institutional documents
+- [x] Send kento email

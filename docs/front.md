@@ -18,9 +18,6 @@
 <dt><a href="#configure">configure()</a> ⇒ <code>undefined</code></dt>
 <dd><p>Show configuration tab and configure action button</p>
 </dd>
-<dt><a href="#documentation">documentation()</a> ⇒ <code>undefined</code></dt>
-<dd><p>Show documentation tab and comment action button</p>
-</dd>
 <dt><a href="#data">data()</a> ⇒ <code>undefined</code></dt>
 <dd><p>Show data tab, and do an AJAX request to get every device in the database, it also generates a table with the response</p>
 </dd>
@@ -46,7 +43,7 @@ Global Object with arduair default configuration and methods
 | Name | Type | Description |
 | --- | --- | --- |
 | arduair.data | <code>Array</code> | Data retrieved from the server, by default is null |
-| arduair.normalizedData | <code>Array</code> | A copy of arduair.data after normalization process |
+| arduair.normalizedData | <code>Array</code> | A copy of arduair.data after normalization process * @property {Array} arduair.aqiData A copy of arduair.data after AQI calculation |
 | arduair.units | <code>Object</code> | Units used in the graphs |
 | arduair.aqi_colors | <code>Array</code> | Colors of every range of the Air Quality index |
 | arduair.aqi_ranges | <code>Array</code> | Ranges used to calculate te aqi_ranges |
@@ -66,6 +63,10 @@ Global Object with arduair default configuration and methods
         * [~removeDuplicate(arr)](#arduair.normalizeDeviceData..removeDuplicate) ⇒ <code>Array</code>
     * [.bindMenuButtonBehavior()](#arduair.bindMenuButtonBehavior)
     * [.calculateAQI()](#arduair.calculateAQI)
+    * [.aqiArray()](#arduair.aqiArray)
+    * [.aqi()](#arduair.aqi)
+    * [.nowcastConcentration()](#arduair.nowcastConcentration)
+    * [.nowcastAqi()](#arduair.nowcastAqi)
 
 <a name="arduair.data"></a>
 
@@ -79,7 +80,7 @@ Data retrieved from server, by default is null, it could store until 5spaces, e
 | --- | --- | --- |
 | name | <code>String</code> | The name of the device |
 | date | <code>Array</code> | Array with date objects |
-| location | <code>Array</code> | Array with location coordinates, for now, Arduair doesn't make use of this parameter but you could use it to extends functionalities |
+| locatioKn | <code>Array</code> | Array with location coordinates, for now, Arduair doesn't make use of this parameter but you could use it to extends functionalities |
 | humidity | <code>Array</code> | Array with humidity data, in % |
 | temperature | <code>Array</code> | Array with temperature data in °C |
 | pressure | <code>Array</code> | Array with pressure data, in mb // TODO: check units |
@@ -181,8 +182,28 @@ This function controls the filledGraphData buttons behavior
 <a name="arduair.calculateAQI"></a>
 
 ### arduair.calculateAQI()
-Calculate the air Quality index
+Calculate the air Quality index fromStandar method,NowCast method andInstantCast method
 
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.aqiArray"></a>
+
+### arduair.aqiArray()
+Calculates the AQI for the given array of concentrations in the pollutant
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.aqi"></a>
+
+### arduair.aqi()
+Calculates the AQI for the given "c" (concentration) in the "pollutant"
+
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.nowcastConcentration"></a>
+
+### arduair.nowcastConcentration()
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.nowcastAqi"></a>
+
+### arduair.nowcastAqi()
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="hiding"></a>
 
@@ -200,12 +221,6 @@ Show the main tab
 
 ## configure() ⇒ <code>undefined</code>
 Show configuration tab and configure action button
-
-**Kind**: global function  
-<a name="documentation"></a>
-
-## documentation() ⇒ <code>undefined</code>
-Show documentation tab and comment action button
 
 **Kind**: global function  
 <a name="data"></a>

@@ -1,0 +1,19 @@
+<div class="input-field col s12 {{class}} {{c}}">
+<textarea 
+  name="{{name}}{{n}}"  
+  {{!id optional}}
+  {{#if id}}id="{{id}}" {{else}}id="{{name}}{{n}}" {{/if}}
+  {{!placeholder}}
+  {{#if placeholder}} placeholder="{{placeholder}}" {{/if}}
+  {{#if ph}} placeholder="{{ph}}" {{/if}}
+  {{!required}}
+  {{#if required}}required{{/if}}
+  {{#if r}}required{{/if}}
+  {{!autocomplete}}
+  {{#if autocomplete}} autocomplete="{{autocomplete}}" {{/if}}
+  {{#if ac}} autocomplete="{{ac}}" {{/if}} 
+  {{#if v}} value="{{v}}" {{/if}} 
+  class="materialize-textarea"
+  >{{v}}</textarea>
+<label for="{{name}}{{n}}">{{label}}{{l}}</label>
+</div>

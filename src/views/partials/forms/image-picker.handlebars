@@ -1,0 +1,5 @@
+<select onchange="ga( 'send', 'event','reservar-cenas','personalizada','{{info.label}}')" class="image-picker browser-default" name="{{info.name}}">
+{{#each info.img}}
+	<option data-img-src="{{this.url}}" value="{{this.value}}"> {{this.value}} </option>
+{{/each}}
+</select>

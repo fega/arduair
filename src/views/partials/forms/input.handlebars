@@ -1,0 +1,31 @@
+{{!-- 	input text
+		Usage:
+		{{>forms/input c="class" n="name" ph="placeholder" r="t" ac="name" d="t" v="value" label="label"}}
+--}}
+<div class="input-field col {{class}} {{c}}">	
+	<input 
+	{{!name}}
+	name="{{name}}{{n}}"  
+	{{!id optional}}
+	{{#if id}}id="{{id}}" {{else}}id="{{name}}{{n}}" {{/if}}
+	{{!placeholder}}
+	{{#if placeholder}} placeholder="{{placeholder}}" {{/if}}
+	{{#if ph}} placeholder="{{ph}}" {{/if}}
+	{{!required}}
+	{{#if required}}required{{/if}}
+	{{#if r}}required{{/if}}
+	{{!autocomplete}}
+	{{#if autocomplete}} autocomplete="{{autocomplete}}" {{/if}}
+	{{#if ac}} autocomplete="{{ac}}" {{/if}}
+	{{!Disavled}}
+	{{#if disabled}}disabled{{/if}}
+	{{#if d}}disabled{{/if}}
+	{{!value}}
+	{{#if value}} value="{{value}}" {{/if}}
+	{{#if v}} value="{{v}}" {{/if}}
+	{{!other}}
+	type="text" 
+	class="validate"
+	>
+	<label for="{{name}}{{n}}">{{label}}{{l}}</label>
+</div>

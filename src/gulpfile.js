@@ -17,12 +17,12 @@ var BROWSER_SYNC_RELOAD_DELAY = 500;// we'd need a slight delay to reload browse
 Plumber and notification
 ///////////////////////////////////////*/
 function plumberit(errTitle) {
-return plumber({
-errorHandler: notify.onError({
-    title: errTitle || "Error running Gulp",
-    message: "Error: <%= error.message %>"
+  return plumber({
+    errorHandler: notify.onError({
+      title: errTitle || "Error running Gulp",
+      message: "Error: <%= error.message %>"
     })
-});
+  });
 }
 /*///////////////////////////////////////
 docs generation
@@ -86,7 +86,6 @@ gulp.task('js',  () => {
     .pipe(gulp.dest('./public/js'))
     .pipe(browserSync.reload({ stream: true }));
 });
-
 gulp.task('css', () => {
   return gulp.src(['./public/css/materialize.css','./public/css/*.css','!./public/css/*.min.css'])
         .pipe(plumberit('CSS build Error'))
@@ -95,7 +94,10 @@ gulp.task('css', () => {
         .pipe(gulp.dest('./public/css'))
         .pipe(browserSync.reload({ stream: true }));
 });
-
+gulp.task('hbs-snippets',()=>{
+  return gulp.src(['./node_modules/handlebars-materialize-snippets/**/*'])
+          .pipe(gulp.dest('./views/partials/'));
+});
 /*///////////////////////////////////////
 Browser-Sync
 ///////////////////////////////////////*/

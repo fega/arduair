@@ -1,0 +1,24 @@
+{{!checkbox:
+info:
+ name:
+ items:
+  - label:
+    checked:
+    disabled:
+    label:
+    value:
+}}
+<p>
+	<input 
+	name="{{name}}{{n}}"   
+	type="checkbox" 
+	{{#if id}}id="{{id}}" {{else}}id="{{name}}{{n}}" {{/if}}
+
+	{{#if required}}required{{/if}}
+	{{#if r}}required{{/if}}
+	{{#if checked}}checked="checked"{{/if}}
+	{{#if disabled}}checked="disabled"{{/if}}
+	{{#if value}} value="{{value}}"  {{else}} {{#if v}}value="{{v}}"{{else}}value="{{label}}{{l}}"{{/if}}{{/if}}
+	/>
+	<label {{#if id}}for="{{id}}" {{else}}for="{{name}}{{n}}" {{/if}}>{{{label}}}{{{l}}}</label>
+</p>

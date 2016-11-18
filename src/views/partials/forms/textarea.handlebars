@@ -15,5 +15,5 @@
   {{#if v}} value="{{v}}" {{/if}} 
   class="materialize-textarea"
   >{{v}}</textarea>
-<label for="{{name}}{{n}}">{{label}}{{l}}</label>
+<label for="{{#if id}}{{id}}{{else}}{{name}}{{n}}{{/if}}">{{label}}{{l}}</label>
 </div>

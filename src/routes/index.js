@@ -10,21 +10,26 @@ const getDeviceToConfig = require('../db/getDeviceToConfig');
 /*//////////////////
 /* API 						*/
 //////////////////*/
-/*POST addDevice*/
+/**
+ * POST /device
+ * this add a device to the db.
+ */
 router.post('/device',getBody,addDevice,(req,res)=>{
 	res.send(req.result);
 });
-/*GET all devices*/
+/**
+ * GET all devices
+ * this get the device names availables in the db.
+ */
 router.get('/device',getDevice, (req, res)=>{
 	res.send(req.result);
 });
-/*GET device data*/
+/**
+ *GET device data
+ *get data for all devices
+ */
 router.get('/device/:device',getBody,getData,(req,res)=>{
 	res.send(req.result);
-});
-/*GET device status*/
-router.get('/device/:device/:password/status',(req,res)=>{
-	res.send('device status');
 });
 /*POST: device and password combination exist?, to config the device?*/
 router.post('/config',getBody,getDeviceToConfig,(req,res)=>{

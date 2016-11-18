@@ -101,7 +101,7 @@ gulp.task('hbs-snippets',()=>{
 /*///////////////////////////////////////
 Browser-Sync
 ///////////////////////////////////////*/
-gulp.task('default', ['browser-sync','css','js'], () => {
+gulp.task('default', ['browser-sync','css','js','hbs-snippets'], () => {
   gulp.watch('public/**/*.js',   ['js','documentation']);
   gulp.watch('public/**/*.css',  ['css']);
   gulp.watch('public/**/*.html', ['bs-reload']);

@@ -25,6 +25,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] Add documentation and designs as an attachment
 
 ## Server
+- [ ] add config upload and download support
 
 ## Client
 

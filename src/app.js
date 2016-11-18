@@ -13,7 +13,6 @@ var exphbs = require('express-handlebars');
 var minifyHTML = require('express-minify-html');
 var colors = require('colors');
 var routes = require('./routes/index');
-var test = require('./routes/test');
 var api = require('./routes/api');
 //MONTAR MONGOOSE Y CONECTAR A LA BASE DE DATOS
 var mongoose = require('mongoose');
@@ -63,7 +62,6 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
-app.use('/test', test);
 app.use('/api', api);
 
 // catch 404 and forward to error handler

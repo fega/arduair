@@ -1,7 +1,7 @@
-<div class="input-field col {{class}} {{c}}">	
-	<input 
+<div class="input-field col {{class}} {{c}}">
+	<input
 	{{!name}}
-	name="{{name}}{{n}}"  
+	name="{{name}}{{n}}"
 	{{!id optional}}
 	{{#if id}}id="{{id}}" {{else}}id="{{name}}{{n}}" {{/if}}
 	{{!placeholder}}
@@ -20,9 +20,14 @@
 	{{#if value}} value="{{value}}" {{/if}}
 	{{#if v}} value="{{v}}" {{/if}}
 	{{!other}}
-	type="number" 
-	class="validate" 
-	
+
+	{{#if max}} max="{{max}}" {{/if}}
+	{{#if min}} min="{{min}}" {{/if}}
+	{{#if step}} step="{{step}}" {{/if}}
+
+	type="number"
+	class="validate"
+
 	>
 	<label for="{{name}}{{n}}">{{label}}{{l}}</label>
 </div>

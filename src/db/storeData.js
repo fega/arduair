@@ -33,7 +33,7 @@ module.exports = function(req, res, next) {
             vocs: req.query.voc || null
         }
     };
-    Device.update(query, store, (err, data)=> {
+    Device.findOneAndUpdate(query, store, (err, data)=> {
         console.log(data);
         if (err) {
             console.log('Handled error: ' + err);
@@ -41,14 +41,14 @@ module.exports = function(req, res, next) {
                 status: "error",
                 message: "Search error, please try again"
             };
-            res.send("fail");
+            res.send('fail');
         } else {
             if (data.n === 0) {
                 console.log('Device not found');
-                req.result = "device not Found";
+                req.result = 'device not Found';
             } else {
                 console.log('Device found and updated');
-                req.result = "OK";
+                req.result = 'OK';
                 req.data = data;
             }
             return next();
@@ -57,24 +57,5 @@ module.exports = function(req, res, next) {
 };
 
 /*
-//general Parameters:
-0   [Date       ]
-1   [humidity   ]
-2   [temperature]
-3   [pressure   ]
-4   [Location   ]
-//Criteria pollutants
-5   [   PST     ]
-6   [   PM10    ]
-7   [   PM2.5   ]
-8   [   SO2     ]
-9   [   NO2     ]
-10  [   O3      ]
-11  [   CO      ]
-//Non Criteria pollutants
-12  [   CH4     ]
-13  [   NH3     ]
-14  [   CH4     ]
-testURL:
 http://localhost:4000/api/demotest1/demodemo?date=hola&co=10&h=10&t=10&p=10&l=10&pst=10&so=10
 */

@@ -20,7 +20,7 @@ module.exports = function(req, res, next) {
             humidity: req.query.h || null,
             temperature: req.query.t || null,
             pressure: req.query.p || null,
-            Location: req.query.l || null,
+            location: req.query.l || null,
             pst: req.query.pst || null,
             pm10: req.query.pm10 || null,
             pm25: req.query.pm25 || null,

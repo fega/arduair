@@ -19,7 +19,7 @@ module.exports = function(req,res,next){
 				humidity : device.humidity ,
 				temperature : device.temperature ,
 				pressure : device.pressure ,
-				Location : device.Location ,
+				location : device.Location ,
 				pst : device.pst ,
 				pm10 : device.pm10 ,
 				pm25 : device.pm25 ,

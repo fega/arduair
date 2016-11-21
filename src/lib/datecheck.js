@@ -7,17 +7,11 @@ module.exports=datecheck;
  * @return {Function}      return an error or the next() callback
  */
 function datecheck(req,res,next){
-	var day= req.params.day;//console.log('DAY: '+ day);
-	var month= req.params.month;//console.log('MONTH: '+ month);
-	var year= req.params.year;//console.log('YEAR: '+ year);
-	var hour= req.params.hour;
-	var minute= req.params.minute;
-
-	checkRange(day,  31,   0,'day');
-	checkRange(month,12,   0,'month');
-	checkRange(year, 10000,2000,'year');
-	checkRange(hour, 24,   0,'hour');
-	checkRange(minute,60,  0,'minute');
+	checkRange(req.params.day,  31,   0,'day');
+	checkRange(req.params.month,12,   0,'month');
+	checkRange(req.params.year, 10000,2000,'year');
+	checkRange(req.params.hour, 24,   0,'hour');
+	checkRange(req.params.minute,60,  0,'minute');
 
 	//console.log(req.message);
 	if (isEmpty(req.message)){

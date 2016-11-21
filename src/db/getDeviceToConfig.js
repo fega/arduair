@@ -1,6 +1,6 @@
 var Device = require('./device');
 module.exports = function(req, res, next) {
-  Device.findOne(req.body, (err, device) => {
+  Device.findOne(req.body,{configFile:1}, (err, device) => {
     if (err) {
       console.log('Handled error: ' + err);
       req.result = {
@@ -22,7 +22,7 @@ module.exports = function(req, res, next) {
       req.result = {
         status: "done",
         message: "Device Found",
-        device
+        device: device.configFile
       };
       return next();
     }

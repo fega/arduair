@@ -57,7 +57,3 @@ var myChart = new Chart($("#chart"), {
         }
     }
 });
-//myChart.update();
-//to update the points use:
-//myChart.data.datasets[0].data
-//myLineChart.update();

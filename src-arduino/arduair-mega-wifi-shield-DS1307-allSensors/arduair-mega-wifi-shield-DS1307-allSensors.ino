@@ -75,6 +75,19 @@ float pm10,pm25;
 float p,h,t,l;
 float co,o3,so2,no2;
 unsigned int second, minute,hour,weekDay,monthDay,month,year;
+//calibration variables
+float pm10_x2=1, pm10_x1=1, pm10_b=0,
+      pm25_x2=1, pm25_x1=1, pm25_b=0,
+      co_x2=1,   co_x1=1,   co_b=0,
+      o3_x2=1,   o3_x1=1,   o3_b=0,
+      so2_x2=1,  so2_x1=1,  so2_b=0,
+      no2_x2=1,  no2_x1=1,  no2_b=0,
+      h_x1=1,  h_b=0,
+      p_x1=1,  p_b=0,
+      t_x1=1,  t_b=0,
+      l_x1=1,  l_b=0;
+
+
 /**
  * Arduair configuration initialization
  */
@@ -139,12 +152,16 @@ void request(){
  if (client.connect(server, 80)) {
    #if defined(DEVMODE)
    Serial.println("connecting...");
-   Serial.print("GET "); Serial.print("/"); Serial.print(device); Serial.print("/"); Serial.print(password);
+   Serial.print("GET ");
+   Serial.print("/api");
+   Serial.print("/"); Serial.print(device); Serial.print("/"); Serial.print(password);
    Serial.print(monthDay); Serial.print(month);Serial.print(year); Serial.print(hour);Serial.print(minute);
    #endif
    //String getRequest ="GET"+"hola"+" "
    // send the HTTP GET request:
-   client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password);
+   client.print("GET ");
+   client.print("/api");
+   client.print("/"); client.print(device); client.print("/"); client.print(password);
    // HTTP time
    client.print(monthDay);client.print(month);client.print(year);client.print(hour);client.print(minute);
    //http GET end
@@ -163,7 +180,7 @@ void request(){
    client.println("");
    //server
    client.print("Host: ");client.print(server);
-   client.println("User-Agent: Arduair");
+   //client.println("User-Agent: Arduair");
    client.println("Connection: close");
    client.println();
    #if defined(DEVMODE)
@@ -483,19 +500,19 @@ void sdBegin(){
  * Meteorology read function
  */
 void meteorologyRead(){
-  p = pressureRead();
-  l = lightRead();
-  h = humidityRead();
-  t = temperatureRead();
+  p = calibrate( pressureRead(),    0, p_x1, p_b);
+  l = calibrate( lightRead(),       0, l_x1, l_b);
+  h = calibrate( humidityRead(),    0, h_x1, h_b);
+  t = calibrate( temperatureRead(), 0, t_x1, t_b);
   #if defined(DEVMODE)
-  Serial.print("  p: ");
-  Serial.println(p);
-  Serial.print("  l: ");
-  Serial.println(l);
-  Serial.print("  h: ");
-  Serial.println(h);
-  Serial.print("  t: ");
-  Serial.println(t);
+    Serial.print("  p: ");
+    Serial.println(p);
+    Serial.print("  l: ");
+    Serial.println(l);
+    Serial.print("  h: ");
+    Serial.println(h);
+    Serial.print("  t: ");
+    Serial.println(t);
   #endif
 }
 /**
@@ -604,6 +621,89 @@ void applySetting(String settingName, String settingValue) {
   }
   if (settingName=="second"){
     second=settingValue.toInt();
+  }
+  
+  if (settingName=="pm10_x2"){
+    pm10_x2=settingValue.toFloat();
+  }
+  if (settingName=="pm10_x1"){
+    pm10_x1=settingValue.toFloat();
+  }
+  if (settingName=="pm10_b"){
+    pm10_b=settingValue.toFloat();
+  }
+
+  if (settingName=="pm25_x2"){
+    pm25_x2=settingValue.toFloat();
+  }
+  if (settingName=="pm25_x1"){
+    pm25_x1=settingValue.toFloat();
+  }
+  if (settingName=="pm25_b"){
+    pm25_b=settingValue.toFloat();
+  }
+  if (settingName=="co_x2"){
+    co_x2=settingValue.toFloat();
+  }
+  if (settingName=="co_x1"){
+    co_x1=settingValue.toFloat();
+  }
+  if (settingName=="co_b"){
+    co_b=settingValue.toFloat();
+  }
+
+  if (settingName=="o3_x2"){
+    o3_x2=settingValue.toFloat();
+  }
+  if (settingName=="o3_x1"){
+    o3_x1=settingValue.toFloat();
+  }
+  if (settingName=="o3_b"){
+    o3_b=settingValue.toFloat();
+  }
+  if (settingName=="so2_x2"){
+    so2_x2=settingValue.toFloat();
+  }
+  if (settingName=="so2_x1"){
+    so2_x1=settingValue.toFloat();
+  }
+  if (settingName=="so2_b"){
+    so2_b=settingValue.toFloat();
+  }
+
+  if (settingName=="no2_x2"){
+    no2_x2=settingValue.toFloat();
+  }
+  if (settingName=="no2_x1"){
+    no2_x1=settingValue.toFloat();
+  }
+  if (settingName=="no2_b"){
+    no2_b=settingValue.toFloat();
+  }
+  if (settingName=="h_x1"){
+    h_x1=settingValue.toFloat();
+  }
+  if (settingName=="h_b"){
+    h_b=settingValue.toFloat();
+  }
+
+  if (settingName=="p_x1"){
+    p_x1=settingValue.toFloat();
+  }
+  if (settingName=="p_b"){
+    p_b=settingValue.toFloat();
+  }
+  if (settingName=="t_x1"){
+    t_x1=settingValue.toFloat();
+  }
+  if (settingName=="t_b"){
+    t_b=settingValue.toFloat();
+  }
+  if (settingName=="l_x1"){
+    l_x1=settingValue.toFloat();
+  }
+  if (settingName=="l_b"){
+    l_b=settingValue.toFloat();
   }
  }
 
@@ -719,7 +819,7 @@ void winsenRead(int cont){
         }
         if (measure[0]==0xff && measure[1]==0x86){
           ppm = measure[2]*256+measure[3];
-          co=ppm;
+          co=calibrate(ppm, co_x2, co_x1, co_b);
           #if defined(DEVMODE)
           Serial.print("  [CO]:  ");
           Serial.println(ppm);
@@ -741,7 +841,7 @@ void winsenRead(int cont){
         }
         if (measure[0]==0xff && measure[1]==0x86){
           ppm = measure[2]*256+measure[3];
-          no2=ppm;
+          no2==calibrate(ppm, no2_x2, no2_x1, no2_b);
 
           #if defined(DEVMODE)
           Serial.print("  [NO2]: ");
@@ -763,7 +863,7 @@ void winsenRead(int cont){
       }
       if (measure[0]==0xff && measure[1]==0x86){
         ppm = measure[2]*256+measure[3];
-        so2=ppm;
+        so2=calibrate(ppm, so2_x2, so2_x1, so2_b);
 
         #if defined(DEVMODE)
         Serial.print("  [SO2]: ");
@@ -793,7 +893,10 @@ void simple_request(){
 
     //String getRequest ="GET"+"hola"+" "
     // send the HTTP GET request:
-    client.print("GET "); client.print("/"); client.print(device); client.print("/"); client.print(password); client.print("/timezone"); client.print(" HTTP/1.1");
+    client.print("GET ");
+    client.print("/api");
+    client.print("/"); client.print(device);
+    client.print("/"); client.print(password); client.print("/timezone"); client.print(" HTTP/1.1");
     client.println("");
     // parameters:
     client.print("?z="); client.print(timezone); client.print(",");
@@ -828,9 +931,10 @@ void requestConfig(){
   Serial.println(server);
   if (client.connect(server, 80)) {
     client.print("GET ");
+    client.print("/api");
     client.print("/"); client.print(device);
     client.print("/"); client.print(password);
-    client.print("/");
+    client.print("/config");
     //http GET end
     client.print(" HTTP/1.1");
     client.println("");
@@ -902,4 +1006,15 @@ void log(String message){
  */
 void warn(){
     digitalWrite(RED_LED_PIN,HIGH);
+}
+/**
+ * Calibrates the 'value' with the ecuation x^2*value+x*value+b
+ * @param  value value to be calibrated
+ * @param  x2    cuadratic param
+ * @param  x     linear param
+ * @param  b     constant param
+ * @return       calibrated value
+ */
+float calibrate(float value,float x2,float x,float b){
+  return value*x2*x2 + value*x + b;
 }

@@ -11,14 +11,8 @@
  		<p class="flow-text">Please search the device to configure</p>
 		{{!First Row: device name and Password}}
 			<div class="row">
-	 			<div class="input-field col s12 m6 l6">
-					<input  id="config-deviceName" name="name" type="text" class="validate" required>
-		        	<label for="config-deviceName">Device Name</label>
-				</div>
-				<div class="input-field col s12 m6 l6">
-					<input  id="config-devicePassword" name="password" type="password" class="validate" required>
-		        	<label for="config-devicePassword">Device Password</label>
-				</div>
+				{{>forms/input c="s12 m6 l6" n="name" 		   id="config-deviceName"     r="t" l="Device Name"}}
+				{{>forms/password c="s12 m6 l6" n="password" id="config-devicePassword" r="t" l="Device Password"}}
 	 		</div>
 		</div>
 		{{!submit form button}}
@@ -29,153 +23,59 @@
 		</div>
 	</form>
 </section>
-<br> 
-<div id="config-device-founded" style="display: none;">{{!this tag, is a wrapper to hide all the configuration form before the user search the device}}
-
+<br>
+<div id="config-device-founded" style="display: none;">
+	{{!this tag, is a wrapper to hide all the configuration form before the user search the device}}
 	<div class="divider"></div>
 	{{!Device sampling configuration form}}
 	<section>
 	 	<div class="container">
 	 		<h3>Sampling configuration:</h3>
 	 		<p class="flow-text">Use this form to change the sampling options</p>
-	 		<form action="">
-	 		{{! first row: Sampling name}}
-	 			<div class="row">
-	 				<div class="input-field col s12 m6 l6">
-						<input  id="config-sample-name" name="config-sample-name" type="text" class="validate" required>
-		          		<label for="config-sample-name">Sampling Name</label>
-					</div>
-	 			</div>
-	 		{{!Second row: Begin and end date}}
-	 			<div class="row">
-	 				<div class="input-field col s6 m6 l6">
-						<input class="datepicker" id="beginDate" name="beginDate" type="date" class="validate" required>
-		          		<label for="beginDate">Begin Date</label>
-					</div>
-					<div class="input-field col s6 m6 l6">
-						<input class="datepicker" id="endDate" name="endDate" type="date" class="validate" required>
-		          		<label for="endDate">End Date</label>
-					</div>
-	 			</div>
-	 			{{!Third row: }}
-	 			<div class="row">
-	 				<div class="input-field col s12 m6 l6">
-						<select name="frequency">
-						    <option value="" disabled selected>Meausure Frecuency</option>
-						    <option value="5">5 minutes</option>
-						    <option value="10">10 minutes</option>
-						    <option value="15">15 minutes</option>
-						    <option value="30">30 minutes</option>
-					    </select>
-					</div>
-	 			</div>
-	 			{{!Form End.}}
+	 		 <form action="/api/demotest1/demodemo/config" method="post"id="config-device-founded-form"> {{!--TODO: implement action change --}}
+				<div class="row">
+					<h4>Network</h4>
+					{{>forms/input c="s12 m6 l6" n="network" 		 id="config-network"     r="t" l="Network"}}
+					{{>forms/input c="s12 m6 l6" n="networkpass" id="config-networkpass" r="t" l="Network pass"}}
+				</div>
+						<div class="divider">	</div>
+				<div class="row">
+					<h4>Server and connectivitiy</h4>
+					{{>forms/input c="s12 m12 l6" n="server" id="config-server" r="t" l="Server"}}
+					{{>forms/input c="s12 m6 l6" n="device" id="config-device" r="t" l="Device Name"}}
+					{{>forms/input c="s12 m6 l6" n="pass" id="config-pass" r="t" l="Device pass"}}
+					{{>forms/checkbox-row c="col m6 l6" n="wifi" id="config-wifi" l="Enable wifi"}}
+				</div>
+				<div class="row">
+					<h4>Calibration</h4>
+					<div class="col s12">CO2</div>
+					{{>forms/input c="s6 m4 l2" n="co_x2" id="config-co_x2" l="co_x2"}}
+					{{>forms/input c="s6 m4 l2" n="co_x1" id="config-co_x1" l="co_x1"}}
+					{{>forms/input c="s6 m4 l2" n="co_b" id="config-co_b" l="co_b"}}
+					<div class="col s12">O3</div>
+					{{>forms/input c="s6 m4 l2" n="o3_x2" id="config-o3_x2" l="o3_x2"}}
+					{{>forms/input c="s6 m4 l2" n="o3_x1" id="config-o3_x1" l="o3_x1"}}
+					{{>forms/input c="s6 m4 l2" n="o3_b"  id="config-o3_b"  l="o3_b"}}
+					<div class="col s12">SO2</div>
+					{{>forms/input c="s6 m4 l2" n="so2_x2" id="config-so2_x2" l="so2_x2"}}
+					{{>forms/input c="s6 m4 l2" n="so2_x1" id="config-so2_x1" l="so2_x1"}}
+					{{>forms/input c="s6 m4 l2" n="so2_b"  id="config-so2_b"  l="so2_b"}}
+					<div class="col s12">NO2</div>
+					{{>forms/input c="s6 m4 l2" n="no2_x2" id="config-no2_x2" l="no2_x2"}}
+					{{>forms/input c="s6 m4 l2" n="no2_x1" id="config-no2_x1" l="no2_x1"}}
+					{{>forms/input c="s6 m4 l2" n="no2_b"  id="config-no2_b"  l="no2_b"}}
+					<div class="col s12">CO2</div>
+					{{>forms/input c="s6 m4 l2" n="pm10_x2" id="config-pm10_x2" l="pm10_x2"}}
+					{{>forms/input c="s6 m4 l2" n="pm10_x1" id="config-pm10_x1" l="pm10_x1"}}
+					{{>forms/input c="s6 m4 l2" n="pm10_b"  id="config-pm10_b"  l="pm10_b"}}
+					<div class="col s12">CO2</div>
+					{{>forms/input c="s6 m4 l2" n="pm25_x2" id="config-pm25_x2" l="pm25_x2"}}
+					{{>forms/input c="s6 m4 l2" n="pm25_x1" id="config-pm25_x1" l="pm25_x1"}}
+					{{>forms/input c="s6 m4 l2" n="pm25_b"  id="config-pm25_b"  l="pm25_b"}}
+					<input id="config-search-btn" type="submit" value="Submit" class=" waves-teal btn-large primary darken">
+				</div>
+				{{!--TODO change this button--}}
 	 		</form>
 	 	</div>
-	</section>
-	<div class="divider"></div>
-	{{!Device Sensor configuration form}}
-	<section>
-		<div class="container">
-			<h3>Sensor configuration:</h3>
-	 		<p class="flow-text">Fill this form is you want to change the sensor ubication</p>
-	 		<div class="row">
-	 			{{!sensor 1}}
-				<div class="row">
-					<div class=" col s3">
-						<p class="flow-text">Sensor:</p>
-					</div>
-					<div class="input-field col s3">
-						<select id="sensor1" name="sensor1">
-							{{>helpers/sensor-select}}
-						</select>
-					</div>
-					<div class="col s3">
-						<p class="flow-text center">on Pin:</p>
-					</div>
-					<div class="col s3">
-						<select id="config-pin1" name="pin1">
-							{{>helpers/pin-select}}
-						</select>
-					</div>
-				</div>
-				{{!sensor 2}}
-				<div class="row">
-					<div class=" col s3">
-						<p class="flow-text">Sensor:</p>
-					</div>
-					<div class="input-field col s3">
-						<select id="sensor2" name="sensor2">
-							{{>helpers/sensor-select}}
-						</select>
-					</div>
-					<div class="col s3">
-						<p class="flow-text center">on Pin:</p>
-					</div>
-					<div class="col s3">
-						<select id="config-pin2" name="pin2">
-							{{>helpers/pin-select}}
-						</select>
-					</div>
-				</div>
-				{{!sensor 3}}
-				<div class="row">
-					<div class=" col s3">
-						<p class="flow-text">Sensor:</p>
-					</div>
-					<div class="input-field col s3">
-						<select id="sensor3" name="sensor3">
-							{{>helpers/sensor-select}}
-						</select>
-					</div>
-					<div class="col s3">
-						<p class="flow-text center">on Pin:</p>
-					</div>
-					<div class="col s3">
-						<select id="config-pin3" name="pin3">
-							{{>helpers/pin-select}}
-						</select>
-					</div>
-				</div>
-				{{!sensor 4}}
-				<div class="row">
-					<div class=" col s3">
-						<p class="flow-text">Sensor:</p>
-					</div>
-					<div class="input-field col s3">
-						<select id="sensor4" name="sensor4">
-							{{>helpers/sensor-select}}
-						</select>
-					</div>
-					<div class="col s3">
-						<p class="flow-text center">on Pin:</p>
-					</div>
-					<div class="col s3">
-						<select id="config-pin4" name="pin4">
-							{{>helpers/pin-select}}
-						</select>
-					</div>
-				</div>
-				{{!sensor 5}}
-				<div class="row">
-					<div class=" col s3">
-						<p class="flow-text">Sensor:</p>
-					</div>
-					<div class="input-field col s3">
-						<select id="sensor5" name="sensor5">
-							{{>helpers/sensor-select}}
-						</select>
-					</div>
-					<div class="col s3">
-						<p class="flow-text center">on Pin:</p>
-					</div>
-					<div class="col s3">
-						<select id="config-pin5" name="pin5">
-							{{>helpers/pin-select}}
-						</select>
-					</div>
-				</div>
-	 		</div>
-		</div>
 	</section>
 </div>

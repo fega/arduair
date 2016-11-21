@@ -1,146 +1,28 @@
 <section class="page-header">
-			<h1 class="project-name">Add a new device</h1>
+	<h1 class="project-name">Add a new device</h1>
 </section>
 <section>
-<div class="container">
-	{{! FORM FOR NEW DEVICES REGISTER}}
-	<div class="row">
-		<h3>device data:</h3>
-	</div>
-	<form action="/device" method="POST" id="addform">
-		{{! DEVICE NAME AND PASSWORD }}
+	<div class="container">
+		{{! FORM FOR NEW DEVICES REGISTER}}
 		<div class="row">
-			<div class="input-field col s12 m6 l6">
-				<input  id="addname" name="addname" type="text" class="validate" required>
-	          	<label for="addname">Device Name</label>
-			</div>
-			<div class="input-field col s12 m6 l6">
-				<input  id="addpassword" name="addpassword" type="password" class="validate" required>
-	          	<label for="addpassword">Device Password</label>
-			</div>
+			<h3>device data:</h3>
 		</div>
-		{{!DEVICE OWNER AND EMAIL}}
-		<div class="row">
-			<div class="input-field col s12 m6 l6">
-				<input  id="addowner" name="addowner" type="text" class="validate" required>
-	          	<label for="addowner">Device Owner</label>
-			</div>
-			<div class="input-field col s12 m6 l6">
-				<input  id="addemail" name="addemail" type="email" class="validate" required>
-	          	<label for="addemail">Owner Name</label>
-			</div>
-		</div>
-		{{!DEVICE DESCRIPTION}}
-		<div class="row">
-			<div class="input-field col s12 m12 l12">
-				<textarea id="adddescription" name="adddescription" class="materialize-textarea"></textarea>
-          		<label for="adddescription">Device Description</label>
-			</div>
-		</div>
-		{{!DEVICE CONFIG FILE GENERATION}}
-		{{!deprecated}}
-		{{!-- <div id="config-file" style="display: none;">
+		<form action="/device" method="POST" id="addform">
+			{{! DEVICE NAME AND PASSWORD }}
 			<div class="row">
-				<h3>device config:</h3>
+				{{>forms/input c="s12 m6 l6"    n="addname"     r="t" l="Device Name"}}
+				{{>forms/password c="s12 m6 l6" n="addpassword" r="t" l="Device Password"}}
 			</div>
-			{{!sensor 1}}
+			{{!DEVICE OWNER AND EMAIL}}
 			<div class="row">
-				<div class=" col s3">
-					<p class="flow-text">Sensor:</p>
-				</div>
-				<div class="input-field col s3">
-					<select id="sensor1" name="sensor1">
-						{{>helpers/sensor-select}}
-					</select>
-				</div>
-				<div class="col s3">
-					<p class="flow-text center">on Pin:</p>
-				</div>
-				<div class="col s3">
-					<select id="pin1" name="pin1">
-						{{>helpers/pin-select}}
-					</select>
-				</div>
+				{{>forms/input c="s12 m6 l6" n="addowner" r="t" l="Device Owner"}}
+				{{>forms/email c="s12 m6 l6" n="addemail" r="t" l="Owner Name"}}
 			</div>
-			{{!sensor 2}}
+			{{!DEVICE DESCRIPTION}}
 			<div class="row">
-				<div class=" col s3">
-					<p class="flow-text">Sensor:</p>
-				</div>
-				<div class="input-field col s3">
-					<select id="sensor2" name="sensor2">
-						{{>helpers/sensor-select}}
-					</select>
-				</div>
-				<div class="col s3">
-					<p class="flow-text center">on Pin:</p>
-				</div>
-				<div class="col s3">
-					<select id="pin2" name="pin2">
-						{{>helpers/pin-select}}
-					</select>
-				</div>
+				{{>forms/email c="s12 m12 l12" n="adddescription" r="t" l="Device Description"}}
 			</div>
-			{{!sensor 3}}
-			<div class="row">
-				<div class=" col s3">
-					<p class="flow-text">Sensor:</p>
-				</div>
-				<div class="input-field col s3">
-					<select id="sensor3" name="sensor3">
-						{{>helpers/sensor-select}}
-					</select>
-				</div>
-				<div class="col s3">
-					<p class="flow-text center">on Pin:</p>
-				</div>
-				<div class="col s3">
-					<select id="pin3" name="pin3">
-						{{>helpers/pin-select}}
-					</select>
-				</div>
-			</div>
-			{{!sensor 4}}
-			<div class="row">
-				<div class=" col s3">
-					<p class="flow-text">Sensor:</p>
-				</div>
-				<div class="input-field col s3">
-					<select id="sensor4" name="sensor4">
-						{{>helpers/sensor-select}}
-					</select>
-				</div>
-				<div class="col s3">
-					<p class="flow-text center">on Pin:</p>
-				</div>
-				<div class="col s3">
-					<select id="pin4" name="pin4">
-						{{>helpers/pin-select}}
-					</select>
-				</div>
-			</div>
-			{{!sensor 5}}
-			<div class="row">
-				<div class=" col s3">
-					<p class="flow-text">Sensor:</p>
-				</div>
-				<div class="input-field col s3">
-					<select id="sensor5" name="sensor5">
-						{{>helpers/sensor-select}}
-					</select>
-				</div>
-				<div class="col s3">
-					<p class="flow-text center">on Pin:</p>
-				</div>
-				<div class="col s3">
-					<select id="pin5" name="pin5">
-						{{>helpers/pin-select}}
-					</select>
-				</div>
-			</div>
-		</div> --}}
-		{{!sensor end}}
-	</form>
+		</form>
 	</div>
 	<div class="divider"></div>
 	<div class="container">
@@ -151,17 +33,4 @@
 			</div>
 		</div>
 	</div>
-
-	{{!generate a config file buttons}}
-	<br>
-	{{!-- <div class="row">
-		<div class="col s12 m12	l12 center">
-			<a id="config-file-btn"class="waves-effect waves-teal btn-large primary darken">¿generate config file?</a>
-		</div>
-		<div class="col s12 m12	l12 center">
-			<a id="no-config-file-btn"class="hide waves-effect waves-teal btn-large primary darken"
-			>No, I dont want a config file</a>
-		</div>
-	</div> --}}
-	<br>
 </section>

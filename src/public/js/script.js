@@ -780,8 +780,109 @@ $(document).ready(() => { // TODO: check if the arrow function breaks the code
         Materialize.toast(res.message, 4000, '', () => {
             $(btn).removeClass(status);
         });
-        if (res.status == "done") {
-            $('#config-device-founded').slideDown(700);
+        if (res.status == "done" ) {
+          $('#config-device-founded').slideDown(700);
+          if(res.device){
+            $( "#config-network" ).attr( "value", res.device.network || undefined );//TODO: improve this code
+            $( "#config-networkpass" ).attr( "value", res.device.networkpass );
+
+            $( "#config-server" ).attr( "value", res.device.server );
+            $( "#config-device" ).attr( "value", res.device.device );
+            $( "#config-pass" ).attr( "value", res.device.pass );
+            if(res.device.pass ){
+              $( "#config-wifi" ).prop('checked', true);
+            }else{
+              $( "#config-wifi" ).prop('checked', true);
+            }
+
+
+            $( "#config-co_x2" ).attr( "value", res.device.co_x2 );
+            $( "#config-co_x1" ).attr( "value", res.device.co_x1 );
+            $( "#config-co_b" ).attr( "value", res.device.co_b );
+
+            $( "#config-o3_x2" ).attr( "value", res.device.o3_x2 );
+            $( "#config-o3_x1" ).attr( "value", res.device.o3_x1 );
+            $( "#config-o3_b" ).attr( "value", res.device.o3_b );
+
+            $( "#config-so2_x2" ).attr( "value", res.device.so2_x2 );
+            $( "#config-so2_x1" ).attr( "value", res.device.so2_x1 );
+            $( "#config-so2_b" ).attr( "value", res.device.so2_b );
+
+            $( "#config-no2_x2" ).attr( "value", res.device.no2_x2 );
+            $( "#config-no2_x1" ).attr( "value", res.device.no2_x1 );
+            $( "#config-no2_b" ).attr( "value", res.device.no2_b );
+
+            $( "#config-pm10_x2" ).attr( "value", res.device.pm10_x2 );
+            $( "#config-pm10_x1" ).attr( "value", res.device.pm10_x1 );
+            $( "#config-pm10_b" ).attr( "value", res.device.pm10_b );
+
+            $( "#config-pm25_x2" ).attr( "value", res.device.pm25_x2 );
+            $( "#config-pm25_x1" ).attr( "value", res.device.pm25_x1 );
+            $( "#config-pm25_b" ).attr( "value", res.device.pm25_b );
+          }else{
+            $( "#config-network" ).attr( "value", "" );//TODO: improve this code
+            $( "#config-networkpass" ).attr( "value", "" );
+
+            $( "#config-server" ).attr( "value", "" );
+            $( "#config-device" ).attr( "value", "" );
+            $( "#config-pass" ).attr( "value", "" );
+              $( "#config-wifi" ).prop('checked', false);
+
+
+            $( "#config-co_x2" ).attr( "value", "" );
+            $( "#config-co_x1" ).attr( "value", "" );
+            $( "#config-co_b" ).attr( "value", "" );
+
+            $( "#config-o3_x2" ).attr( "value", "" );
+            $( "#config-o3_x1" ).attr( "value", "" );
+            $( "#config-o3_b" ).attr( "value", "" );
+
+            $( "#config-so2_x2" ).attr( "value", "" );
+            $( "#config-so2_x1" ).attr( "value", "" );
+            $( "#config-so2_b" ).attr( "value", "" );
+
+            $( "#config-no2_x2" ).attr( "value", "" );
+            $( "#config-no2_x1" ).attr( "value", "" );
+            $( "#config-no2_b" ).attr( "value", "" );
+
+            $( "#config-pm10_x2" ).attr( "value", "" );
+            $( "#config-pm10_x1" ).attr( "value", "" );
+            $( "#config-pm10_b" ).attr( "value", "" );
+
+            $( "#config-pm25_x2" ).attr( "value", "" );
+            $( "#config-pm25_x1" ).attr( "value", "" );
+            $( "#config-pm25_b" ).attr( "value", "" );
+          }
+          $( "#config-network" ).focus();//TODO: improve this code
+          $( "#config-networkpass" ).focus();
+
+          $( "#config-server" ).focus();
+          $( "#config-device" ).focus();
+          $( "#config-pass" ).focus();
+
+          $( "#config-co_x2" ).focus();
+          $( "#config-co_x1" ).focus();
+          $( "#config-co_b" ).focus();
+
+          $( "#config-o3_x2" ).focus();
+          $( "#config-o3_x1" ).focus();
+          $( "#config-o3_b" ).focus();
+
+          $( "#config-so2_x2" ).focus();
+          $( "#config-so2_x1" ).focus();
+          $( "#config-so2_b" ).focus();
+
+          $( "#config-no2_x2" ).focus();
+          $( "#config-no2_x1" ).focus();
+          $( "#config-no2_b" ).focus();
+
+          $( "#config-pm10_x2" ).focus();
+          $( "#config-pm10_x1" ).focus();
+          $( "#config-pm10_b" ).focus();
+
+          $( "#config-pm25_x2" ).focus();
+          $( "#config-pm25_x1" ).focus();
+          $( "#config-pm25_b" ).focus();
         }
     }
 });

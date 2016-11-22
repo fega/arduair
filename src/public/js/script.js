@@ -1,5 +1,4 @@
 /*global page $, Materialize, myChart, moment mean min max*/
-// TODO: add AQI calculator function
 /**
  * Global Object with arduair default configuration and methods
  * @global

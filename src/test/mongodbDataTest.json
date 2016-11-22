@@ -1,0 +1,23 @@
+{
+	"description": "Demo for test Frontend functions",
+	"password":"demo",
+  "email": "fega.hg@gmail.com",
+  "owner": "Fabian Gutierrez",
+  "name": "demo",
+	"configFile":{
+
+	},
+	"date":[],
+	"humidity":[],
+	"temperature":[],
+	"pressure":[],
+	"location":[],
+	"pst":[],
+	"pm10":[],
+	"pm25":[],
+	"so2":[],
+	"no2":[],
+	"o3":[],
+	"NowcastResults":[]
+
+}

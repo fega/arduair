@@ -36,6 +36,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] AQI chart mode
 - [ ] AQI lines for chart
 - [ ] Total AQI
+- [ ] refactoring code
 
 ## Documentation
 

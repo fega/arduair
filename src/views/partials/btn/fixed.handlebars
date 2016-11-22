@@ -1,0 +1,21 @@
+{{!-- Usage:
+{{btn/fixed cw="wrapper class" c="class" id="id" type="type" i="icon" f="form"}}
+--}}
+<div
+  class="fixed-action-btn {{cw}}"
+  {{#if id}}id="{{id}}"{{/if}}
+>
+    {{#if type}}
+    <button
+      type="{{type}}"
+      class="btn-floating btn-large {{c}}"
+      form="{{f}}"
+    >
+      <i class="large material-icons">{{i}}</i>
+    </button>
+    {{else}}
+    <a class="btn-floating btn-large {{c}}">
+        <i class="large material-icons">{{i}}</i>
+    </a>
+    {{/if}}
+</div>

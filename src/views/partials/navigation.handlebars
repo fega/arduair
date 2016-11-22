@@ -1,0 +1,44 @@
+{{!-- usage:
+{{>navigation
+	fixed="100" //fixed and offset
+	logoSvg="logo.svg"
+	logoJpg="logo.jpg"
+	logoAlt="my company name"
+	info="A Js object with the navbar items"
+}}
+info example YAML:
+info:
+ - action: "/action"
+ - label: "button label"
+ - c: "button classes"
+ - idN: "button-id-in-nav-bar"
+ - idS: "button-id-in-sidenav"
+ - active: true
+ - btn: true
+ --}}
+<nav>
+	<div class="nav-wrapper " {{#if bool}}data-spy="affix" data-offset-top="{{fixed}}"{{/if}} >
+		{{!LOGO}}
+		<a id="logo-container" class="brand-logo"><object  type="image/svg+xml" data="{{logoSvg}}" height="50"><img height=59 src="{{logoPng}}" alt="{{logoAlt}}" ></object></a>{{!NAVIGATION BUTTONS}}
+		<ul class="right hide-on-med-and-down ">
+			{{#each info}}
+				{{#unless this.btn}}
+					<li><a class="accent-text" href="{{this.action}}">{{this.label}}</a></li>
+					{{else}}
+						<a id="landingBtn" class="btn accent {{this.c}}" href="{{this.action}}" id="{{this.id}}">{{this.label}}</a>
+				{{/unless}}
+			{{/each}}
+		</ul>
+		{{!MOBILE NAVIGATION BUTTONS}}
+		<ul id="nav-mobile" class="side-nav">
+			{{#each info}}
+				{{#unless this.btn}}
+					<li><a class="accent-text" href="{{../this.action}}">{{../this.label}}</a></li>
+					{{else}}
+						<a id="landingBtn" class="btn accent {{this.c}}" href="{{../this.action}}">{{../this.label}}</a>
+				{{/unless}}
+			{{/each}}
+		</ul>
+		<a href="#" data-activates="nav-mobile" class="button-collapse primary-text  "><i class="material-icons waves-effect waves-pink circle">menu</i></a>
+	</div>
+</nav>

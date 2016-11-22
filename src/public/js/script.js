@@ -326,7 +326,7 @@ var arduair = {
               position = 0;
               //console.log("todo el array es null");
           } else { // si no, busco una posicion nula para imprimir
-              position = arduair.data.checkNewData(name);
+              position = arduair.data.checkNewData(name,arduair.data);
               //console.log("CheckNewData retornando" + position);
               if (position === false || position === null || position === undefined) {
                   position = arduair.data.firstNull();
@@ -640,20 +640,20 @@ page();
  * @return {undefined}
  */
 function hiding() {
-    $("#main").addClass("hide");
-    $("#data").addClass("hide");
-    $("#configure").addClass("hide");
-    $("#documentation").addClass("hide");
-    $("#add").addClass("hide");
-    $("#debugger").addClass("hide");
-    $("#graph").addClass("hide");
+  $("#main").addClass("hide");
+  $("#data").addClass("hide");
+  $("#configure").addClass("hide");
+  $("#documentation").addClass("hide");
+  $("#add").addClass("hide");
+  $("#debugger").addClass("hide");
+  $("#graph").addClass("hide");
 
-    $("#actionBtn-add").addClass("hide");
-    $("#actionBtn-configure").addClass("hide");
-    $("#actionBtn-search").addClass("hide");
-    $("#actionBtn-comment").addClass("hide");
+  $("#actionBtn-add").addClass("hide");
+  $("#actionBtn-configure").addClass("hide");
+  $("#actionBtn-search").addClass("hide");
+  $("#actionBtn-comment").addClass("hide");
 
-    $('.button-collapse').sideNav('hide');
+  $('.button-collapse').sideNav('hide');
 }
 /**
  * Show the main tab
@@ -661,8 +661,8 @@ function hiding() {
  * @return {undefined}
  */
 function main() {
-    hiding();
-    $("#main").removeClass("hide");
+  hiding();
+  $("#main").removeClass("hide");
 }
 /**
  * Show configuration tab and configure action button
@@ -670,9 +670,9 @@ function main() {
  * @return {undefined}
  */
 function configure() {
-    hiding();
-    $("#configure").removeClass("hide");
-    $("#actionBtn-configure").removeClass("hide");
+  hiding();
+  $("#configure").removeClass("hide");
+  $("#actionBtn-configure").removeClass("hide");
 }
 /**
  * Show data tab, and do an AJAX request to get every device in the database, it also generates a table with the response
@@ -680,14 +680,14 @@ function configure() {
  * @return {undefined}
  */
 function data() {
-    hiding();
-    $("#data").removeClass("hide");
-    $("#actionBtn-search").removeClass("hide");
-    $("#actionBtn-search a").addClass("sync");
-    //send AJAX request to get devices data
-    $.get('/device', (res) => {
-        arduair.generateDeviceList(res);
-    });
+  hiding();
+  $("#data").removeClass("hide");
+  $("#actionBtn-search").removeClass("hide");
+  $("#actionBtn-search a").addClass("sync");
+  //send AJAX request to get devices data
+  $.get('/device', (res) => {
+    arduair.generateDeviceList(res);
+  });
 }
 /**
  * Show add tab and add action button
@@ -695,9 +695,9 @@ function data() {
  * @return {undefined}
  */
 function pageAdd() {
-    hiding();
-    $("#add").removeClass("hide");
-    $("#actionBtn-add").removeClass("hide");
+  hiding();
+  $("#add").removeClass("hide");
+  $("#actionBtn-add").removeClass("hide");
 }
 /**
  * Show debug tab
@@ -705,8 +705,8 @@ function pageAdd() {
  * @return {undefined}
  */
 function pageDebugger() {
-    hiding();
-    $("#debugger").removeClass("hide");
+  hiding();
+  $("#debugger").removeClass("hide");
 }
 /**
  * Show graph
@@ -714,176 +714,94 @@ function pageDebugger() {
  * @return {undefined}
  */
 function pageDataGraph(ctx) {
-    //hide tab
-    hiding();
-    $('#graph').removeClass("hide");
-    var device = ctx.params.device;
-    $.get('/device/' + device, (res) => {
-        arduair.saveDataRequested(res);
-        arduair.generateGraphMenu(); //imprimo el menu
-        arduair.bindMenuButtonBehavior();
-        arduair.generateGraphChips();
-    });
+  //hide tab
+  hiding();
+  $('#graph').removeClass("hide");
+  var device = ctx.params.device;
+  $.get('/device/' + device, (res) => {
+    arduair.saveDataRequested(res);
+    arduair.generateGraphMenu(); //imprimo el menu
+    arduair.bindMenuButtonBehavior();
+    arduair.generateGraphChips();
+  });
 }
 /*////////////////////
 //AJAX Forms
 ////////////////////*/
 //add Device Form
 $(document).ready(() => { // TODO: check if the arrow function breaks the code
-    $('#addform').ajaxForm({
-        success: addFormSuccess, //success Callback
-        beforeSubmit: formBefore, //Before Submit Callback
-        buttonId: "#actionBtn-add button",
-        error: formError
+  $('#addform').ajaxForm({
+    success: addFormSuccess, //success Callback
+    beforeSubmit: formBefore, //Before Submit Callback
+    buttonId: "#actionBtn-add button",
+    error: formError
+  });
+  // bind '#config-search-form' and provide a simple callback function
+  $('#config-search-form').ajaxForm({
+    success: configSearchSuccess, //success Callback
+    beforeSubmit: formBefore, //Before Submit Callback
+    buttonId: "#actionBtn-configure a",
+    error: formError
+  });
+  //this function is triggered when a addform is sended successful
+  function addFormSuccess(res) {
+    //res.status= status sended by the server
+    //res.message= message sended by the sever, for human reading
+    var status = res.status;
+    var btn = this.buttonId;
+    $(btn).addClass(status);
+    $(btn).removeClass("sync");
+    Materialize.toast(res.message, 4000, '', () => {
+      $(btn).removeClass(status);
     });
-    // bind '#config-search-form' and provide a simple callback function
-    $('#config-search-form').ajaxForm({
-        success: configSearchSuccess, //success Callback
-        beforeSubmit: formBefore, //Before Submit Callback
-        buttonId: "#actionBtn-configure a",
-        error: formError
+  }
+  //this function is before send the form, it change the state of button ID.
+  function formBefore() {
+    //add a sync class before send the form
+    $(this.buttonId).addClass("sync");
+    //console.log("sending request");
+  }
+  //when an error happen, a toast is showed, and the state of button is error
+  function formError() {
+    var btn = this.buttonId;
+    $(btn).addClass('error');
+    $(btn).removeClass("sync");
+    Materialize.toast('error desconocido, intenta de nuevo', 4000, '', () => {
+      $(btn).removeClass('error');
     });
-    //this function is triggered when a addform is sended successful
-    function addFormSuccess(res) {
-        //res.status= status sended by the server
-        //res.message= message sended by the sever, for human reading
-        var status = res.status;
-        var btn = this.buttonId;
-        $(btn).addClass(status);
-        $(btn).removeClass("sync");
-        Materialize.toast(res.message, 4000, '', () => {
-            $(btn).removeClass(status);
+  }
+  //this function is triggered when a #config-search-form is sended successful
+  function configSearchSuccess(res) {
+    var status = res.status;
+    var btn = this.buttonId;
+    $(btn).addClass(status);
+    $(btn).removeClass("sync");
+    Materialize.toast(res.message, 4000, '', () => {
+      $(btn).removeClass(status);
+    });
+    if (res.status == "done") {
+      $('#config-device-founded').slideDown(700);
+      if (res.device) {
+        $('#config-device-founded-form input').each(function() {
+          var atribute = $(this).attr('id').replace("config-", "");
+          $(this).attr("value", res.device[atribute]);
         });
-    }
-    //this function is before send the form, it change the state of button ID.
-    function formBefore() {
-        //add a sync class before send the form
-        $(this.buttonId).addClass("sync");
-        //console.log("sending request");
-    }
-    //when an error happen, a toast is showed, and the state of button is error
-    function formError() {
-        var btn = this.buttonId;
-        $(btn).addClass('error');
-        $(btn).removeClass("sync");
-        Materialize.toast('error desconocido, intenta de nuevo', 4000, '', () => {
-            $(btn).removeClass('error');
-        });
-    }
-    //this function is triggered when a #config-search-form is sended successful
-    function configSearchSuccess(res) {
-        var status = res.status;
-        var btn = this.buttonId;
-        $(btn).addClass(status);
-        $(btn).removeClass("sync");
-        Materialize.toast(res.message, 4000, '', () => {
-            $(btn).removeClass(status);
-        });
-        if (res.status == "done" ) {
-          $('#config-device-founded').slideDown(700);
-          if(res.device){
-            $( "#config-network" ).attr( "value", res.device.network || undefined );//TODO: improve this code
-            $( "#config-networkpass" ).attr( "value", res.device.networkpass );
-
-            $( "#config-server" ).attr( "value", res.device.server );
-            $( "#config-device" ).attr( "value", res.device.device );
-            $( "#config-pass" ).attr( "value", res.device.pass );
-            if(res.device.pass ){
-              $( "#config-wifi" ).prop('checked', true);
-            }else{
-              $( "#config-wifi" ).prop('checked', true);
-            }
-
-
-            $( "#config-co_x2" ).attr( "value", res.device.co_x2 );
-            $( "#config-co_x1" ).attr( "value", res.device.co_x1 );
-            $( "#config-co_b" ).attr( "value", res.device.co_b );
-
-            $( "#config-o3_x2" ).attr( "value", res.device.o3_x2 );
-            $( "#config-o3_x1" ).attr( "value", res.device.o3_x1 );
-            $( "#config-o3_b" ).attr( "value", res.device.o3_b );
-
-            $( "#config-so2_x2" ).attr( "value", res.device.so2_x2 );
-            $( "#config-so2_x1" ).attr( "value", res.device.so2_x1 );
-            $( "#config-so2_b" ).attr( "value", res.device.so2_b );
-
-            $( "#config-no2_x2" ).attr( "value", res.device.no2_x2 );
-            $( "#config-no2_x1" ).attr( "value", res.device.no2_x1 );
-            $( "#config-no2_b" ).attr( "value", res.device.no2_b );
-
-            $( "#config-pm10_x2" ).attr( "value", res.device.pm10_x2 );
-            $( "#config-pm10_x1" ).attr( "value", res.device.pm10_x1 );
-            $( "#config-pm10_b" ).attr( "value", res.device.pm10_b );
-
-            $( "#config-pm25_x2" ).attr( "value", res.device.pm25_x2 );
-            $( "#config-pm25_x1" ).attr( "value", res.device.pm25_x1 );
-            $( "#config-pm25_b" ).attr( "value", res.device.pm25_b );
-          }else{
-            $( "#config-network" ).attr( "value", "" );//TODO: improve this code
-            $( "#config-networkpass" ).attr( "value", "" );
-
-            $( "#config-server" ).attr( "value", "" );
-            $( "#config-device" ).attr( "value", "" );
-            $( "#config-pass" ).attr( "value", "" );
-              $( "#config-wifi" ).prop('checked', false);
-
-
-            $( "#config-co_x2" ).attr( "value", "" );
-            $( "#config-co_x1" ).attr( "value", "" );
-            $( "#config-co_b" ).attr( "value", "" );
-
-            $( "#config-o3_x2" ).attr( "value", "" );
-            $( "#config-o3_x1" ).attr( "value", "" );
-            $( "#config-o3_b" ).attr( "value", "" );
-
-            $( "#config-so2_x2" ).attr( "value", "" );
-            $( "#config-so2_x1" ).attr( "value", "" );
-            $( "#config-so2_b" ).attr( "value", "" );
-
-            $( "#config-no2_x2" ).attr( "value", "" );
-            $( "#config-no2_x1" ).attr( "value", "" );
-            $( "#config-no2_b" ).attr( "value", "" );
-
-            $( "#config-pm10_x2" ).attr( "value", "" );
-            $( "#config-pm10_x1" ).attr( "value", "" );
-            $( "#config-pm10_b" ).attr( "value", "" );
-
-            $( "#config-pm25_x2" ).attr( "value", "" );
-            $( "#config-pm25_x1" ).attr( "value", "" );
-            $( "#config-pm25_b" ).attr( "value", "" );
-          }
-          $( "#config-network" ).focus();//TODO: improve this code
-          $( "#config-networkpass" ).focus();
-
-          $( "#config-server" ).focus();
-          $( "#config-device" ).focus();
-          $( "#config-pass" ).focus();
-
-          $( "#config-co_x2" ).focus();
-          $( "#config-co_x1" ).focus();
-          $( "#config-co_b" ).focus();
-
-          $( "#config-o3_x2" ).focus();
-          $( "#config-o3_x1" ).focus();
-          $( "#config-o3_b" ).focus();
-
-          $( "#config-so2_x2" ).focus();
-          $( "#config-so2_x1" ).focus();
-          $( "#config-so2_b" ).focus();
-
-          $( "#config-no2_x2" ).focus();
-          $( "#config-no2_x1" ).focus();
-          $( "#config-no2_b" ).focus();
-
-          $( "#config-pm10_x2" ).focus();
-          $( "#config-pm10_x1" ).focus();
-          $( "#config-pm10_b" ).focus();
-
-          $( "#config-pm25_x2" ).focus();
-          $( "#config-pm25_x1" ).focus();
-          $( "#config-pm25_b" ).focus();
+        if (res.device.pass) {
+          $("#config-wifi").prop('checked', true);
+        } else {
+          $("#config-wifi").prop('checked', true);
         }
+      } else {
+        $('#config-device-founded-form input').each(function() {
+          $(this).attr("value", "");
+        });
+        $("#config-wifi").prop('checked', false);
+      }
+      $('#config-device-founded-form input').each(function() {
+        $(this).focus();
+      });
     }
+  }
 });
 /*////////////////////
 //Other stuff
@@ -893,23 +811,23 @@ $(document).ready(() => { // TODO: check if the arrow function breaks the code
  * @return {Boolean} [description]
  */
 Array.prototype.isNull = function() {
-    return this.join().replace(/,/g, '').length === 0;
+  return this.join().replace(/,/g, '').length === 0;
 };
 /**
  * Check if an object of an array contains a name property equals to name parameter
  * @param  {String} name the name value that you want to search
  * @return {Number}      the index of the element found
  */
-Array.prototype.checkNewData = function(name) {
-    var result = false;
-    arduair.data.forEach((el, index) => {
-        if (el) {
-            if (el.name == name) {
-                result = index;
-            }
-        }
-    });
-    return result;
+Array.prototype.checkNewData = function(name,array) {
+  var result = false;
+  array.forEach((el, index) => {
+    if (el) {
+      if (el.name == name) {
+        result = index;
+      }
+    }
+  });
+  return result;
 };
 /**
  * return the position of the first nul found
@@ -919,9 +837,9 @@ Array.prototype.checkNewData = function(name) {
  * @return {Number}
  */
 Array.prototype.firstNull = function() {
-    if (arduair.data.indexOf(null) === -1) {
-        return arduair.data.length;
-    } else {
-        return arduair.data.indexOf(null);
-    }
+  if (arduair.data.indexOf(null) === -1) {
+    return arduair.data.length;
+  } else {
+    return arduair.data.indexOf(null);
+  }
 };

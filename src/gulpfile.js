@@ -95,7 +95,7 @@ gulp.task('css', () => {
         .pipe(browserSync.reload({ stream: true }));
 });
 gulp.task('hbs-snippets',()=>{
-  return gulp.src(['./node_modules/handlebars-materialize-snippets/**/*'])
+  return gulp.src(['./node_modules/handlebars-materialize-snippets/materialize/**/*'])
           .pipe(gulp.dest('./views/partials/'));
 });
 /*///////////////////////////////////////

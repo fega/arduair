@@ -818,9 +818,9 @@ Array.prototype.isNull = function() {
  * @param  {String} name the name value that you want to search
  * @return {Number}      the index of the element found
  */
-Array.prototype.checkNewData = function(name,array) {
+Array.prototype.checkNewData = function(name) {
   var result = false;
-  array.forEach((el, index) => {
+  this.forEach((el, index) => {
     if (el) {
       if (el.name == name) {
         result = index;
@@ -837,9 +837,9 @@ Array.prototype.checkNewData = function(name,array) {
  * @return {Number}
  */
 Array.prototype.firstNull = function() {
-  if (arduair.data.indexOf(null) === -1) {
-    return arduair.data.length;
+  if (this.indexOf(null) === -1) {
+    return this.length;
   } else {
-    return arduair.data.indexOf(null);
+    return this.indexOf(null);
   }
 };

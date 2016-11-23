@@ -1,4 +1,4 @@
-/*global page $, Materialize, myChart, moment mean min max*/
+/*global page $, Materialize, myChart, moment mean min max _*/
 /**
  * Global Object with arduair default configuration and methods
  * @global
@@ -303,8 +303,8 @@ var arduair = {
       $(".page-edit-chip i.material-icons").click(function() { //AÑADO LOS CLICKS del boton "clear", para eliminar la entrada
           //console.log($(this));
           var index = $(this).parent().attr("id").replace('page-edit-chip-', '');
-          arduair.data.splice(index, 1, null);
-          arduair.generateGraphMenu(); //imprimo el menu
+          data.splice(index, 1, null);
+          arduair.generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
           arduair.bindMenuButtonBehavior();
           //arduair.generateGraphChips(arduair.data);
       });
@@ -316,7 +316,7 @@ var arduair = {
   saveDataRequested(res) {
       var position = false;
       var name = res.data.name;
-      if (res.status === 'error') { // si el resultado es un error, imprimo el error
+      if (res.status === 'error') { // If the result is an error, print the error
           Materialize.toast(res.message, 4000, '', () => {
               $("#actionBtn-search a").removeClass(res.status);
           });
@@ -352,26 +352,28 @@ var arduair = {
   /**
    * Generates a options menu for each data array.
    */
-  generateGraphMenu() {
-      arduair.data.forEach((el, index) => {
-          var ind = index + 1;
-          if (el) {
-              var content = "";
-              content += '<a  class="btn filledGraphDataMaster white-text" style="background-color:' + arduair.line_style[index] + ';">' + el.name + '</a>';
-              for (var i in arduair.data[index]) {
-                  if (i == 'date' || i == 'Location' || i == 'pst' || i == 'name');
-                  else {
-                      var units = arduair.units[i];
-                      //console.log(units);
-                      content += '<a  class="btn filledGraphData" data-var="' + i + '" data-units="' + units + '">' + i + ' ' + units + '</a>';
-                  }
-              }
-
-              $('#graph-options-' + ind).html(content);
-              //console.log("remplazado en: " + ind);
-          } else {
-              $('#graph-options-' + ind).html("");
-          }
+  generateGraphMenu(data,units,colors) {
+      data.forEach((el, index) => {
+        var ind = index + 1;
+        if (el) {
+          var content = '';
+          content+=`
+          <a  class="btn filledGraphDataMaster white-text" style="background-color:${colors[index]}">
+            ${el.name}
+          </a>`;
+          var filteredData=
+           _.omit(el,['date','Location','pst','name']);
+           _.forIn(filteredData,(val,key)=>{
+             var u =units[key];
+             content +=`
+             <a  class="btn filledGraphData" data-var="${key}" data-units="${u}">
+              ${key} ${u}
+             </a>`;
+           });
+          $(`#graph-options-${ind}`).html(content);
+        } else {
+          $(`#graph-options-${ind}`).html('');
+        }
       });
   },
   /**
@@ -720,7 +722,7 @@ function pageDataGraph(ctx) {
   var device = ctx.params.device;
   $.get('/device/' + device, (res) => {
     arduair.saveDataRequested(res);
-    arduair.generateGraphMenu(); //imprimo el menu
+    arduair.generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
     arduair.bindMenuButtonBehavior();
     arduair.generateGraphChips(arduair.data);
   });

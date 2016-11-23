@@ -383,23 +383,23 @@ var arduair = {
    * @return {Array} Array with the data normalized
    */
   normalizeDeviceData(data) {
-      var dateArray=_(data)
+    var dateArray = _(data)
       .chain()
-      .filter(val=>val!==null)
-      .map(val=>val.date)
+      .filter(val => val !== null)
+      .map(val => val.date)
       .flatten()
-      .sort((date1,date2)=>{
+      .sort((date1, date2) => {
         if (date1 > date2) return 1;
         if (date1 < date2) return -1;
         return 0;
       })
       .sortedUniq()
       .value();
-      // 4) put everything in their place
-      return {
-        data: checkAndNormalize(dateArray),
-        dates: dateArray
-      };
+    // 4) put everything in their place
+    return {
+      data: checkAndNormalize(dateArray),
+      dates: dateArray
+    };
       /**
        * Check all data from dates provided if arduair.data.date
        * contains this date, if true, puts every arduair.data key in the

@@ -383,21 +383,19 @@ var arduair = {
    * @return {Array} Array with the data normalized
    */
   normalizeDeviceData(data) {
+    //generate a normalized dates array
     var dateArray = _(data)
       .chain()
       .filter(val => val !== null)
       .map(val => val.date)
       .flatten()
-      .sort((date1, date2) => {
-        if (date1 > date2) return 1;
-        if (date1 < date2) return -1;
-        return 0;
-      })
+      .sort((date1, date2) => { if (date1 > date2) return 1; if (date1 < date2) return -1; return 0;})
       .sortedUniq()
       .value();
-    // 4) put everything in their place
+    var normalizedData =checkAndNormalize(data,dateArray);
+    //put everything in their place
     return {
-      data: checkAndNormalize(dateArray),
+      data: normalizedData,
       dates: dateArray
     };
       /**
@@ -409,9 +407,9 @@ var arduair = {
        * dateArray.sort(dateSort());
        * @return {Array} myArray normalized copy objects from arduair.data
        */
-      function checkAndNormalize(dates) {
+      function checkAndNormalize(data,dates) {
           var myArray = []; //array to return
-          arduair.data.forEach((val, ind) => { //for each arduair.data
+          data.forEach((val, ind) => { //for each arduair.data
               if (val !== null) { //that isn't null
                   myArray[ind] = {}; //set an empty object
                   for (var k in val) { //with empty array Keys
@@ -526,32 +524,26 @@ var arduair = {
    * Calculates the AQI for the given array of concentrations in the pollutant
    */
   aqiArray(arr,pollutant){
-     var result = arr.map(n=>{
-       return  arduair.aqi(n,pollutant);
-     });
-     return result;
+     return arr.map(n=> arduair.aqi(n,pollutant));
   },
   /**
    * Calculates the AQI for the given "c" (concentration) in the "pollutant"
    */
   aqi(c,pollutant){
-    var ind;
+    var category;
     arduair.aqi_ranges[pollutant].some((item,index)=>  {
       var min =item.range[0];
       var max =item.range[1];
       if (c >= min && c<=max){
-        ind = index;
-        return index;
-      }
-      if (c >= min && c<=max){
+        category = index;
         return true;
       }
       return false;
     });
-    var Ihi=arduair.aqi_ranges[pollutant][ind].value[1];
-    var Ilo=arduair.aqi_ranges[pollutant][ind].value[0];
-    var Bhi=arduair.aqi_ranges[pollutant][ind].range[1];
-    var Blo=arduair.aqi_ranges[pollutant][ind].range[0];
+    var Ihi=arduair.aqi_ranges[pollutant][category].value[1];
+    var Ilo=arduair.aqi_ranges[pollutant][category].value[0];
+    var Bhi=arduair.aqi_ranges[pollutant][category].range[1];
+    var Blo=arduair.aqi_ranges[pollutant][category].range[0];
     return  (Ihi-Ilo)/(Bhi-Blo)*(c-Blo)+Ilo;
   },
   /**
@@ -595,8 +587,8 @@ var arduair = {
   /**
    *
    */
-  nowcastAqi(arr,pollutant){
-    var C=arduair.nowcastConcentration(arr,pollutant,arduair.normalizedDates);
+  nowcastAqi(arr,pollutant,dates){
+    var C=arduair.nowcastConcentration(arr,pollutant,dates);
     return arduair.aqiArray(C,pollutant);
   }
 };

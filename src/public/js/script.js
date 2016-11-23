@@ -276,7 +276,7 @@ var arduair = {
       var firstNull = data.firstNull(); // how many chips will be created
       for (var i = 0; i < firstNull; i++) {
           var el = data[i];
-          content= `
+          content+= `
           <div class="chip page-edit-chip" id="page-edit-chip-${i}">
             ${el.name}<i class="material-icons">close</i>
           </div>`;
@@ -345,7 +345,7 @@ var arduair = {
           $("#actionBtn-search a").removeClass(res.status);
       }); //le aviso al usuario que paso
       arduair.data[position] = res.data; //ubico el array recibido en el array
-      var normalized = arduair.normalizeDeviceData();
+      var normalized = arduair.normalizeDeviceData(arduair.data);
       arduair.normalizedData=normalized.data;
       arduair.normalizedDates=normalized.dates;
   },
@@ -382,42 +382,24 @@ var arduair = {
    * in one array and organizes all the measures (Y data) consequently
    * @return {Array} Array with the data normalized
    */
-  normalizeDeviceData() {
-      // 1) concat arrays
-      var dateArray = dateConcat();
-      // 2) sort array
-      dateArray.sort(dateSort());
-      // 3) delete duplicates
-      dateArray = removeDuplicate(dateArray);
+  normalizeDeviceData(data) {
+      var dateArray=_(data)
+      .chain()
+      .filter(val=>val!==null)
+      .map(val=>val.date)
+      .flatten()
+      .sort((date1,date2)=>{
+        if (date1 > date2) return 1;
+        if (date1 < date2) return -1;
+        return 0;
+      })
+      .sortedUniq()
+      .value();
       // 4) put everything in their place
       return {
         data: checkAndNormalize(dateArray),
         dates: dateArray
       };
-      /**
-       * Sorting date function comparator from https://gist.github.com/onpubcom/1772996
-       * @param  {Date} date1 First date object to compare
-       * @param  {Date} date2 Second date object to compare
-       * @return {Number} Comparison Returns Comparison result.
-       */
-      function dateSort(date1, date2) {
-          if (date1 > date2) return 1;
-          if (date1 < date2) return -1;
-          return 0;
-      }
-      /**
-       * Concat each arduair.data.date
-       * @return {Array} Concatenated_Dates concatenated dates array
-       */
-      function dateConcat() {
-          var myArray = [];
-          arduair.data.forEach((val) => {
-              if (val !== null) {
-                  myArray = myArray.concat(val.date);
-              }
-          });
-          return myArray;
-      }
       /**
        * Check all data from dates provided if arduair.data.date
        * contains this date, if true, puts every arduair.data key in the
@@ -464,14 +446,6 @@ var arduair = {
               }
           });
           return myArray;
-      }
-      /**
-       * Remove duplicates in an array
-       * @param  {Array} arr Array to remove their duplicates
-       * @return {Array}     Array without duplicates
-       */
-      function removeDuplicate(arr) {
-          return Array.from(new Set(arr));
       }
   },
   /**

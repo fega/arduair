@@ -250,24 +250,21 @@ var arduair = {
 
       var devices = ''; //this array contains the html of the device list
       if (res.devices.length > 0) {
-
-          for (var i = 0; i < res.devices.length; i++) {
-              devices += '<li class="collection-item avatar">';
-              devices += '<a href="data/' + res.devices[i].name + '">';
-              devices += ' <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">';
-              devices += '<span class="primary-text title">' + res.devices[i].name + '</span>';
-              devices += '<p>Owner:' + res.devices[i].owner + '</p>';
-              devices += '<p>Last register:' + res.devices[i].lastRegister + '</p>';
-              //devices +='<p>Measure:'+res.devices[i].owner+'</p>';
-              //devices +='<p>Last Location:'+res.devices[i].owner+'</p>';
-              devices += '</a>';
-              devices += '</li>';
-          }
-
+          res.devices.forEach((item)=>{
+            devices+=`
+            <li class="collection-item avatar">
+              <a href="data/${item.name}">
+                <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">
+                <span class="primary-text title">${item.name}</span>
+                <p>Owner:${item.owner}</p>
+              </a>
+            </li>`;
+          });
       } else {
-          devices += '<div class="col s12 center"><p class="error-text">'; //if data is not retrieved
-          devices += res.message;
-          devices += '</p> </div>';
+        devices +=`
+        <div class="col s12 center">
+          <p class="error-text">${res.message}</p>
+        </div>`;
       }
       $('#deviceCollection').html(devices);
   },
@@ -326,7 +323,7 @@ var arduair = {
               position = 0;
               //console.log("todo el array es null");
           } else { // si no, busco una posicion nula para imprimir
-              position = arduair.data.checkNewData(name,arduair.data);
+              position = arduair.data.checkNewData(name);
               //console.log("CheckNewData retornando" + position);
               if (position === false || position === null || position === undefined) {
                   position = arduair.data.firstNull();
@@ -581,10 +578,10 @@ var arduair = {
   /**
    *
    */
-  nowcastConcentration(arr,pollutant){
+  nowcastConcentration(arr,pollutant,datesArr){
     return arr.map((item,index,arr)=>{//for each item in the array
       var arrays=[]; //create a temporal array to store te evaluated values
-      var date=moment(arduair.normalizedDates[index]);//and create a moment.js date
+      var date=moment(datesArr[index]);//and create a moment.js date
 
       arr.forEach((item)=>{// Iterate the entire array Again
         if(item!=undefined){
@@ -620,7 +617,7 @@ var arduair = {
    *
    */
   nowcastAqi(arr,pollutant){
-    var C=arduair.nowcastConcentration(arr,pollutant);
+    var C=arduair.nowcastConcentration(arr,pollutant,arduair.normalizedDates);
     return arduair.aqiArray(C,pollutant);
   }
 };

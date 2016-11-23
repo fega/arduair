@@ -271,20 +271,23 @@ var arduair = {
   /**
    * Generates chips for each device loaded
    */
-  generateGraphChips() {
+  generateGraphChips(data) {
       var content = ""; //namespace
-      var firstNull = arduair.data.firstNull(); // how many chips will be created
+      var firstNull = data.firstNull(); // how many chips will be created
       for (var i = 0; i < firstNull; i++) {
-          var el = arduair.data[i];
-          content += '<div class="chip page-edit-chip" id="page-edit-chip-' + i + '">' + el.name + '<i class="material-icons">close</i></div>';
+          var el = data[i];
+          content= `
+          <div class="chip page-edit-chip" id="page-edit-chip-${i}">
+            ${el.name}<i class="material-icons">close</i>
+          </div>`;
       }
       content += '<a id="page-graph-add" href="/data" class="btn-floating accent"><i class="material-icons">add</i></a>';
       content += '<a id="page-graph-edit" class="btn-floating primary"><i class="material-icons">edit</i></a>';
 
       $('#page-graph-chips').html(content); // PONGO LOS CHIPS EN EL HTML
 
-      if (arduair.data.isNull()) $('#page-graph-edit').addClass("disabled"); //ACTIVO O DESACTIVO LOS BOTONES
-      if (arduair.data.firstNull() === 5) $('#page-graph-add').addClass("disabled");
+      if (data.isNull()) $('#page-graph-edit').addClass("disabled"); //ACTIVO O DESACTIVO LOS BOTONES
+      if (data.firstNull() === 5) $('#page-graph-add').addClass("disabled");
 
       $('#page-graph-edit').click(() => { //AÑADO LOS CLICKS del boton de edicion
           var menu = $("#page-graph-edit-menu");
@@ -303,7 +306,7 @@ var arduair = {
           arduair.data.splice(index, 1, null);
           arduair.generateGraphMenu(); //imprimo el menu
           arduair.bindMenuButtonBehavior();
-          //arduair.generateGraphChips();
+          //arduair.generateGraphChips(arduair.data);
       });
 
   },
@@ -719,7 +722,7 @@ function pageDataGraph(ctx) {
     arduair.saveDataRequested(res);
     arduair.generateGraphMenu(); //imprimo el menu
     arduair.bindMenuButtonBehavior();
-    arduair.generateGraphChips();
+    arduair.generateGraphChips(arduair.data);
   });
 }
 /*////////////////////

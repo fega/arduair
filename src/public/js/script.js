@@ -92,7 +92,28 @@ var arduair = {
           value: [401, 500],
           range: [0, 0]
       }], //ppm,
-
+      o3: [{
+          value: [0, 50],
+          range: [0, 0.059]
+      }, {
+          value: [51, 100],
+          range: [0.060, 0.075]
+      }, {
+          value: [101, 150],
+          range: [0.076, 0.095]
+      }, {
+          value: [151, 200],
+          range: [0.096, 0.115]
+      }, {
+          value: [201, 300],
+          range: [0.116, 0.374]
+      }, {
+          value: [301, 301],
+          range: [0.375, 100000]
+      }, {
+          value: [401, 500],
+          range: [0, 0]
+      }],
 
       o3_1h: [{
           value: [101, 150],
@@ -529,20 +550,13 @@ var arduair = {
    * Calculates the AQI for the given "c" (concentration) in the "pollutant"
    */
   aqi(c,pollutant){
-    var category;
-    arduair.aqi_ranges[pollutant].some((item,index)=>  {
-      var min =item.range[0];
-      var max =item.range[1];
-      if (c >= min && c<=max){
-        category = index;
-        return true;
-      }
-      return false;
-    });
-    var Ihi=arduair.aqi_ranges[pollutant][category].value[1];
-    var Ilo=arduair.aqi_ranges[pollutant][category].value[0];
-    var Bhi=arduair.aqi_ranges[pollutant][category].range[1];
-    var Blo=arduair.aqi_ranges[pollutant][category].range[0];
+    //this return the category that I want.
+    var category = arduair.aqi_ranges[pollutant].find(v=>_.inRange(c,v.range[0],v.range[1]));
+    var Ihi=category.value[1];
+    var Ilo=category.value[0];
+    var Bhi=category.range[1];
+    var Blo=category.range[0];
+    if (_.isUndefined(category)) {category=0;console.warn("[concentration] out of range");}
     return  (Ihi-Ilo)/(Bhi-Blo)*(c-Blo)+Ilo;
   },
   /**
@@ -718,6 +732,10 @@ function pageDataGraph(ctx) {
     arduair.bindMenuButtonBehavior();
     arduair.generateGraphChips(arduair.data);
   });
+}
+
+function pageAqiGraph(){
+  arduair.calculateAQI()
 }
 /*////////////////////
 //AJAX Forms

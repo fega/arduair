@@ -73,6 +73,7 @@ gulp.task('js',  () => {
     './public/js/jqueryform.js',
     './public/js/moment.js',
     './public/js/chart.js',
+    './public/js/chartjs-plugin-annotation.min.js',
     './public/js/init.js',
     './public/js/page.js',
     './public/js/script.js',

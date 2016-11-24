@@ -314,40 +314,29 @@ var arduair = {
    * Save a requested data in the correct place of arduair.data
    */
   saveDataRequested(res) {
-      var position = false;
-      var name = res.data.name;
-      if (res.status === 'error') { // If the result is an error, print the error
-          Materialize.toast(res.message, 4000, '', () => {
-              $("#actionBtn-search a").removeClass(res.status);
-          });
+    var position;
+    var name = res.data.name;
+    if (res.status === 'done') { //si el resultado es satisfactorio...
+      position = selectPosition(arduair.data);
+    }
+    Materialize.toast(res.message, 2000, '', () => { $("#actionBtn-search a").removeClass(res.status);});
+    arduair.data[position] = res.data; //ubico el array recibido en el array
+    var normalized = arduair.normalizeDeviceData(arduair.data);
+    arduair.normalizedData = normalized.data;
+    arduair.normalizedDates = normalized.dates;
+    function selectPosition(data){
+      if (data.isNull()) { //.. si todo el array  del cliente es null, imprimo en la posicion 0
+        return 0;//console.log("todo el array es null");
+      } else { // si no, busco una posicion nula para imprimir
+        var position = data.checkNewData(name);//console.log("CheckNewData retornando" + position);
+        if (position === false || position === null || position === undefined) {
+          return data.firstNull();//console.log("no hay data con ese nombre, poniendo la data en:" + position);
+        }
+        if (position === -1) { // ni no la hay imprimo en el ultimo lugar
+          return 4;//console.log("Data full, sobre escribiendo 4");
+        }
       }
-      if (res.status === 'done') { //si el resultado es satisfactorio...
-          if (arduair.data.isNull()) { //.. si todo el array  del cliente es null, imprimo en la posicion 0
-              position = 0;
-              //console.log("todo el array es null");
-          } else { // si no, busco una posicion nula para imprimir
-              position = arduair.data.checkNewData(name);
-              //console.log("CheckNewData retornando" + position);
-              if (position === false || position === null || position === undefined) {
-                  position = arduair.data.firstNull();
-                  //console.log("no hay data con ese nombre, poniendo la data en:" + position);
-              }
-              if (position === -1) { // ni no la hay imprimo en el ultimo lugar
-                  position = 4;
-                  //console.log("Data full, sobre escribiendo 4");
-              }
-              if (position >= 0) {
-                  //console.log("poniendo la data en :" + position);
-              }
-          }
-      }
-      Materialize.toast(res.message, 4000, '', () => {
-          $("#actionBtn-search a").removeClass(res.status);
-      }); //le aviso al usuario que paso
-      arduair.data[position] = res.data; //ubico el array recibido en el array
-      var normalized = arduair.normalizeDeviceData(arduair.data);
-      arduair.normalizedData=normalized.data;
-      arduair.normalizedDates=normalized.dates;
+    }
   },
   /**
    * Generates a options menu for each data array.
@@ -550,39 +539,66 @@ var arduair = {
    *
    */
   nowcastConcentration(arr,pollutant,datesArr){
-    return arr.map((item,index,arr)=>{//for each item in the array
-      var arrays=[]; //create a temporal array to store te evaluated values
-      var date=moment(datesArr[index]);//and create a moment.js date
+    var dates = datesArr.map(val=>moment(val));
+    var range = pollutant==="o3"?8:12;
 
-      arr.forEach((item)=>{// Iterate the entire array Again
-        if(item!=undefined){
-          var hour = (pollutant!=="o3")?12:8;
-          for(var i=1;i>hour;i++){ //to know where to store it
-            if(  moment(item).isBetween(date.subtract(i-1, 'hours'),date.subtract(i, 'hours'))  ){
-              arrays[i].push(arr[i]);// put the concentration in their place
-            }
-          }
-        }//when I finalize the array
-      });
-      var ch = arrays.forEach((item)=>{
-        return mean([item]); //cal
-      });
+    return arr.map((value,index)=>{
+      var w1,w,c1,c2;
+      var means= _(arr)
+      .groupBy((v,i)=>dates[index].diff(dates[i],'hours'))
+      .filter((v,k)=>_.inRange(parseInt(k),range))
+      .map(v=>mean(v))
+      .value();
 
-      var w1 = min(arr)/max(arr);
-      var w  = (w1<= 0.5)? 0.5 : w1;
+      w1 = min(means)/max(means);
+      w  = (w1<= 0.5)? 0.5 : w1;
 
-      var c1 = ch.reduce((ant,act,index)=>{
-        var k=Math.pow(w, index);
-        return ant + k*act;
-      });
-      var c2 = ch.reduce((ant,act,index)=>{
-        var k=Math.pow(w, index);
-        return ant + k;
-      });
-      // result concentration
+      c1= _(means)
+        .map((v,k)=>v*Math.pow(w,k))
+        .sum()
+        .value();
+      c2= _(means)
+        .map((v,k)=>Math.pow(w,k))
+        .sum()
+        .value();
+
       var c= c1/c2;
       return c;
     });
+
+    // return arr.map((item,index,arr)=>{//for each item in the array
+    //   var arrays=[]; //create a temporal array to store te evaluated values
+    //   var date=moment(datesArr[index]);//and create a moment.js date
+    //
+    //   arr.forEach((item)=>{// Iterate the entire array Again
+    //     if(item!=undefined){
+    //       var hour = (pollutant!=="o3")?12:8;
+    //       for(var i=1;i>hour;i++){ //to know where to store it
+    //         if(  moment(item).isBetween(date.subtract(i-1, 'hours'),date.subtract(i, 'hours'))  ){
+    //           arrays[i].push(arr[i]);// put the concentration in their place
+    //         }
+    //       }
+    //     }//when I finalize the array
+    //   });
+    //   var ch = arrays.forEach((item)=>{
+    //     return mean([item]); //cal
+    //   });
+    //
+    //   var w1 = min(arr)/max(arr);
+    //   var w  = (w1<= 0.5)? 0.5 : w1;
+    //
+    //   var c1 = ch.reduce((ant,act,index)=>{
+    //     var k=Math.pow(w, index);
+    //     return ant + k*act;
+    //   });
+    //   var c2 = ch.reduce((ant,act,index)=>{
+    //     var k=Math.pow(w, index);
+    //     return ant + k;
+    //   });
+    //   // result concentration
+    //   var c= c1/c2;
+    //   return c;
+    // });
   },
   /**
    *

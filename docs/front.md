@@ -57,10 +57,7 @@ Global Object with arduair default configuration and methods
     * [.saveDataRequested()](#arduair.saveDataRequested)
     * [.generateGraphMenu()](#arduair.generateGraphMenu)
     * [.normalizeDeviceData()](#arduair.normalizeDeviceData) ⇒ <code>Array</code>
-        * [~dateSort(date1, date2)](#arduair.normalizeDeviceData..dateSort) ⇒ <code>Number</code>
-        * [~dateConcat()](#arduair.normalizeDeviceData..dateConcat) ⇒ <code>Array</code>
         * [~checkAndNormalize(dates)](#arduair.normalizeDeviceData..checkAndNormalize) ⇒ <code>Array</code>
-        * [~removeDuplicate(arr)](#arduair.normalizeDeviceData..removeDuplicate) ⇒ <code>Array</code>
     * [.bindMenuButtonBehavior()](#arduair.bindMenuButtonBehavior)
     * [.calculateAQI()](#arduair.calculateAQI)
     * [.aqiArray()](#arduair.aqiArray)
@@ -122,33 +119,6 @@ This method organizes into a form appropriate for graphjs.mainly, this method p
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 **Returns**: <code>Array</code> - Array with the data normalized  
-
-* [.normalizeDeviceData()](#arduair.normalizeDeviceData) ⇒ <code>Array</code>
-    * [~dateSort(date1, date2)](#arduair.normalizeDeviceData..dateSort) ⇒ <code>Number</code>
-    * [~dateConcat()](#arduair.normalizeDeviceData..dateConcat) ⇒ <code>Array</code>
-    * [~checkAndNormalize(dates)](#arduair.normalizeDeviceData..checkAndNormalize) ⇒ <code>Array</code>
-    * [~removeDuplicate(arr)](#arduair.normalizeDeviceData..removeDuplicate) ⇒ <code>Array</code>
-
-<a name="arduair.normalizeDeviceData..dateSort"></a>
-
-#### normalizeDeviceData~dateSort(date1, date2) ⇒ <code>Number</code>
-Sorting date function comparator from https://gist.github.com/onpubcom/1772996
-
-**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
-**Returns**: <code>Number</code> - Comparison Returns Comparison result.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| date1 | <code>Date</code> | First date object to compare |
-| date2 | <code>Date</code> | Second date object to compare |
-
-<a name="arduair.normalizeDeviceData..dateConcat"></a>
-
-#### normalizeDeviceData~dateConcat() ⇒ <code>Array</code>
-Concat each arduair.data.date
-
-**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
-**Returns**: <code>Array</code> - Concatenated_Dates concatenated dates array  
 <a name="arduair.normalizeDeviceData..checkAndNormalize"></a>
 
 #### normalizeDeviceData~checkAndNormalize(dates) ⇒ <code>Array</code>
@@ -160,18 +130,6 @@ Check all data from dates provided if arduair.data.datecontains this date, if t
 | Param | Type | Description |
 | --- | --- | --- |
 | dates | <code>Date</code> | array of dates, mainly concatenated dates from dateArray.sort(dateSort()); |
-
-<a name="arduair.normalizeDeviceData..removeDuplicate"></a>
-
-#### normalizeDeviceData~removeDuplicate(arr) ⇒ <code>Array</code>
-Remove duplicates in an array
-
-**Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
-**Returns**: <code>Array</code> - Array without duplicates  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| arr | <code>Array</code> | Array to remove their duplicates |
 
 <a name="arduair.bindMenuButtonBehavior"></a>
 

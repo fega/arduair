@@ -281,8 +281,18 @@ var arduair = {
             ${el.name}<i class="material-icons">close</i>
           </div>`;
       }
-      content += '<a id="page-graph-add" href="/data" class="btn-floating accent"><i class="material-icons">add</i></a>';
-      content += '<a id="page-graph-edit" class="btn-floating primary"><i class="material-icons">edit</i></a>';
+      content += `
+      <a id="page-graph-add" href="/data" class="btn-floating accent">
+        <i class="material-icons">add</i>
+      </a>`;
+      content += `
+      <a id="page-graph-edit" class="btn-floating primary">
+        <i class="material-icons">edit</i>
+      </a>`;
+      content += `
+      <a id="page-graph-edit" class="btn-floating primary" style="background-color:#2c3e50!important">
+        <i class="material-icons">cloud</i>
+      </a>`;
 
       $('#page-graph-chips').html(content); // PONGO LOS CHIPS EN EL HTML
 

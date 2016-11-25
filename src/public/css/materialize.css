@@ -1616,7 +1616,7 @@ small {
       min-width: 8%;
       top: 10%;
       right: 7%;
-      left: 7%; } }
+      /*left: 7%;*/ } }
 
 .toast {
   border-radius: 2px;

@@ -1,4 +1,4 @@
-/*global page $, Materialize, myChart, moment mean min max _*/
+/*global page $, moment _ toastAndRemoveClass generateDeviceCollectionList generateGraphChips generateGraphMenu saveDataRequested*/
 /**
  * Global Object with arduair default configuration and methods
  * @global
@@ -31,6 +31,7 @@ var arduair = {
   normalizedData: [null],
   normalizedDates:[null],
   aqiData: [null],
+  instantData:[null],
   units: {
       humidity: '%',
       temperature: '°C',
@@ -257,145 +258,7 @@ var arduair = {
       "nh3": [3, 3, 3, 15],
       "default": [0, 1],
   },
-  /**
-   * Generates the table with devices gotten by a request
-   * @param  {Json} res Response object
-   */
-  generateDeviceList(res) {
-      //console.log(res);
-      $("#actionBtn-search a").removeClass("sync");
-      $("#actionBtn-search a").addClass(res.status);
-      Materialize.toast(res.message, 4000, '', () => {
-          $("#actionBtn-search a").removeClass(res.status);
-      });
 
-      var devices = ''; //this array contains the html of the device list
-      if (res.devices.length > 0) {
-          res.devices.forEach((item)=>{
-            devices+=`
-            <li class="collection-item avatar">
-              <a href="data/${item.name}">
-                <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">
-                <span class="primary-text title">${item.name}</span>
-                <p>Owner:${item.owner}</p>
-              </a>
-            </li>`;
-          });
-      } else {
-        devices +=`
-        <div class="col s12 center">
-          <p class="error-text">${res.message}</p>
-        </div>`;
-      }
-      $('#deviceCollection').html(devices);
-  },
-  /**
-   * Generates chips for each device loaded
-   */
-  generateGraphChips(data) {
-      var content = ""; //namespace
-      var firstNull = data.firstNull(); // how many chips will be created
-      for (var i = 0; i < firstNull; i++) {
-          var el = data[i];
-          content+= `
-          <div class="chip page-edit-chip" id="page-edit-chip-${i}">
-            ${el.name}<i class="material-icons">close</i>
-          </div>`;
-      }
-      content += `
-      <a id="page-graph-add" href="/data" class="btn-floating accent">
-        <i class="material-icons">add</i>
-      </a>`;
-      content += `
-      <a id="page-graph-edit" class="btn-floating primary">
-        <i class="material-icons">edit</i>
-      </a>`;
-      content += `
-      <a id="page-graph-edit" class="btn-floating primary" style="background-color:#2c3e50!important">
-        <i class="material-icons">cloud</i>
-      </a>`;
-
-      $('#page-graph-chips').html(content); // PONGO LOS CHIPS EN EL HTML
-
-      if (data.isNull()) $('#page-graph-edit').addClass("disabled"); //ACTIVO O DESACTIVO LOS BOTONES
-      if (data.firstNull() === 5) $('#page-graph-add').addClass("disabled");
-
-      $('#page-graph-edit').click(() => { //AÑADO LOS CLICKS del boton de edicion
-          var menu = $("#page-graph-edit-menu");
-          if (menu.hasClass("active")) {
-              menu.removeClass("active");
-              menu.slideUp();
-          } else {
-              menu.addClass("active");
-              menu.slideDown();
-          }
-      });
-
-      $(".page-edit-chip i.material-icons").click(function() { //AÑADO LOS CLICKS del boton "clear", para eliminar la entrada
-          //console.log($(this));
-          var index = $(this).parent().attr("id").replace('page-edit-chip-', '');
-          data.splice(index, 1, null);
-          arduair.generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
-          arduair.bindMenuButtonBehavior();
-          //arduair.generateGraphChips(arduair.data);
-      });
-
-  },
-  /**
-   * Save a requested data in the correct place of arduair.data
-   */
-  saveDataRequested(res) {
-    var position;
-    var name = res.data.name;
-    if (res.status === 'done') { //si el resultado es satisfactorio...
-      position = selectPosition(arduair.data);
-    }
-    Materialize.toast(res.message, 2000, '', () => { $("#actionBtn-search a").removeClass(res.status);});
-    arduair.data[position] = res.data; //ubico el array recibido en el array
-    var normalized = arduair.normalizeDeviceData(arduair.data);
-    arduair.normalizedData = normalized.data;
-    arduair.normalizedDates = normalized.dates;
-    function selectPosition(data){
-      if (data.isNull()) { //.. si todo el array  del cliente es null, imprimo en la posicion 0
-        return 0;//console.log("todo el array es null");
-      } else { // si no, busco una posicion nula para imprimir
-        var position = data.checkNewData(name);//console.log("CheckNewData retornando" + position);
-        if (position === false || position === null || position === undefined) {
-          return data.firstNull();//console.log("no hay data con ese nombre, poniendo la data en:" + position);
-        }
-        if (position === -1) { // ni no la hay imprimo en el ultimo lugar
-          return 4;//console.log("Data full, sobre escribiendo 4");
-        }
-      }
-    }
-  },
-  /**
-   * Generates a options menu for each data array.
-   */
-  generateGraphMenu(data,units,colors) {
-      data.forEach((el, index) => {
-        var ind = index + 1;
-        if (el) {
-          var content = '';
-          content+=`
-          <a  class="btn filledGraphDataMaster white-text" style="background-color:${colors[index]}">
-            ${el.name}
-          </a>`;
-          var filteredData=
-           _.omit(el,['date','Location','pst','name']);
-           _.forIn(filteredData,(val,key)=>{
-             var u =units[key];
-             content +=`
-             <a  class="btn filledGraphData" data-var="${key}" data-units="${u}">
-              ${key} ${u}
-             </a>`;
-           });
-          $(`#graph-options-${ind}`).html(content);
-        } else {
-          $(`#graph-options-${ind}`).html('');
-        }
-      });
-  },
   /**
    * This method organizes into a form appropriate for graphjs.
    * mainly, this method put all dates (X axis of the graph)
@@ -467,169 +330,96 @@ var arduair = {
       }
   },
   /**
-   * This function controls the filledGraphData buttons behavior
-   */
-  bindMenuButtonBehavior() {
-      $('.filledGraphData').unbind('click.namespace').bind('click.namespace', function() {
-          var main = $(this);
-          var units = main.data("units");
-          var value = main.data("var");
-          var index = main.parent().attr("id").replace("graph-options-", "") - 1;
-          var data = [];
-
-          if ($(this).hasClass("active")) $(this).removeClass("active"); // si esta activo lo desactivo
-          else $(this).addClass("active"); //si no:
-
-          $(".filledGraphData").each(function() { //por cada boton filledGraphData
-              var other = $(this);
-              var oUnits = other.data("units");
-              var oValue = other.data("var");
-              var oIndex = other.parent().attr("id").replace("graph-options-", "") - 1;
-              if (oUnits === units) { //que tenga las mismas unidades
-                  other.removeClass("disabled"); //lo dejo disponible
-                  if (oValue === value && index !== oIndex && main.hasClass("active")) { //si ademas tiene el mismo tipo de valor
-                      other.addClass("active"); // lo activo y añado a la gradica
-                  }
-              } else { //si no tiene las mismas unidades
-                  other.addClass("disabled"); //lo desactivo y elimino la clase activo
-                  other.removeClass("active");
-              }
-              //despues de todo esto:
-              if (other.hasClass("active")) {
-                  var color = arduair.line_style[oIndex];
-                  var line = arduair.line_borders[oValue];
-                  data.push({
-                      data: arduair.normalizedData[oIndex][oValue],
-                      label: oValue,
-                      borderColor: color,
-                      borderDash: line
-                  });
-              }
-              myChart.data.datasets = data;
-              myChart.data.labels = arduair.normalizedDates;
-              myChart.update(100);
-          });
-      });
-  },
-  /**
    * Calculate the air Quality index from
    * Standar method,
    * NowCast method and
    * InstantCast method
    */
-  calculateAQI(obj){
+  calculateAQI(obj,dates){
     var result ={};
-    //Standar aqi
-    result.o3   = arduair.aqiArray(obj.o3,"o3_1h");
-    result.co   = arduair.aqiArray(obj.co,"co_8h");
-    result.no2  = arduair.aqiArray(obj.no2,"no2_1h");
-    result.so2  = arduair.aqiArray(obj.so2,"so2_24h");
-    result.pm10 = arduair.aqiArray(obj.pm10,"pm10_24h");
-    result.pm25 = arduair.aqiArray(obj.pm25,"pm25_24h");
     //InstantCast
-    result.o3_ins   = arduair.aqiArray(obj.o3,"o3_1h");
-    result.co_ins   = arduair.aqiArray(obj.co,"co_8h");
-    result.no2_ins  = arduair.aqiArray(obj.no2,"no2_1h");
-    result.so2_ins  = arduair.aqiArray(obj.so2,"so2_24h");
-    result.pm10_ins = arduair.aqiArray(obj.pm10,"pm10_24h");
-    result.pm25_ins = arduair.aqiArray(obj.pm25,"pm25_24h");
+    result.o3_ins   = arduair.aqi(obj.o3,"o3_1h",dates);
+    result.co_ins   = arduair.aqi(obj.co,"co_8h",dates);
+    result.no2_ins  = arduair.aqi(obj.no2,"no2_1h",dates);
+    result.so2_ins  = arduair.aqi(obj.so2,"so2_24h",dates);
+    result.pm10_ins = arduair.aqi(obj.pm10,"pm10_24h",dates);
+    result.pm25_ins = arduair.aqi(obj.pm25,"pm25_24h",dates);
     //Nowcast
-    result.o3_now   = arduair.nowcast(obj.o3,"o3_1h");
-    result.co_now   = arduair.nowcast(obj.co,"co_8h");
-    result.pm10_now = arduair.nowcast(obj.pm10,"pm10_24h");
-    result.pm25_now = arduair.nowcast(obj.pm25,"pm25_24h");
+    result.o3_now   = arduair.aqi(obj.o3,"o3_1h",dates);
+    result.co_now   = arduair.aqi(obj.co,"co_8h",dates);
+    result.pm10_now = arduair.aqi(obj.pm10,"pm10_24h",dates);
+    result.pm25_now = arduair.aqi(obj.pm25,"pm25_24h",dates);
     return result;
   },
   /**
-   * Calculates the AQI for the given array of concentrations in the pollutant
-   */
-  aqiArray(arr,pollutant){
-     return arr.map(n=> arduair.aqi(n,pollutant));
-  },
-  /**
    * Calculates the AQI for the given "c" (concentration) in the "pollutant"
+   * if c is an array, returns the an array with the InstantCast aqi values.
    */
-  aqi(c,pollutant){
-    //this return the category that I want.
-    var category = arduair.aqi_ranges[pollutant].find(v=>_.inRange(c,v.range[0],v.range[1]));
-    var Ihi=category.value[1];
-    var Ilo=category.value[0];
-    var Bhi=category.range[1];
-    var Blo=category.range[0];
-    if (_.isUndefined(category)) {category=0;console.warn("[concentration] out of range");}
-    return  (Ihi-Ilo)/(Bhi-Blo)*(c-Blo)+Ilo;
-  },
-  /**
-   *
-   */
-  nowcastConcentration(arr,pollutant,datesArr){
-    var dates = datesArr.map(val=>moment(val));
-    var range = pollutant==="o3"?8:12;
+  aqi(c, pollutant) {
+    if (_.isArray(c)) {
+      return c.map(n => computeAqi(n, pollutant));
+    } else {
+      return computeAqi(c, pollutant);
+    }
 
-    return arr.map((value,index)=>{
-      var w1,w,c1,c2;
-      var means= _(arr)
-      .groupBy((v,i)=>dates[index].diff(dates[i],'hours'))
-      .filter((v,k)=>_.inRange(parseInt(k),range))
-      .map(v=>mean(v))
-      .value();
+    function computeAqi(c, pollutant) {
+      var category = arduair.aqi_ranges[pollutant].find(v => _.inRange(c, v.range[0], v.range[1])); //this return the category that I want.
+      if (_.isUndefined(category)) {
+        console.warn("[concentration] out of range");
+        return undefined;//TODO: it should return 0 or 500 in edge cases
+      } else {
+        var Ihi = category.value[1];
+        var Ilo = category.value[0];
+        var Bhi = category.range[1];
+        var Blo = category.range[0];
 
-      w1 = min(means)/max(means);
-      w  = (w1<= 0.5)? 0.5 : w1;
-
-      c1= _(means)
-        .map((v,k)=>v*Math.pow(w,k))
-        .sum()
-        .value();
-      c2= _(means)
-        .map((v,k)=>Math.pow(w,k))
-        .sum()
-        .value();
-
-      var c= c1/c2;
-      return c;
-    });
-
-    // return arr.map((item,index,arr)=>{//for each item in the array
-    //   var arrays=[]; //create a temporal array to store te evaluated values
-    //   var date=moment(datesArr[index]);//and create a moment.js date
-    //
-    //   arr.forEach((item)=>{// Iterate the entire array Again
-    //     if(item!=undefined){
-    //       var hour = (pollutant!=="o3")?12:8;
-    //       for(var i=1;i>hour;i++){ //to know where to store it
-    //         if(  moment(item).isBetween(date.subtract(i-1, 'hours'),date.subtract(i, 'hours'))  ){
-    //           arrays[i].push(arr[i]);// put the concentration in their place
-    //         }
-    //       }
-    //     }//when I finalize the array
-    //   });
-    //   var ch = arrays.forEach((item)=>{
-    //     return mean([item]); //cal
-    //   });
-    //
-    //   var w1 = min(arr)/max(arr);
-    //   var w  = (w1<= 0.5)? 0.5 : w1;
-    //
-    //   var c1 = ch.reduce((ant,act,index)=>{
-    //     var k=Math.pow(w, index);
-    //     return ant + k*act;
-    //   });
-    //   var c2 = ch.reduce((ant,act,index)=>{
-    //     var k=Math.pow(w, index);
-    //     return ant + k;
-    //   });
-    //   // result concentration
-    //   var c= c1/c2;
-    //   return c;
-    // });
+        return (Ihi - Ilo) / (Bhi - Blo) * (c - Blo) + Ilo;
+      }
+    }
   },
   /**
    *
    */
   nowcastAqi(arr,pollutant,dates){
-    var C=arduair.nowcastConcentration(arr,pollutant,dates);
-    return arduair.aqiArray(C,pollutant);
+    var C=nowcastConcentration(arr,pollutant,dates);
+    return arduair.aqi(C,pollutant);
+    /**
+     * Calculates the right concentration for every value in the arr,depending on the dates array
+     *
+     */
+    function nowcastConcentration(arr,pollutant,datesArr){
+      //console.log(datesArr)
+      var dates = datesArr.map(val=>moment(val));
+      var range = pollutant==="o3"?8:12;//TODO: check calculated ranges
+      var nowcast= (pollutant==="so2"|| pollutant==="no2")?false:true;
+      if (nowcast){
+        return arr.map((value,index)=>{
+          var w1,w,c1,c2;
+          var means= _(arr)
+          .groupBy((v,i)=>dates[index].diff(dates[i],'hours'))
+          .filter((v,k)=>_.inRange(parseInt(k),range))
+          .map(v=>_.mean(v))
+          .value();
+
+          w1 = Math.min(means)/Math.max(means);
+          w  = (w1<= 0.5)? 0.5 : w1;
+
+          c1= _(means)
+            .map((v,k)=>v*Math.pow(w,k))
+            .sum();
+
+          c2= _(means)
+            .map((v,k)=>Math.pow(w,k))
+            .sum();
+
+          var c= c1/c2;
+          return c;
+        });
+      }else{
+        //TODO: calculate aqi for NO2 and SO2
+      }
+
+    }
   }
 };
 /*
@@ -694,7 +484,10 @@ function data() {
   $("#actionBtn-search a").addClass("sync");
   //send AJAX request to get devices data
   $.get('/device', (res) => {
-    arduair.generateDeviceList(res);
+    $("#actionBtn-search a").removeClass("sync");
+    $("#actionBtn-search a").addClass(res.status);
+    toastAndRemoveClass(res.message,"#actionBtn-search a",res.status);
+    generateDeviceCollectionList(res);
   });
 }
 /**
@@ -727,15 +520,10 @@ function pageDataGraph(ctx) {
   $('#graph').removeClass("hide");
   var device = ctx.params.device;
   $.get('/device/' + device, (res) => {
-    arduair.saveDataRequested(res);
-    arduair.generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
-    arduair.bindMenuButtonBehavior();
-    arduair.generateGraphChips(arduair.data);
+    saveDataRequested(res);
+    generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
+    generateGraphChips(arduair.data);
   });
-}
-
-function pageAqiGraph(){
-  arduair.calculateAQI()
 }
 /*////////////////////
 //AJAX Forms
@@ -763,9 +551,7 @@ $(document).ready(() => { // TODO: check if the arrow function breaks the code
     var btn = this.buttonId;
     $(btn).addClass(status);
     $(btn).removeClass("sync");
-    Materialize.toast(res.message, 4000, '', () => {
-      $(btn).removeClass(status);
-    });
+    toastAndRemoveClass(res.message,btn,status);
   }
   //this function is before send the form, it change the state of button ID.
   function formBefore() {
@@ -778,9 +564,7 @@ $(document).ready(() => { // TODO: check if the arrow function breaks the code
     var btn = this.buttonId;
     $(btn).addClass('error');
     $(btn).removeClass("sync");
-    Materialize.toast('error desconocido, intenta de nuevo', 4000, '', () => {
-      $(btn).removeClass('error');
-    });
+    toastAndRemoveClass("error desconocido, intenta de nuevo",btn,'error');
   }
   //this function is triggered when a #config-search-form is sended successful
   function configSearchSuccess(res) {
@@ -788,9 +572,7 @@ $(document).ready(() => { // TODO: check if the arrow function breaks the code
     var btn = this.buttonId;
     $(btn).addClass(status);
     $(btn).removeClass("sync");
-    Materialize.toast(res.message, 4000, '', () => {
-      $(btn).removeClass(status);
-    });
+    toastAndRemoveClass(res.message,btn,status);
     if (res.status == "done") {
       $('#config-device-founded').slideDown(700);
       if (res.device) {

@@ -327,7 +327,7 @@ a.filledGraphData.active{
 #page-graph-chips .chip, #page-graph-chips a{
   margin-right: 10px;
 }
-#page-graph-edit-menu{
+#page-graph-edit-menu,#page-aqigraph-edit-menu{
   position: absolute;
   background-color: rgba(255,255,255,0.0);
   width: 100%

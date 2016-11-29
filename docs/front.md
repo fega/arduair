@@ -52,23 +52,18 @@ Global Object with arduair default configuration and methods
 
 * [arduair](#arduair)
     * [.data](#arduair.data) : <code>Array</code>
-    * [.generateDeviceList(res)](#arduair.generateDeviceList)
-    * [.generateGraphChips()](#arduair.generateGraphChips)
-    * [.saveDataRequested()](#arduair.saveDataRequested)
-    * [.generateGraphMenu()](#arduair.generateGraphMenu)
     * [.normalizeDeviceData()](#arduair.normalizeDeviceData) ⇒ <code>Array</code>
         * [~checkAndNormalize(dates)](#arduair.normalizeDeviceData..checkAndNormalize) ⇒ <code>Array</code>
-    * [.bindMenuButtonBehavior()](#arduair.bindMenuButtonBehavior)
     * [.calculateAQI()](#arduair.calculateAQI)
-    * [.aqiArray()](#arduair.aqiArray)
     * [.aqi()](#arduair.aqi)
-    * [.nowcastConcentration()](#arduair.nowcastConcentration)
     * [.nowcastAqi()](#arduair.nowcastAqi)
+        * [~nowcastConcentration()](#arduair.nowcastAqi..nowcastConcentration)
 
 <a name="arduair.data"></a>
 
 ### arduair.data : <code>Array</code>
-Data retrieved from server, by default is null, it could store until 5spaces, each data contains at least a name and date properties.
+Data retrieved from server, by default is null, it could store until 5
+spaces, each data contains at least a name and date properties.
 
 **Kind**: static property of <code>[arduair](#arduair)</code>  
 **Properties**
@@ -83,46 +78,22 @@ Data retrieved from server, by default is null, it could store until 5spaces, e
 | pressure | <code>Array</code> | Array with pressure data, in mb // TODO: check units |
 | others: | <code>Array</code> | others attributes measured, in this categories, can be grouped 'pm10' and 'pm2.5' in mg/m3, and 'CO', 'O3', 'NO2' and 'SO2' in ug/m3 |
 
-<a name="arduair.generateDeviceList"></a>
-
-### arduair.generateDeviceList(res)
-Generates the table with devices gotten by a request
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| res | <code>Json</code> | Response object |
-
-<a name="arduair.generateGraphChips"></a>
-
-### arduair.generateGraphChips()
-Generates chips for each device loaded
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
-<a name="arduair.saveDataRequested"></a>
-
-### arduair.saveDataRequested()
-Save a requested data in the correct place of arduair.data
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
-<a name="arduair.generateGraphMenu"></a>
-
-### arduair.generateGraphMenu()
-Generates a options menu for each data array.
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="arduair.normalizeDeviceData"></a>
 
 ### arduair.normalizeDeviceData() ⇒ <code>Array</code>
-This method organizes into a form appropriate for graphjs.mainly, this method put all dates (X axis of the graph)in one array and organizes all the measures (Y data) consequently
+This method organizes into a form appropriate for graphjs.
+mainly, this method put all dates (X axis of the graph)
+in one array and organizes all the measures (Y data) consequently
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 **Returns**: <code>Array</code> - Array with the data normalized  
 <a name="arduair.normalizeDeviceData..checkAndNormalize"></a>
 
 #### normalizeDeviceData~checkAndNormalize(dates) ⇒ <code>Array</code>
-Check all data from dates provided if arduair.data.datecontains this date, if true, puts every arduair.data key in thecorresponding place of the date checked. it seems to be a very slowfunction and should be corrected for another better implementation.
+Check all data from dates provided if arduair.data.date
+contains this date, if true, puts every arduair.data key in the
+corresponding place of the date checked. it seems to be a very slow
+function and should be corrected for another better implementation.
 
 **Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
 **Returns**: <code>Array</code> - myArray normalized copy objects from arduair.data  
@@ -131,38 +102,32 @@ Check all data from dates provided if arduair.data.datecontains this date, if t
 | --- | --- | --- |
 | dates | <code>Date</code> | array of dates, mainly concatenated dates from dateArray.sort(dateSort()); |
 
-<a name="arduair.bindMenuButtonBehavior"></a>
-
-### arduair.bindMenuButtonBehavior()
-This function controls the filledGraphData buttons behavior
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="arduair.calculateAQI"></a>
 
 ### arduair.calculateAQI()
-Calculate the air Quality index fromStandar method,NowCast method andInstantCast method
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
-<a name="arduair.aqiArray"></a>
-
-### arduair.aqiArray()
-Calculates the AQI for the given array of concentrations in the pollutant
+Calculate the air Quality index from
+Standar method,
+NowCast method and
+InstantCast method
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="arduair.aqi"></a>
 
 ### arduair.aqi()
 Calculates the AQI for the given "c" (concentration) in the "pollutant"
+if c is an array, returns the an array with the InstantCast aqi values.
 
-**Kind**: static method of <code>[arduair](#arduair)</code>  
-<a name="arduair.nowcastConcentration"></a>
-
-### arduair.nowcastConcentration()
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="arduair.nowcastAqi"></a>
 
 ### arduair.nowcastAqi()
 **Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.nowcastAqi..nowcastConcentration"></a>
+
+#### nowcastAqi~nowcastConcentration()
+Calculates the right concentration for every value in the arr,depending on the dates array
+
+**Kind**: inner method of <code>[nowcastAqi](#arduair.nowcastAqi)</code>  
 <a name="hiding"></a>
 
 ## hiding() ⇒ <code>undefined</code>

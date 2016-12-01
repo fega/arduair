@@ -108,7 +108,7 @@ function generateChipsForGraph(destiny, data) {
       //console.log($(this));
       var index = $(this).parent().attr("id").replace('page-edit-chip-', '');
       data.splice(index, 1, null);
-      arduair.generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
+      generateGraphMenu(arduair.data,arduair.units); //imprimo el menu
   });
 }
 function generateBtnAddToGraph(destiny,dataCount){
@@ -153,7 +153,7 @@ function bindBtnEditGraph(destiny) {
     }
   });
 }
-function generateBtnSwitchGraph(destiny,data,dates){
+function generateBtnSwitchGraph(destiny,data){
   var button = `
   <a id="page-graph-switch" class="btn-floating primary" style="background-color:#2c3e50!important;text-align: center;
     font-size: small;
@@ -164,7 +164,7 @@ function generateBtnSwitchGraph(destiny,data,dates){
   .click(function(){
     var btn = $(this);//the button to bind the function
     if(btn.text().includes("AQI")){
-      generateAqiGraphMenu(data,arduair.line_style);
+      generateAqiGraphMenu(data);
       aqiChart.data.datasets=[];
       addAqiGraphLines(aqiChart);
       aqiChart.update(0);
@@ -186,14 +186,14 @@ function generateBtnSwitchGraph(destiny,data,dates){
 /**
  * Generates a options menu for each data array.
  */
-function generateGraphMenu(data,units,colors) {
+function generateGraphMenu(data,units) {
     data.forEach((el, index) => {
       var ind = index + 1;
       var destiny = `#graph-options-${ind}`;
       var filteredData;
       $(`#graph-options-${ind}`).html('');
       if (el){
-        generateGraphMenuMasterBtn(destiny,colors[index],el.name);
+        generateGraphMenuMasterBtn(destiny,arduair.getColor(index),el.name);
         filteredData=_.omit(el,['date','Location','pst','name']);
         _.forIn(filteredData,(val,key)=>generateGraphMenuBtn(destiny,key,units[key]));
       }
@@ -230,8 +230,8 @@ function generateGraphMenuBtn(destiny,name,units){
           }
           //despues de todo esto:
           if (other.hasClass("active")) {
-              var color = arduair.line_style[oIndex];
-              var line = arduair.line_borders[oValue];
+              var color = arduair.getColor(oIndex);
+              var line = arduair.getLine(oValue);
               data.push({
                   data: arduair.normalizedData[oIndex][oValue],
                   label: oValue,
@@ -253,14 +253,13 @@ function generateGraphMenuMasterBtn(destiny,color,name){
   $(destiny).append(content);
 }
 
-function generateAqiGraphMenu(data,colors){
+function generateAqiGraphMenu(data){
   data.forEach((item, index) => {//forEach element in data
     var ind = index + 1;
     $(`#aqigraph-options-${ind}`).html('');//TODO: it should iterates over this kind of objects
     var destiny = `#aqigraph-options-${ind}`;//set a destiny
     if (item){//generate buttons depending on their keys
-          console.log(item)
-      generateGraphMenuMasterBtn(destiny,colors[index],item.name);
+      generateGraphMenuMasterBtn(destiny,arduair.getColor(index),item.name);
       if (_.has(item,'o3')){
         generateAqiGraphMenuBtn(destiny,'Instant O3','AQI',item.name);
         generateAqiGraphMenuBtn(destiny,'Nowcast O3','AQI',item.name);
@@ -272,10 +271,10 @@ function generateAqiGraphMenu(data,colors){
         generateAqiGraphMenuBtn(destiny,'Nowcast PM10','AQI',item.name);
       }if(_.has(item,'no2')){
         generateAqiGraphMenuBtn(destiny,'NO2','AQI',item.name);
-        generateAqiGraphMenuBtn(destiny,'Instant CO','AQI',item.name);
+        generateAqiGraphMenuBtn(destiny,'Instant NO2','AQI',item.name);
       }if(_.has(item,'so2')){
         generateAqiGraphMenuBtn(destiny,'SO2','AQI',item.name);
-        generateAqiGraphMenuBtn(destiny,'Instant CO','AQI',item.name);
+        generateAqiGraphMenuBtn(destiny,'Instant SO2','AQI',item.name);
       }if(_.has(item,'co')){
         generateAqiGraphMenuBtn(destiny,'Nowcast CO','AQI',item.name);
         generateAqiGraphMenuBtn(destiny,'Instant CO','AQI',item.name);
@@ -285,7 +284,7 @@ function generateAqiGraphMenu(data,colors){
 }
 function generateAqiGraphMenuBtn(destiny,name,units,device){
   var content =`
-  <a  class="btn filledGraphData" data-var="${name}" data-units="${units}" data-device="${device}" >
+  <a  class="btn filledGraphData" data-var="${name}" data-units="${units}" data-device="${device }" >
    ${name} ${units}
   </a>`;
 
@@ -293,77 +292,42 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
     var item=$(this);
     var device=item.data('device');
     var label=item.data('var');//get the button data
-    var normalizedLabel='';
-    var active= item.hasClass("active")
+    var pollutant= _(label).toLower().replace("instant ","").replace("nowcast ","");
+    var normalizedLabel=_.camelCase(label+" AQI");
+    var active= item.hasClass("active");
+    var object= _.find(arduair.normalizedData,{name:device});
+    var objectIndex= _.findIndex(arduair.normalizedData,{name:device});
+
+    console.log(objectIndex);
+    var result={};
     if(active){// if the button is active
       item.removeClass("active");//put inactive off
       _(aqiChart.data.datasets).remove({label,device});//and delete the data
     }else{//if Not
       $(this).addClass("active");//set it as active
-      var object=_(arduair.aqi_data).find({device});
-      if(object){//and search if the arduair.aqi_data already has the device.
-        //if true, check if this device also have the data searched
-         if(object.label){
-           //pass this object to the aqichart.data.datasets
-         }else{
-          //calculate this aqi and pass to the aqichart.data.datasets
+      if(!_.has(object,normalizedLabel)){
+        if(normalizedLabel.includes("instant")){
+          arduair.data[objectIndex][normalizedLabel]=arduair.aqi(arduair.data[objectIndex][pollutant],pollutant);
+        }else{
+          arduair.data[objectIndex][normalizedLabel]=arduair.nowcastAqi(arduair.data[objectIndex][pollutant],pollutant,arduair.normalizedDates);
         }
-      }else{
-        //calculate this aqi and pass to the aqichart.data.datasets
-       }
-      //and search if the arduair.aqiData has already data with certain data with the device and the label of the button
+      }
+      result.label=label;
+      result.borderColor=arduair.getColor(objectIndex);
+      result.borderDash=arduair.getLine(pollutant);
+      aqiChart.data.datasets.push;
     }
   });
 }
 function addAqiGraphLines(graph) {
   var lines = [{
           label: 'aqi',
-          data: [50, 50],
+          data: [130, 130],
           borderColor: "#00e500",
-          backgroundColor: "rgba(0,230,0,.1)",
-          fill: true,
-          pointRadius: 0,
-          borderWidth: 1
-        }, { //AQI LINES
-          label: 'aqi',
-          data: [100, 100],
-          borderColor: "#ffff00",
-          backgroundColor: "rgba(255,255,0,.08)",
-          fill: true,
-          pointRadius: 0,
-        }, { //AQI LINES
-          label: 'aqi',
-          data: [150, 150],
-          borderColor: "rgb(255,127,0)",
-          backgroundColor: "rgba(255,127,0,.04)",
-          fill: true,
-          pointRadius: 0,
-        }, { //AQI LINES
-          label: 'aqi',
-          data: [200, 200],
-          borderColor: "#ff0000",
-          backgroundColor: "rgba(255,0,0,.04)",
-          fill: true,
-          pointRadius: 0,
-        }, { //AQI LINES
-          label: 'aqi',
-          data: [300, 300],
-          borderColor: "rgb(164,61,155)",
-          backgroundColor: "rgba(164,61,155,.04)",
-          fill: true,
-          pointRadius: 0,
-        }, { //AQI LINES
+        },{ //AQI LINES
           label: 'aqi',
           data: [400, 400],
-          borderColor: "#94001e",
-          pointRadius: 0,
-        }, { //AQI LINES
-          label: 'aqi',
-          data: [500, 500],
           borderColor: "rgb(148,0,30)",
-          backgroundColor: "rgba(148,0,30,.05)",
-          fill: true,
-          pointRadius: 0
   }];
   lines.forEach(val=>graph.data.datasets.push(val));
 }
@@ -401,16 +365,6 @@ var myChart = new Chart($("#chart"), {
                 type: "time"
             }]
         }
-    },
-    annotation: {
-      annotations: [{
-        type: 'line',
-        mode: 'horizontal',
-        scaleID: 'y-axis-0',
-        value: 10,
-        borderColor: 'black',
-        borderWidth: 3
-      }]
     }
 });
 /**
@@ -430,16 +384,66 @@ var aqiChart = new Chart($("#aqi-chart"), {
       xAxes: [{
         type: "time"
       }]
+    },
+    annotation: {
+      annotations: [{
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 50,
+        borderColor: '#00e500',
+        borderWidth: 1
+      },{
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 100,
+        borderColor: '#ffff00',
+        borderWidth: 1
+      }, { //AQI LINES
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 150,
+        borderColor: "rgb(255,127,0)",
+        backgroundColor: "rgba(255,127,0,.04)",
+        fill: true,
+        pointRadius: 0,
+      }, { //AQI LINES
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 200,
+        borderColor: "#ff0000",
+        backgroundColor: "rgba(255,0,0,.04)",
+        fill: true,
+        pointRadius: 0,
+      }, { //AQI LINES
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 300,
+        borderColor: "rgb(164,61,155)",
+        backgroundColor: "rgba(164,61,155,.04)",
+        fill: true,
+        pointRadius: 0,
+      }, { //AQI LINES
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 400,
+        borderColor: "#94001e",
+        pointRadius: 0,
+      }, { //AQI LINES
+        type: 'line',
+        mode: 'horizontal',
+        scaleID: 'y-axis-0',
+        value: 500,
+        borderColor: "rgb(148,0,30)",
+        backgroundColor: "rgba(148,0,30,.05)",
+        fill: true,
+        pointRadius: 0
+}]
     }
-  },
-  annotation: {
-    annotations: [{
-      type: 'line',
-      mode: 'horizontal',
-      scaleID: 'y-axis-0',
-      value: 10,
-      borderColor: 'black',
-      borderWidth: 3
-    }]
   }
 });

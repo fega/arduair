@@ -58,6 +58,8 @@ Global Object with arduair default configuration and methods
     * [.aqi()](#arduair.aqi)
     * [.nowcastAqi()](#arduair.nowcastAqi)
         * [~nowcastConcentration()](#arduair.nowcastAqi..nowcastConcentration)
+    * [.getColor()](#arduair.getColor)
+    * [.getLine()](#arduair.getLine)
 
 <a name="arduair.data"></a>
 
@@ -128,6 +130,14 @@ if c is an array, returns the an array with the InstantCast aqi values.
 Calculates the right concentration for every value in the arr,depending on the dates array
 
 **Kind**: inner method of <code>[nowcastAqi](#arduair.nowcastAqi)</code>  
+<a name="arduair.getColor"></a>
+
+### arduair.getColor()
+**Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="arduair.getLine"></a>
+
+### arduair.getLine()
+**Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="hiding"></a>
 
 ## hiding() ⇒ <code>undefined</code>

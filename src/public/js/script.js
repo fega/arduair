@@ -30,8 +30,6 @@ var arduair = {
   data: [null],
   normalizedData: [null],
   normalizedDates:[null],
-  aqiData: [null],
-  instantData:[null],
   units: {
       humidity: '%',
       temperature: '°C',
@@ -254,8 +252,10 @@ var arduair = {
       "no2": [2, 2],
       "pm25": [2, 2],
       "co": [5, 5],
-      "ch4": [15, 5],
-      "nh3": [3, 3, 3, 15],
+      "nowcast pm10": [15, 5],
+      "nowcast pm2.5": [3, 1, 3, 15],
+      "nowcast o3": [3, 10, 3, 15],
+      "nowcast co": [10, 3, 10, 15],
       "default": [0, 1],
   },
 
@@ -381,6 +381,33 @@ var arduair = {
    *
    */
   nowcastAqi(arr,pollutant,dates){
+    switch (pollutant) {
+      case "instantO3Aqi":
+      case "nowcastO3Aqi":
+        pollutant="o3";
+        break;
+      case "instantCoAqi":
+      case "nowcastCoAqi":
+        pollutant="co_8h";
+        break;
+      case "instantPm10Aqi":
+      case "nowcastPm10Aqi":
+        pollutant="pm10_24h";
+        break;
+      case "instantPm25Aqi":
+      case "nowcastPm25Aqi":
+        pollutant="pm25_24h";
+        break;
+      case "no2":
+      case "no2Aqi":
+        pollutant="no2_1h";
+        break;
+      case "so2":
+      case "so2Aqi":
+        pollutant="so2_1h";
+        break;
+
+    }
     var C=nowcastConcentration(arr,pollutant,dates);
     return arduair.aqi(C,pollutant);
     /**
@@ -420,6 +447,18 @@ var arduair = {
       }
 
     }
+  },
+  /**
+   *
+   */
+  getColor(index){
+    return arduair.line_style[index];
+  },
+  /**
+   *
+   */
+  getLine(pollutant){
+    return arduair.line_borders[pollutant];
   }
 };
 /*
@@ -521,7 +560,7 @@ function pageDataGraph(ctx) {
   var device = ctx.params.device;
   $.get('/device/' + device, (res) => {
     saveDataRequested(res);
-    generateGraphMenu(arduair.data,arduair.units,arduair.line_style); //imprimo el menu
+    generateGraphMenu(arduair.data,arduair.units); //imprimo el menu
     generateGraphChips(arduair.data);
   });
 }

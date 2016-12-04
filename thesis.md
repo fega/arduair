@@ -32,7 +32,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] PDF report feature
 - [ ] NowCast Testing
 - [ ] InstantCast Testing
-- [ ] Summary table Feature
+- [ ] ~~Summary table Feature~~
 - [x] AQI chart mode
 - [x] AQI lines for chart
 - [ ] Total AQI

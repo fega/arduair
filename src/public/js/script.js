@@ -252,6 +252,7 @@ var arduair = {
       "no2": [2, 2],
       "pm25": [2, 2],
       "co": [5, 5],
+      "o3": [3, 10, 3, 15],
       "nowcast pm10": [15, 5],
       "nowcast pm2.5": [3, 1, 3, 15],
       "nowcast o3": [3, 10, 3, 15],
@@ -330,32 +331,10 @@ var arduair = {
       }
   },
   /**
-   * Calculate the air Quality index from
-   * Standar method,
-   * NowCast method and
-   * InstantCast method
-   */
-  calculateAQI(obj,dates){
-    var result ={};
-    //InstantCast
-    result.o3_ins   = arduair.aqi(obj.o3,"o3_1h",dates);
-    result.co_ins   = arduair.aqi(obj.co,"co_8h",dates);
-    result.no2_ins  = arduair.aqi(obj.no2,"no2_1h",dates);
-    result.so2_ins  = arduair.aqi(obj.so2,"so2_24h",dates);
-    result.pm10_ins = arduair.aqi(obj.pm10,"pm10_24h",dates);
-    result.pm25_ins = arduair.aqi(obj.pm25,"pm25_24h",dates);
-    //Nowcast
-    result.o3_now   = arduair.aqi(obj.o3,"o3_1h",dates);
-    result.co_now   = arduair.aqi(obj.co,"co_8h",dates);
-    result.pm10_now = arduair.aqi(obj.pm10,"pm10_24h",dates);
-    result.pm25_now = arduair.aqi(obj.pm25,"pm25_24h",dates);
-    return result;
-  },
-  /**
    * Calculates the AQI for the given "c" (concentration) in the "pollutant"
    * if c is an array, returns the an array with the InstantCast aqi values.
    */
-  aqi(c, pollutant) {
+      aqi(c, pollutant) {
     if (_.isArray(c)) {
       return c.map(n => computeAqi(n, pollutant));
     } else {
@@ -363,6 +342,33 @@ var arduair = {
     }
 
     function computeAqi(c, pollutant) {
+
+      switch (pollutant) {
+        case "instantO3Aqi":
+          pollutant="o3";
+          break;
+        case "instantCoAqi":
+        case "co":
+          pollutant="co_8h";
+          break;
+        case "instantPm10Aqi":
+        case "pm10":
+          pollutant="pm10_24h";
+          break;
+        case "instantPm25Aqi":
+        case "pm2.5":
+        case "pm25":
+          pollutant="pm25_24h";
+          break;
+        case "no2":
+        case "no2Aqi":
+          pollutant="no2_1h";
+          break;
+        case "so2":
+        case "so2Aqi":
+          pollutant="so2_24h";
+          break;
+      }
       var category = arduair.aqi_ranges[pollutant].find(v => _.inRange(c, v.range[0], v.range[1])); //this return the category that I want.
       if (_.isUndefined(category)) {
         console.warn("[concentration] out of range");
@@ -381,21 +387,22 @@ var arduair = {
    *
    */
   nowcastAqi(arr,pollutant,dates){
+    console.log("ARRAY");
+    console.log(arr);
     switch (pollutant) {
-      case "instantO3Aqi":
       case "nowcastO3Aqi":
         pollutant="o3";
         break;
-      case "instantCoAqi":
       case "nowcastCoAqi":
+      case "co":
         pollutant="co_8h";
         break;
-      case "instantPm10Aqi":
       case "nowcastPm10Aqi":
         pollutant="pm10_24h";
         break;
-      case "instantPm25Aqi":
       case "nowcastPm25Aqi":
+      case "pm2.5":
+      case "pm25":
         pollutant="pm25_24h";
         break;
       case "no2":
@@ -404,7 +411,7 @@ var arduair = {
         break;
       case "so2":
       case "so2Aqi":
-        pollutant="so2_1h";
+        pollutant="so2_24h";
         break;
 
     }

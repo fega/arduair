@@ -107,8 +107,15 @@ function generateChipsForGraph(destiny, data) {
   $(".page-edit-chip i.material-icons").click(function() { //AÑADO LOS CLICKS del boton "clear", para eliminar la entrada
       //console.log($(this));
       var index = $(this).parent().attr("id").replace('page-edit-chip-', '');
+      var device = $(this).parent().text();
+      device=_.trim(device).slice(0, -5); //TODO add device name validation withoutspaces
+      console.log("DEVICE:")
+      console.log(device)
       data.splice(index, 1, null);
       generateGraphMenu(arduair.data,arduair.units); //imprimo el menu
+      generateAqiGraphMenu(arduair.data); //imprimo el menu
+      _.remove(aqiChart.data.datasets,{device});//and delete the data
+      aqiChart.update(0);
   });
 }
 function generateBtnAddToGraph(destiny,dataCount){
@@ -166,7 +173,6 @@ function generateBtnSwitchGraph(destiny,data){
     if(btn.text().includes("AQI")){
       generateAqiGraphMenu(data);
       aqiChart.data.datasets=[];
-      addAqiGraphLines(aqiChart);
       aqiChart.update(0);
       bindBtnEditGraph("#page-aqigraph-edit-menu");
       btn.text("[C]");//changes button text
@@ -289,47 +295,46 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
   </a>`;
 
   $(content ).appendTo(destiny).bind('click.namespace', function() {//when you do click
+    console.log("PROBANDO FUNCION")
     var item=$(this);
     var device=item.data('device');
     var label=item.data('var');//get the button data
-    var pollutant= _(label).toLower().replace("instant ","").replace("nowcast ","");
+    var pollutant= _(label).toLower().replace("instant ","").replace("nowcast ","").replace(".","").replace(" ","");
     var normalizedLabel=_.camelCase(label+" AQI");
     var active= item.hasClass("active");
     var object= _.find(arduair.normalizedData,{name:device});
     var objectIndex= _.findIndex(arduair.normalizedData,{name:device});
-
-    console.log(objectIndex);
     var result={};
     if(active){// if the button is active
       item.removeClass("active");//put inactive off
-      _(aqiChart.data.datasets).remove({label,device});//and delete the data
+      _.remove(aqiChart.data.datasets,{label,device});//and delete the data
+      aqiChart.update(0);
     }else{//if Not
+      console.log("PROBANDO ACTIVE MODE")
+      console.log(label)
+      console.log(normalizedLabel)
+      console.log(object)
+      console.log(objectIndex)
+      console.log(result)
+
       $(this).addClass("active");//set it as active
       if(!_.has(object,normalizedLabel)){
         if(normalizedLabel.includes("instant")){
-          arduair.data[objectIndex][normalizedLabel]=arduair.aqi(arduair.data[objectIndex][pollutant],pollutant);
+          result.data=arduair.data[objectIndex][normalizedLabel]=arduair.aqi(arduair.data[objectIndex][pollutant],pollutant);
         }else{
-          arduair.data[objectIndex][normalizedLabel]=arduair.nowcastAqi(arduair.data[objectIndex][pollutant],pollutant,arduair.normalizedDates);
+          result.data=arduair.data[objectIndex][normalizedLabel]=arduair.nowcastAqi(arduair.data[objectIndex][pollutant],pollutant,arduair.normalizedDates);
         }
       }
       result.label=label;
       result.borderColor=arduair.getColor(objectIndex);
       result.borderDash=arduair.getLine(pollutant);
-      aqiChart.data.datasets.push;
+      result.device = device;
+      aqiChart.data.datasets.push(result);
+      aqiChart.data.labels = arduair.normalizedDates;
+
+      aqiChart.update(0);
     }
   });
-}
-function addAqiGraphLines(graph) {
-  var lines = [{
-          label: 'aqi',
-          data: [130, 130],
-          borderColor: "#00e500",
-        },{ //AQI LINES
-          label: 'aqi',
-          data: [400, 400],
-          borderColor: "rgb(148,0,30)",
-  }];
-  lines.forEach(val=>graph.data.datasets.push(val));
 }
 /* eslint-enable */
 /*///////////////////////////////////////

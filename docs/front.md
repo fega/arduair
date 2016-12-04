@@ -63,8 +63,7 @@ Global Object with arduair default configuration and methods
 <a name="arduair.data"></a>
 
 ### arduair.data : <code>Array</code>
-Data retrieved from server, by default is null, it could store until 5
-spaces, each data contains at least a name and date properties.
+Data retrieved from server, by default is null, it could store until 5spaces, each data contains at least a name and date properties.
 
 **Kind**: static property of <code>[arduair](#arduair)</code>  
 **Properties**
@@ -82,19 +81,14 @@ spaces, each data contains at least a name and date properties.
 <a name="arduair.normalizeDeviceData"></a>
 
 ### arduair.normalizeDeviceData() ⇒ <code>Array</code>
-This method organizes into a form appropriate for graphjs.
-mainly, this method put all dates (X axis of the graph)
-in one array and organizes all the measures (Y data) consequently
+This method organizes into a form appropriate for graphjs.mainly, this method put all dates (X axis of the graph)in one array and organizes all the measures (Y data) consequently
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 **Returns**: <code>Array</code> - Array with the data normalized  
 <a name="arduair.normalizeDeviceData..checkAndNormalize"></a>
 
 #### normalizeDeviceData~checkAndNormalize(dates) ⇒ <code>Array</code>
-Check all data from dates provided if arduair.data.date
-contains this date, if true, puts every arduair.data key in the
-corresponding place of the date checked. it seems to be a very slow
-function and should be corrected for another better implementation.
+Check all data from dates provided if arduair.data.datecontains this date, if true, puts every arduair.data key in thecorresponding place of the date checked. it seems to be a very slowfunction and should be corrected for another better implementation.
 
 **Kind**: inner method of <code>[normalizeDeviceData](#arduair.normalizeDeviceData)</code>  
 **Returns**: <code>Array</code> - myArray normalized copy objects from arduair.data  
@@ -106,8 +100,7 @@ function and should be corrected for another better implementation.
 <a name="arduair.aqi"></a>
 
 ### arduair.aqi()
-Calculates the AQI for the given "c" (concentration) in the "pollutant"
-if c is an array, returns the an array with the InstantCast aqi values.
+Calculates the AQI for the given "c" (concentration) in the "pollutant"if c is an array, returns the an array with the InstantCast aqi values.
 
 **Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="arduair.nowcastAqi"></a>

@@ -25,7 +25,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] Add documentation and designs as an attachment
 
 ## Server
-- [ ] add config upload and download support
+- [x] add config upload and download support
 
 ## Client
 
@@ -33,10 +33,10 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] NowCast Testing
 - [ ] InstantCast Testing
 - [ ] Summary table Feature
-- [ ] AQI chart mode
-- [ ] AQI lines for chart
+- [x] AQI chart mode
+- [x] AQI lines for chart
 - [ ] Total AQI
-- [ ] refactoring code
+- [x] refactoring code
 
 ## Documentation
 

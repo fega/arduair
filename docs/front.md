@@ -54,7 +54,6 @@ Global Object with arduair default configuration and methods
     * [.data](#arduair.data) : <code>Array</code>
     * [.normalizeDeviceData()](#arduair.normalizeDeviceData) ⇒ <code>Array</code>
         * [~checkAndNormalize(dates)](#arduair.normalizeDeviceData..checkAndNormalize) ⇒ <code>Array</code>
-    * [.calculateAQI()](#arduair.calculateAQI)
     * [.aqi()](#arduair.aqi)
     * [.nowcastAqi()](#arduair.nowcastAqi)
         * [~nowcastConcentration()](#arduair.nowcastAqi..nowcastConcentration)
@@ -104,15 +103,6 @@ function and should be corrected for another better implementation.
 | --- | --- | --- |
 | dates | <code>Date</code> | array of dates, mainly concatenated dates from dateArray.sort(dateSort()); |
 
-<a name="arduair.calculateAQI"></a>
-
-### arduair.calculateAQI()
-Calculate the air Quality index from
-Standar method,
-NowCast method and
-InstantCast method
-
-**Kind**: static method of <code>[arduair](#arduair)</code>  
 <a name="arduair.aqi"></a>
 
 ### arduair.aqi()

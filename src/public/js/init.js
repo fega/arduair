@@ -1,4 +1,4 @@
-/*global Chart, jQuery $ myChart, Materialize arduair _*/
+/*global Chart, jQuery $ myChart, Materialize arduair _ moment pdfMake*/
 /* exported myChart*/
 /*///////////////////////////////////////
 MaterializeCSS initialization
@@ -335,6 +335,86 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
       aqiChart.update(0);
     }
   });
+}
+
+function generatePDF(data,firstDate,lastDate){
+  firstDate =moment(firstDate);
+  lastDate  =moment(lastDate);
+  if (_.isEmpty(data)){//check if the data is empty
+    toastAndRemoveClass("There is no data to print","","");
+    return;
+  }
+  if(firstDate.diff(lastDate)<=0){//check the input dates
+    toastAndRemoveClass("LastDateError","","");
+    return;
+  }
+  var pdf={
+    content:[{
+      text: "ARDUAIR summary document",
+      style:"header",
+      alignment: 'center'
+    },{
+      text:" "
+    },{
+      text:"Devices:",
+      style: 'subheader'
+    },{
+      text:"Devices:",//for each data.devices....
+    },{
+      text:" "
+    },{
+      text:"date Ranges:"
+    },{
+      text: `From:  ${firstDate.format("dddd, MMMM Do YYYY, h:mm:ss a")}
+      To:        ${lastDate.format("dddd, MMMM Do YYYY, h:mm:ss a")}`
+    },{
+      text:" "
+    },{
+      text:"Results"
+    },{
+      table: {
+								headerRows: 1,
+								// keepWithHeaderRows: 1,
+								// dontBreakRows: true,
+								body: [//todo, put devices
+										[
+                    { text: 'Parameter', style: 'tableHeader' },
+                    { text: 'Header 1', style: 'tableHeader' },//TODO: set devices as headers
+                    { text: 'Header 2', style: 'tableHeader' },
+                    { text: 'Header 3', style: 'tableHeader' },
+                    { text: 'Header 4', style: 'tableHeader' },
+                    { text: 'Header 5', style: 'tableHeader' }],
+										[{text:"Min", style: 'tableHeader' },      "","","",""],
+                    [{text:"Max", style: 'tableHeader' },      "","","",""],
+                    [{text:"Mean", style: 'tableHeader' },     "","","",""],
+                    [{text:"Median", style: 'tableHeader' },   "","","",""],
+                    [{text:"Peak hour", style: 'tableHeader' },"","","",""],
+								]
+						}
+    }],
+    styles: {
+      header: {
+        fontSize: 25,
+        bold: true
+      },
+      subheader: {
+        fontSize: 15,
+        bold: true
+      },
+      tableHeader: {
+			fontSize: 12,
+			color:"#2980b9",
+      },
+      quote: {
+        italics: true
+      },
+      small: {
+        fontSize: 8
+      }
+    }
+  };
+
+   pdfMake.createPdf(pdf).open();
 }
 /* eslint-enable */
 /*///////////////////////////////////////

@@ -26,24 +26,52 @@ Don't care about this file. it's only to organize my thoughts.
 
 ## Server
 - [x] add config upload and download support
+- [ ] send configuration file after device /configure submit
 
 ## Client
 
 - [ ] PDF report feature
+- [ ] Download in csv
 - [ ] NowCast Testing
 - [ ] InstantCast Testing
-- [ ] ~~Summary table Feature~~
 - [x] AQI chart mode
 - [x] AQI lines for chart
-- [ ] Total AQI
 - [x] refactoring code
+- [ ] change fixed-action-btn position to fixed
+- [ ] change "submit" to "search device" in /configure
+
 
 ## Documentation
 
-- [ ] Finish Fritzing Sketch
+- [x] Finish Fritzing Sketch
 - [ ] User Manual
+	- [ ] Introducción
+		- [ ] Primer parrafo
+		- [ ] Medidas de seguridad
+		- [ ] Características del dispositivo
+		- [ ] Extraer/insertar la microSD
+		- [ ] Cargar la bateria del dispositivo
+	- [ ] Configurar el dispositivo
+		- [ ] Registrar el dispositivo en la plataforma
+		- [ ] Configurar el dispositivo
+		- [ ] Opciones de configuracion del dispositivo
+	- [ ] Realizar monitoreos
+	- [ ] Revisar los datos
+		- [ ] Revisar los datos en la plataforma
+			- [ ] Buscar el dispositivo
+			- [ ] Añadir un nuevo dispositivo a la visualizacion
+			- [ ] Eliminar un dispositivo de la visalizacion
+			- [ ] Seleccionar parametros a visualizar
+			- [ ] Ver Indice de calidad de aire AQI
+			- [ ] Descargar informe en PDF
+			- [ ] Descargar datos en CSV
 - [ ] Technical Documentation
-
+	- [ ] Software Documentation
+		- [ ] Front-end Documentation
+		- [ ] Back-end Documentation
+	- [ ] Hardware Documentation
+	 - [ ] Fritzing Sketch
+	 - [ ] Shell Sketch
 ## Hardware
 
 - [ ] Insert calibration function
@@ -53,5 +81,6 @@ Don't care about this file. it's only to organize my thoughts.
 
 ## others
 
-- [ ] fill institutional documents
+- [x] fill institutional documents
+- [x] update institutional documents
 - [x] Send kento email

@@ -44,27 +44,41 @@ Don't care about this file. it's only to organize my thoughts.
 ## Documentation
 
 - [x] Finish Fritzing Sketch
+
 - [ ] User Manual
 	- [ ] Introducción
 		- [ ] Primer parrafo
 		- [ ] Medidas de seguridad
 		- [ ] Características del dispositivo
-		- [ ] Extraer/insertar la microSD
-		- [ ] Cargar la bateria del dispositivo
-	- [ ] Configurar el dispositivo
-		- [ ] Registrar el dispositivo en la plataforma
-		- [ ] Configurar el dispositivo
-		- [ ] Opciones de configuracion del dispositivo
-	- [ ] Realizar monitoreos
+		- [ ] Extraer la microSD
+			- [x] parrafo
+			- [ ] imagen
+		- [x] Insertar la microSD
+		- [x] Cargar la bateria del dispositivo
+		- [ ] Revision de datos guardados en la microSD
+	- [ ] Solucionar problemas comunes.
+		- [ ] El led rojo parpadea.
+		- [ ] La luz naranja se queda encendida
+		- [ ] El componente X no esta funcionando correctamente.
+	- [x] Configurar el dispositivo
+		- [x] Registrar el dispositivo en la plataforma
+		- [x] Configurar el dispositivo
+		- [x] Configurar la hora del dispositivo
+		- [x] Opciones de configuracion del dispositivo
+		- [x] Editar manualmente el archivo de configuracion
+
+	- [x] Realizar monitoreos
+
 	- [ ] Revisar los datos
 		- [ ] Revisar los datos en la plataforma
-			- [ ] Buscar el dispositivo
-			- [ ] Añadir un nuevo dispositivo a la visualizacion
-			- [ ] Eliminar un dispositivo de la visalizacion
-			- [ ] Seleccionar parametros a visualizar
-			- [ ] Ver Indice de calidad de aire AQI
-			- [ ] Descargar informe en PDF
-			- [ ] Descargar datos en CSV
+			- [x] Buscar el dispositivo
+			- [x] Añadir un nuevo dispositivo a la visualizacion
+			- [x] Eliminar un dispositivo de la visalizacion
+			- [x] Seleccionar parametros a visualizar
+			- [x] Ver Indice de calidad de aire AQI
+		- [ ] Descargar informe en PDF
+		- [ ] Descargar datos en CSV
+		
 - [ ] Technical Documentation
 	- [ ] Software Documentation
 		- [ ] Front-end Documentation
@@ -78,6 +92,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] Add "get configuration" feature
 - [ ] Add MQ 131 support
 - [ ] Create the container box
+- [ ] Insert time calibration function
 
 ## others
 

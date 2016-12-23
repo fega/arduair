@@ -28,6 +28,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] add config upload and download support
 - [x] send configuration file after device /configure submit
 - [x] delete device/pass duplication
+- [x] datecheck refractored
 
 ## Client
 

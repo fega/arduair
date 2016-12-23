@@ -47,19 +47,14 @@ Don't care about this file. it's only to organize my thoughts.
 
 - [ ] User Manual
 	- [ ] Introducción
-		- [ ] Primer parrafo
-		- [ ] Medidas de seguridad
+		- [x] Primer parrafo
 		- [ ] Características del dispositivo
 		- [ ] Extraer la microSD
 			- [x] parrafo
 			- [ ] imagen
 		- [x] Insertar la microSD
 		- [x] Cargar la bateria del dispositivo
-		- [ ] Revision de datos guardados en la microSD
-	- [ ] Solucionar problemas comunes.
-		- [ ] El led rojo parpadea.
-		- [ ] La luz naranja se queda encendida
-		- [ ] El componente X no esta funcionando correctamente.
+		- [x] Revision de datos guardados en la microSD
 	- [x] Configurar el dispositivo
 		- [x] Registrar el dispositivo en la plataforma
 		- [x] Configurar el dispositivo
@@ -69,16 +64,16 @@ Don't care about this file. it's only to organize my thoughts.
 
 	- [x] Realizar monitoreos
 
-	- [ ] Revisar los datos
-		- [ ] Revisar los datos en la plataforma
+	- [x] Revisar los datos
+		- [x] Revisar los datos en la plataforma
 			- [x] Buscar el dispositivo
 			- [x] Añadir un nuevo dispositivo a la visualizacion
 			- [x] Eliminar un dispositivo de la visalizacion
 			- [x] Seleccionar parametros a visualizar
 			- [x] Ver Indice de calidad de aire AQI
-		- [ ] Descargar informe en PDF
-		- [ ] Descargar datos en CSV
-		
+		- [x] Descargar informe en PDF
+		- [x] Descargar datos en CSV
+
 - [ ] Technical Documentation
 	- [ ] Software Documentation
 		- [ ] Front-end Documentation
@@ -86,6 +81,7 @@ Don't care about this file. it's only to organize my thoughts.
 	- [ ] Hardware Documentation
 	 - [ ] Fritzing Sketch
 	 - [ ] Shell Sketch
+
 ## Hardware
 
 - [ ] Insert calibration function

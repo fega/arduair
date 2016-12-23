@@ -18,7 +18,7 @@
 		{{!submit form button}}
 		<div class="row">
 			<div class="col s12 m12	l12 center">
-				<input id="config-search-btn" type="submit" value="Submit" class=" waves-teal btn-large primary darken" form="config-search-form">
+				<input id="config-search-btn" type="submit" value="Search device" class=" waves-teal btn-large primary darken" form="config-search-form">
 			</div>
 		</div>
 	</form>
@@ -72,7 +72,12 @@
 					{{>forms/input c="s6 m4 l2" n="pm25_x2" id="config-pm25_x2" l="pm25_x2"}}
 					{{>forms/input c="s6 m4 l2" n="pm25_x1" id="config-pm25_x1" l="pm25_x1"}}
 					{{>forms/input c="s6 m4 l2" n="pm25_b"  id="config-pm25_b"  l="pm25_b"}}
-					<input id="config-search-btn" type="submit" value="Submit" class=" waves-teal btn-large primary darken">
+					<div class="row">
+					<div class="col s12 center">
+						<input id="config-search-btn" type="submit" value="Send configuration" class=" waves-teal btn-large primary darken center">
+					</div>
+				</div>
+
 				</div>
 				{{!--TODO change this button--}}
 	 		</form>

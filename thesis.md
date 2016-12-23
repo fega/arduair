@@ -27,7 +27,7 @@ Don't care about this file. it's only to organize my thoughts.
 ## Server
 - [x] add config upload and download support
 - [x] send configuration file after device /configure submit
-- [x] delete device/pass duplication
+- [ ] delete device/pass duplication
 - [x] datecheck refractored
 
 ## Client
@@ -40,6 +40,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] AQI lines for chart
 - [x] refactoring code
 - [ ] change fixed-action-btn position to fixed
+- [x] Deleted configure's fixed-action-btn
 - [ ] change "submit" to "search device" in /configure
 
 

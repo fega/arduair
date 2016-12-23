@@ -4,6 +4,7 @@ var store = require('../db/storeData');
 var getConfig = require('../db/getDeviceConfig');
 var storeConfig = require('../db/storeConfig');
 var dateCheck = require('../lib/datecheck');
+const generateConfigFile =require('../db/generateConfigFile');
 /**
  * GET /:device/:password/config
  * get the config for the provided device, usefull to store the configuration
@@ -16,7 +17,7 @@ router.get('/:device/:password/config',getConfig,(req,res)=>{
  * POST /:device/:password/config
  * POST the config for the provided device, usefull to store the configuration in the db
  */
-router.post('/:device/:password/config',storeConfig,(req,res)=>{
+router.post('/:device/:password/config',storeConfig,generateConfigFile,(req,res)=>{
 	res.send(req.result);
 });
 /**

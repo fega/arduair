@@ -26,7 +26,8 @@ Don't care about this file. it's only to organize my thoughts.
 
 ## Server
 - [x] add config upload and download support
-- [ ] send configuration file after device /configure submit
+- [x] send configuration file after device /configure submit
+- [ ] delete device/pass duplication
 
 ## Client
 

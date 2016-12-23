@@ -476,8 +476,18 @@ page("/data/:device", pageDataGraph);
 page("/data", data);
 page("/configure", configure);
 page("/add", pageAdd);
+page("/documentation", pageDocumentation);
 page("/debug", pageDebugger);
 page();
+/**
+ * Show the documentation tab
+ * @function
+ * @return {undefined}
+ */
+function pageDocumentation(){
+  hiding();
+  $("#documentation").removeClass("hide");
+}
 /**
  * This function hides all tabs and special buttons
  * @function

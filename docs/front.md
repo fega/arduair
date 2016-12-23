@@ -9,6 +9,9 @@
 ## Functions
 
 <dl>
+<dt><a href="#pageDocumentation">pageDocumentation()</a> ⇒ <code>undefined</code></dt>
+<dd><p>Show the documentation tab</p>
+</dd>
 <dt><a href="#hiding">hiding()</a> ⇒ <code>undefined</code></dt>
 <dd><p>This function hides all tabs and special buttons</p>
 </dd>
@@ -121,6 +124,12 @@ Calculates the right concentration for every value in the arr,depending on the d
 
 ### arduair.getLine()
 **Kind**: static method of <code>[arduair](#arduair)</code>  
+<a name="pageDocumentation"></a>
+
+## pageDocumentation() ⇒ <code>undefined</code>
+Show the documentation tab
+
+**Kind**: global function  
 <a name="hiding"></a>
 
 ## hiding() ⇒ <code>undefined</code>

@@ -42,6 +42,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] change fixed-action-btn position to fixed
 - [x] Deleted configure's fixed-action-btn
 - [ ] change "submit" to "search device" in /configure
+- [x] Add documentation again.
 
 
 ## Documentation

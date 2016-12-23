@@ -1,8 +1,11 @@
 var Device = require('./device');
+/**
+ * Middleware that generate a configFile and return it to the client
+ */
 module.exports = function(req, res, next) {
   var query = {
-    name: req.params.device,
-    password: req.params.password
+    name: req.body["device"],
+    password: req.body["pass"]
   };
   Device.findOne(query,{configFile:1,name:1,password:1}, (err, device) => {
     if (err) {
@@ -84,7 +87,6 @@ function setConfig(object,variable,name){
   if (name===undefined){
     name=variable;
   }
-  console.log(object);
   return object.configFile[variable]!==undefined?
   `[${name}=${object.configFile[variable]}]`:
   "";

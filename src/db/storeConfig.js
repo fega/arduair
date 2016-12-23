@@ -10,7 +10,9 @@ module.exports = function(req, res, next) {
 
   var store = { //get the variables
     $set: {
-      configFile: {}
+      configFile: {},
+      name:req.body["device"],
+      password:req.body["pass"],
     }
   };
   for (var key in req.body) {
@@ -26,11 +28,14 @@ module.exports = function(req, res, next) {
         status: "error",
         message: "Search error, please try again"
       };
-      res.send("fail");
+      return next();
     } else {
       if (data.n === 0) {
         console.log('Device not found');
-        req.result = "device not Found";
+        req.result = {
+          status: "error",
+          message: "Device not found"
+        };
       } else {
         console.log('Device found and updated');
         req.result = "OK";

@@ -14,7 +14,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] Add references for "monitoreo fijo"
 - [ ] Add references for "Sensores de calidad de aire"
 - [ ] Add references for "Sensores a tiempo real"
-- [ ] Add references for "Sensores postprocesados"
+- [ ] Add references  for "Sensores postprocesados"
 - [ ] Add references for "2.5.3 Sensores electroquímicos de óxido de metal (MOx) > Principio de operación"
 - [ ] Add references for "luz ambiental"
 - [ ] In "2.7 Parámetros de calidad para muestreo atmosférico." try to get regulatory air quality monitoring standars
@@ -27,7 +27,7 @@ Don't care about this file. it's only to organize my thoughts.
 ## Server
 - [x] add config upload and download support
 - [x] send configuration file after device /configure submit
-- [ ] delete device/pass duplication
+- [x] delete device/pass duplication
 
 ## Client
 

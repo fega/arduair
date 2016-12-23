@@ -1,4 +1,7 @@
 var Device = require('./device');
+/**
+ * Middleware that get configuration from server
+ */
 module.exports = function(req, res, next) {
   var query = {
     name: req.params.device,

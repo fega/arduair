@@ -1,5 +1,7 @@
  var Device = require('./device');
-
+/**
+ * Middleware that retrieves all the data of devices from the server
+ */
  module.exports = function(req, res, next) {
    Device.find({}, (err, devices) => {
 

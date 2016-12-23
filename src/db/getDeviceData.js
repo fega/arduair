@@ -1,4 +1,7 @@
 var Device = require('./device');
+/**
+ * Middleware that retrieves the data from One device
+ */
 module.exports = function(req,res,next){
 	Device.findOne({name : req.params.device},(err,device)=>{
 		if(err){

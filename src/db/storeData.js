@@ -1,5 +1,7 @@
 var Device = require('./device');
-
+/**
+ * Middleware to store an arduair device data
+ */
 module.exports = function(req, res, next) {
     var dataDate;
     if (req.isServerTime) {

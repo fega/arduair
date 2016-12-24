@@ -41,6 +41,7 @@ SDA/SCL BMP180, RTC, Light Module
 #define GREEN_LED_PIN 3
 #define YELLOW_LED_PIN 13
 #define DS1307_ADDRESS 0x68 //clock ADRESS
+byte zero = 0x00; //work around for an Issue found  in bildr
 #define WIFIPIN 4
 #define DHTPIN 5
 #define SHINYEI_P1 8
@@ -106,7 +107,7 @@ void setup() {
   arduairSetup();
   if (wifi){wifiBegin();}
   if (config==HIGH) requestConfig();
-
+  if (resetClock==true) timeConfig();
   Wire.begin();
   dht.begin();
   bmp.begin();
@@ -622,7 +623,7 @@ void applySetting(String settingName, String settingValue) {
   if (settingName=="second"){
     second=settingValue.toInt();
   }
-  
+
   if (settingName=="pm10_x2"){
     pm10_x2=settingValue.toFloat();
   }
@@ -977,6 +978,33 @@ void requestConfig(){
     myFile.close();
   }
   arduairSetup();
+}
+/**
+ * Get time config from Server
+ */
+void timeConfig(){
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(zero);
+
+  Wire.write(decToBcd(second));
+  Wire.write(decToBcd(minute));
+  Wire.write(decToBcd(hour));
+  Wire.write(decToBcd(weekDay));
+  Wire.write(decToBcd(monthDay));
+  Wire.write(decToBcd(month));
+  Wire.write(decToBcd(year));
+
+  Wire.write(zero); //start
+
+  Wire.endTransmission();
+
+  myFile = SD.open("CONFIG.txt", FILE_WRITE);
+  myFile.print("[");
+  myFile.print("resetclock=");
+  myFile.print("false");
+  myFile.println("]");
+  myFile.close();
+  log("Clock updated")
 }
 /**
  * Log function, it writes a message in a log file.

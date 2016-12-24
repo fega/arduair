@@ -41,7 +41,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] refactoring code
 - [ ] change fixed-action-btn position to fixed
 - [x] Deleted configure's fixed-action-btn
-- [ ] change "submit" to "search device" in /configure
+- [x] change "submit" to "search device" in /configure
 - [x] Add documentation again.
 
 
@@ -88,11 +88,12 @@ Don't care about this file. it's only to organize my thoughts.
 
 ## Hardware
 
-- [ ] Insert calibration function
-- [ ] Add "get configuration" feature
+- [x] Insert calibration function
+- [x] Insert default calibration constants
+- [x] Add "get configuration from web" feature
 - [ ] Add MQ 131 support
 - [ ] Create the container box
-- [ ] Insert time calibration function
+- [x] Insert time calibration function
 
 ## others
 

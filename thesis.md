@@ -80,8 +80,9 @@ Don't care about this file. it's only to organize my thoughts.
 
 - [ ] Technical Documentation
 	- [ ] Software Documentation
-		- [ ] Front-end Documentation
+		- [x] Front-end Documentation
 		- [ ] Back-end Documentation
+		- [ ] Project structure
 	- [ ] Hardware Documentation
 	 - [ ] Fritzing Sketch
 	 - [ ] Shell Sketch
@@ -94,6 +95,7 @@ Don't care about this file. it's only to organize my thoughts.
 - [ ] Add MQ 131 support
 - [ ] Create the container box
 - [x] Insert time calibration function
+- [ ] Print PCB
 
 ## others
 

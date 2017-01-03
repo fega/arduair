@@ -53,11 +53,22 @@ function saveDataRequested(res) {
       }
     }
   }
+/**
+ * Lauch a materialize toast and after it disappear, remove the a specific class to the given object
+ * @param  {String} message       message in the toast
+ * @param  {JquerySelector} object        Object to remove a class
+ * @param  {String} classToRemove class to be removed in the object
+ */
 function toastAndRemoveClass(message,object,classToRemove){
-  Materialize.toast(message, 2000, '', () => {
+  Materialize.toast(message, 4000, '', () => {
     $(object).removeClass(classToRemove);
   });
 }
+/**
+ * Generate a item of a collection with the given item, this is visible in the /data url
+ * @param  {Object} item Item to be rendered
+ * @return {String}      Html string to be rendered
+ */
 function generateDeviceCollectionItem(item){
   return `
   <li class="collection-item avatar">
@@ -68,6 +79,10 @@ function generateDeviceCollectionItem(item){
     </a>
   </li>`;
 }
+/**
+ * generate a collection from the given res parameter using the generateDeviceCollectionItem() function, if res.devices is empty, it generates an html error message and append it #deviceCollection object
+ * @param  {Object} res object with a device field with the objects to be rendered
+ */
 function generateDeviceCollectionList(res){
   var devices = _(res.devices)
   .map(item=>generateDeviceCollectionItem(item))
@@ -76,6 +91,11 @@ function generateDeviceCollectionList(res){
   if(_.isEmpty(devices)) devices= generateErrorItem(res.message);
   $('#deviceCollection').html(devices);
 }
+/**
+ * Returns an html error message with the given text
+ * @param  {String} text Error text.
+ * @return {String}      Html error message
+ */
 function generateErrorItem(text){
   return `
   <div class="col s12 center">
@@ -84,7 +104,8 @@ function generateErrorItem(text){
 }
 
 /**
- * Generates chips for each device loaded
+ * Generates a control bar in the /data/device panel with the given data
+ * @param  {Object} data data to create the chips
  */
 function generateGraphChips(data) {
     $('#page-graph-chips').html(''); // PONGO LOS CHIPS EN EL HTML
@@ -93,6 +114,11 @@ function generateGraphChips(data) {
     generateBtnEditGraph  ("#page-graph-chips",data.isNull());
     generateBtnSwitchGraph("#page-graph-chips",arduair.normalizedData,arduair.normalizedDates);
 }
+/**
+ * Generate a set of chips and append it to the destiny object
+ * @param  {JquerySelector} destiny Where to apppend the chips
+ * @param  {Object} data    Object to create the chips
+ */
 function generateChipsForGraph(destiny, data) {
   var content = '';
   var firstNull = data.firstNull(); // how many chips will be created
@@ -109,8 +135,8 @@ function generateChipsForGraph(destiny, data) {
       var index = $(this).parent().attr("id").replace('page-edit-chip-', '');
       var device = $(this).parent().text();
       device=_.trim(device).slice(0, -5); //TODO add device name validation withoutspaces
-      console.log("DEVICE:")
-      console.log(device)
+      //console.log("DEVICE:")
+      //console.log(device)
       data.splice(index, 1, null);
       generateGraphMenu(arduair.data,arduair.units); //imprimo el menu
       generateAqiGraphMenu(arduair.data); //imprimo el menu
@@ -118,6 +144,11 @@ function generateChipsForGraph(destiny, data) {
       aqiChart.update(0);
   });
 }
+/**
+ * Generate an "add to graph" button and append it to the destiny. if dataCount >= 5, disables the add button.
+ * @param  {JquerySelector} destiny   Where append the button
+ * @param  {Number} dataCount if dataCount>= disables the buton
+ */
 function generateBtnAddToGraph(destiny,dataCount){
   var button=`
   <a id="page-graph-add" href="/data" class="btn-floating accent">
@@ -126,6 +157,11 @@ function generateBtnAddToGraph(destiny,dataCount){
   $(destiny).append(button);
   if (dataCount === 5) $(destiny).addClass("disabled");
 }
+/**
+ * Generate an "edit graph" button and append it to the destiny. if dataCount >= 5, disables the add button.
+ * @param  {JquerySelector} destiny   Where append the button
+ * @param  {Number} dataCount if dataCount>= disables the buton
+ */
 function generateBtnEditGraph(destiny,disabled){
   var button = `
   <a id="page-graph-edit" class="btn-floating primary">
@@ -145,6 +181,10 @@ function generateBtnEditGraph(destiny,disabled){
       }
   });
 }
+/**
+ * adds editGraph button functionality
+ * @param  {JquerySelector} destiny   Where append the button
+ */
 function bindBtnEditGraph(destiny) {
   $('#page-graph-edit')
   .unbind('click')
@@ -160,6 +200,11 @@ function bindBtnEditGraph(destiny) {
     }
   });
 }
+/**
+ * Generate an "switch" button and append it to the destiny. if dataCount >= 5, disables the add button.
+ * @param  {JquerySelector} destiny   Where append the button
+ * @param  {Number} dataCount if dataCount>= disables the buton
+ */
 function generateBtnSwitchGraph(destiny,data){
   var button = `
   <a id="page-graph-switch" class="btn-floating primary" style="background-color:#2c3e50!important;text-align: center;
@@ -188,9 +233,8 @@ function generateBtnSwitchGraph(destiny,data){
     }
   });
 }
-
 /**
- * Generates a options menu for each data array.
+ * Generates a options menu for each data array. with the given units
  */
 function generateGraphMenu(data,units) {
     data.forEach((el, index) => {
@@ -205,6 +249,12 @@ function generateGraphMenu(data,units) {
       }
     });
 }
+/**
+ * generate the buttons for the graph menu
+ * @param  {JquerySelector} destiny where the button should be placed
+ * @param  {String} name    Name of the button
+ * @param  {String} units   units of the button
+ */
 function generateGraphMenuBtn(destiny,name,units){
   var content =`
   <a  class="btn filledGraphData" data-var="${name}" data-units="${units}">
@@ -251,6 +301,12 @@ function generateGraphMenuBtn(destiny,name,units){
       });
   });;
 }
+/**
+ * Adds a simple header button for the graph menu
+ * @param  {JquerySelector} destiny where the button should be placed
+ * @param  {String} color   Color of the master button
+ * @param  {name} name    Name of the button (a device name)
+ */
 function generateGraphMenuMasterBtn(destiny,color,name){
   var content=`
   <a  class="btn filledGraphDataMaster white-text" style="background-color:${color}">
@@ -258,7 +314,9 @@ function generateGraphMenuMasterBtn(destiny,color,name){
   </a>`;
   $(destiny).append(content);
 }
-
+/**
+ * Generates a options menu for each data array, in the AQI graph panel with the given units
+ */
 function generateAqiGraphMenu(data){
   data.forEach((item, index) => {//forEach element in data
     var ind = index + 1;
@@ -288,6 +346,13 @@ function generateAqiGraphMenu(data){
     }
   });
 }
+/**
+ * Generates a button for the menu in de aqi graph menu button.
+ * @param  {JquerySelector} destiny Where the button should be placed
+ * @param  {String} name    Name of the variable
+ * @param  {String} units   Units in the button
+ * @param  {String} device  Device name (for triggering reason)
+ */
 function generateAqiGraphMenuBtn(destiny,name,units,device){
   var content =`
   <a  class="btn filledGraphData" data-var="${name}" data-units="${units}" data-device="${device }" >
@@ -336,7 +401,12 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
     }
   });
 }
-
+/**
+ * Generates a pdf report from the firstDate to the last date
+ * @param  {Object} data      Data source
+ * @param  {Date} firstDate beggining date
+ * @param  {Date} lastDate  Last date in the report
+ */
 function generatePDF(data,firstDate,lastDate){
   firstDate =moment(firstDate);
   lastDate  =moment(lastDate);

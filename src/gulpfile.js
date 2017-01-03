@@ -28,7 +28,7 @@ function plumberit(errTitle) {
 docs generation
 ///////////////////////////////////////*/
 gulp.task('documentation', () => {
-  return jsdoc2md.render({ files: './public/js/script.js' })
+  return jsdoc2md.render({ files: ['./public/js/init.js','./public/js/script.js'] })
     .then(output => fs.writeFileSync('../docs/front.md', output));
 });
 /*///////////////////////////////////////

@@ -14,7 +14,7 @@ var minifyHTML = require('express-minify-html');
 var colors = require('colors');
 var routes = require('./routes/index');
 var api = require('./routes/api');
-//MONTAR MONGOOSE Y CONECTAR A LA BASE DE DATOS
+//Mount mongoose and connect to the dataBase
 var mongoose = require('mongoose');
 var db = require('./db/db');
 mongoose.connect(db.url);
@@ -44,7 +44,7 @@ app.use(minifyHTML({
         minifyJS: true
     }
 }));
-//MONTAR HANDLEBARS TEMPLATE ENGINE
+//Mount HANDLEBARS TEMPLATE ENGINE
 app.engine('handlebars', exphbs({
     defaultLayout: 'main',
     partialsDir: path.join(__dirname, 'views', 'partials'),
@@ -52,7 +52,6 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());

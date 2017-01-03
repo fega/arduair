@@ -39,7 +39,6 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] AQI chart mode
 - [x] AQI lines for chart
 - [x] refactoring code
-- [ ] change fixed-action-btn position to fixed
 - [x] Deleted configure's fixed-action-btn
 - [x] change "submit" to "search device" in /configure
 - [x] Add documentation again.
@@ -82,10 +81,12 @@ Don't care about this file. it's only to organize my thoughts.
 	- [ ] Software Documentation
 		- [x] Front-end Documentation
 		- [ ] Back-end Documentation
-		- [ ] Project structure
+		- [x] Project structure
 	- [ ] Hardware Documentation
-	 - [ ] Fritzing Sketch
+	 - [x] Fritzing Sketch
 	 - [ ] Shell Sketch
+	 - [x] Hardware comments
+	- [ ] Spell-check
 
 ## Hardware
 

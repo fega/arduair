@@ -3,32 +3,45 @@
 Don't care about this file. it's only to organize my thoughts.
 
 ## Book
-
+- [ ] Write Calibration Section
+  - [ ] Métodos de calibración
+  	- [ ] Calibración linear
+  	- [ ] Calibración de una variable no linear
+  	- [ ] Calibración multivariable en base a humedad, temperatura y respuesta del sensor
+  	- [ ] Calibración multivariable por métodos empíricos
+  	- [ ] Calibración por redes neuronales artificiales .  
+  	- [ ] Calibración en tiempo real (on the fly)
 - [x] Write an abstract
 - [x] Write an introduction
 - [x] Write the acknowledgments
-- [ ] Finish NowCast section
+- [x] Finish NowCast section
 - [x] Finish instantCast Section
-- [ ] Write Calibration Section
-- [ ] Add references for "monitoreo de calidad de aire section"
-- [ ] Add references for "monitoreo fijo"
-- [ ] Add references for "Sensores de calidad de aire"
-- [ ] Add references for "Sensores a tiempo real"
+- [x] Add references for "monitoreo de calidad de aire section"
+- [x] Add references for "monitoreo fijo"
+- [x] Add references for "Sensores de calidad de aire"
+- [x] Add references for "Sensores a tiempo real"
 - [ ] Add references  for "Sensores postprocesados"
-- [ ] Add references for "2.5.3 Sensores electroquímicos de óxido de metal (MOx) > Principio de operación"
-- [ ] Add references for "luz ambiental"
+- [x] Add references for "2.5.3 Sensores electroquímicos de óxido de metal (MOx) > Principio de operación"
+- [x] Add references for "luz ambiental"
 - [ ] In "2.7 Parámetros de calidad para muestreo atmosférico." try to get regulatory air quality monitoring standars
-- [ ] Add references for " Sensor de humedad y temperatura RHT03:"
-- [ ] Add references for "3.2.1.2 Sensor de presión Barométrica BMP180"
-- [ ] Add references for "3.2.1.5 Sensor Shinyei PPD42NS"
-- [ ] Delete MQ-7 section and rewrite "3.2.1.6 Sensor MQ-131 baja concentración"
+- [x] Add references for " Sensor de humedad y temperatura RHT03:"
+- [x] Add references for "3.2.1.2 Sensor de presión Barométrica BMP180"
+- [x] Add references for "3.2.1.5 Sensor Shinyei PPD42NS"
+- [x] Delete MQ-7 section and rewrite "3.2.1.6 Sensor MQ-131 baja concentración"
+  - [x] Delete MQ-7 section
+  - [x] Rewrite MQ131 section
+  - [x] Update Equations
+- [ ] Delete MICS 2714 section
 - [ ] Add documentation and designs as an attachment
+- [ ] Add MQ calibration explaination
+- [ ] Bibliography correction
 
 ## Server
 - [x] add config upload and download support
 - [x] send configuration file after device /configure submit
-- [ ] delete device/pass duplication
+- [x] delete device/pass duplication
 - [x] datecheck refractored
+- [x] add Procfile
 
 ## Client
 
@@ -46,11 +59,12 @@ Don't care about this file. it's only to organize my thoughts.
 
 ## Documentation
 
+- [x] Add MQ-131 Ro to the documentation
 - [x] Finish Fritzing Sketch
 
 - [ ] User Manual
 	- [ ] Introducción
-		- [x] Primer parrafo
+			- [x] Primer parrafo
 		- [ ] Características del dispositivo
 		- [ ] Extraer la microSD
 			- [x] parrafo
@@ -78,9 +92,9 @@ Don't care about this file. it's only to organize my thoughts.
 		- [x] Descargar datos en CSV
 
 - [ ] Technical Documentation
-	- [ ] Software Documentation
+	- [x] Software Documentation
 		- [x] Front-end Documentation
-		- [ ] Back-end Documentation
+		- [x] Back-end Documentation
 		- [x] Project structure
 	- [ ] Hardware Documentation
 	 - [x] Fritzing Sketch
@@ -93,10 +107,10 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] Insert calibration function
 - [x] Insert default calibration constants
 - [x] Add "get configuration from web" feature
-- [ ] Add MQ 131 support
-- [ ] Create the container box
+- [x] Add MQ 131 support
+- [ ] Create the container box -> Sunday
 - [x] Insert time calibration function
-- [ ] Print PCB
+- [ ] Print PCB -> monday
 
 ## others
 

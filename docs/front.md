@@ -48,6 +48,9 @@
 <dt><a href="#generateBtnSwitchGraph">generateBtnSwitchGraph(destiny, dataCount)</a></dt>
 <dd><p>Generate an &quot;switch&quot; button and append it to the destiny. if dataCount &gt;= 5, disables the add button.</p>
 </dd>
+<dt><a href="#generateBtnPDFGraph">generateBtnPDFGraph(destiny, dataCount)</a></dt>
+<dd><p>Generate a PDF generator button</p>
+</dd>
 <dt><a href="#generateGraphMenu">generateGraphMenu()</a></dt>
 <dd><p>Generates a options menu for each data array. with the given units</p>
 </dd>
@@ -314,6 +317,18 @@ adds editGraph button functionality
 
 ## generateBtnSwitchGraph(destiny, dataCount)
 Generate an "switch" button and append it to the destiny. if dataCount >= 5, disables the add button.
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| destiny | <code>JquerySelector</code> | Where append the button |
+| dataCount | <code>Number</code> | if dataCount>= disables the buton |
+
+<a name="generateBtnPDFGraph"></a>
+
+## generateBtnPDFGraph(destiny, dataCount)
+Generate a PDF generator button
 
 **Kind**: global function  
 

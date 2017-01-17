@@ -1,0 +1,26 @@
+{//chrome app manifest version
+	"manifest_version": 2,
+	"version": "0.0.1",
+	"lang": "en",
+	"name": "ArduAir",
+	"short_name": "ArduAir",
+	"description": "Open Source Air Quality Monitor in Arduino, controlled by the web",
+	"icons": {
+		"16": "favicon-16x16.png",
+		"128":"apple-touch-icon-120x120.png"
+		//agregar el resto.
+		},
+	"start_url": "https://fega.github.io/arduAir",
+	"theme_color": "#0d47a1",
+	"background_color": "#000000",
+	"display": "standalone",
+	"developer": {
+		"name": "Fega",
+		"url": "http://fega.cienciambiente.com"
+	},
+	"app": {
+    "background": {
+      "scripts": ["background.js","./js/jquery.js","./js/materialize.min.js","./js/init.js","./js/page.js"]
+    	}
+	}
+}

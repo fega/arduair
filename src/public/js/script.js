@@ -334,7 +334,7 @@ var arduair = {
    * Calculates the AQI for the given "c" (concentration) in the "pollutant"
    * if c is an array, returns the an array with the InstantCast aqi values.
    */
-      aqi(c, pollutant) {
+  aqi(c, pollutant) {
     if (_.isArray(c)) {
       return c.map(n => computeAqi(n, pollutant));
     } else {
@@ -387,8 +387,8 @@ var arduair = {
    *
    */
   nowcastAqi(arr,pollutant,dates){
-    console.log("ARRAY");
-    console.log(arr);
+  //console.log("ARRAY");
+  //console.log(arr);
     switch (pollutant) {
       case "nowcastO3Aqi":
         pollutant="o3";
@@ -585,7 +585,7 @@ function pageDataGraph(ctx) {
 //AJAX Forms
 ////////////////////*/
 //add Device Form
-$(document).ready(() => { // TODO: check if the arrow function breaks the code
+$(document).ready(() => {
   $('#addform').ajaxForm({
     success: addFormSuccess, //success Callback
     beforeSubmit: formBefore, //Before Submit Callback

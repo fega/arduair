@@ -353,3 +353,7 @@ a.filledGraphData.active{
   background-color: #78909c  ;
   color: white;
 }
+.collection .collection-item.avatar .title {
+    font-size: 17px;
+    font-weight: 500;
+}

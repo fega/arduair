@@ -10,9 +10,7 @@ module.exports = function(req, res, next) {
 
   var store = { //get the variables
     $set: {
-      configFile: {},
-      name:req.body["device"],
-      password:req.body["pass"],
+      configFile: {}
     }
   };
   for (var key in req.body) {

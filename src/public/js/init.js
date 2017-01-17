@@ -73,11 +73,24 @@ function generateDeviceCollectionItem(item){
   return `
   <li class="collection-item avatar">
     <a href="data/${item.name}">
-      <img src="http://www.asocopi.org/images/logo_upb.gif" alt="" class="responsive-img circle">
       <span class="primary-text title">${item.name}</span>
-      <p>Owner:${item.owner}</p>
+      <p class="primary-text">Last Register: ${moment(name.lastRegister).format("Do YYYY, h:mm:ss a")}</p>
+      <p>Owner: ${item.owner}</p>
+      ${chips(item)}
     </a>
   </li>`;
+
+  function chips(item){
+    var result = "";
+    result = _(item)
+      .omit(["location", "name" , "lastRegister", "email", "password", "parameters", "owner","_id","__v","temperature","date","humidity","pressure","Location","pst","description","configFile"])
+      .map((i,k)=>`<div class="chip">${k}</div>`)
+      .join(" ");
+
+    result= `<div class="hide-on-small-only">${result}</div>`;
+      console.log(result);
+    return result;
+  }
 }
 /**
  * generate a collection from the given res parameter using the generateDeviceCollectionItem() function, if res.devices is empty, it generates an html error message and append it #deviceCollection object
@@ -87,7 +100,7 @@ function generateDeviceCollectionList(res){
   var devices = _(res.devices)
   .map(item=>generateDeviceCollectionItem(item))
   .join('');
-
+  console.log(res.devices[1])
   if(_.isEmpty(devices)) devices= generateErrorItem(res.message);
   $('#deviceCollection').html(devices);
 }
@@ -102,7 +115,6 @@ function generateErrorItem(text){
     <p class="error-text">${text}</p>
   </div>`;
 }
-
 /**
  * Generates a control bar in the /data/device panel with the given data
  * @param  {Object} data data to create the chips
@@ -113,6 +125,7 @@ function generateGraphChips(data) {
     generateBtnAddToGraph ("#page-graph-chips",data.firstNull());
     generateBtnEditGraph  ("#page-graph-chips",data.isNull());
     generateBtnSwitchGraph("#page-graph-chips",arduair.normalizedData,arduair.normalizedDates);
+    generateBtnPDFGraph("#page-graph-chips");
 }
 /**
  * Generate a set of chips and append it to the destiny object
@@ -231,6 +244,24 @@ function generateBtnSwitchGraph(destiny,data){
       $("#aqigraph-row").slideUp('fast');
       $("#graph-row").slideDown('fast');
     }
+  });
+}
+/**
+ * Generate a PDF generator button
+ * @param  {JquerySelector} destiny   Where append the button
+ * @param  {Number} dataCount if dataCount>= disables the buton
+ */
+function generateBtnPDFGraph(destiny){
+  var button = `
+  <a id="page-graph-switch" class="btn-floating primary" style="background-color:#2c3e50!important;text-align: center;
+    font-size: small;
+    font-weight: bolder;">
+    PDF
+  </a>`;
+  $(button).appendTo(destiny)
+  .click(()=>{
+    //var btn = $(this);//the button to bind the function
+    generatePDF(arduair.data,"1995-12-25","2002-12-25");
   });
 }
 /**
@@ -360,7 +391,7 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
   </a>`;
 
   $(content ).appendTo(destiny).bind('click.namespace', function() {//when you do click
-    console.log("PROBANDO FUNCION")
+    // console.log("PROBANDO FUNCION")
     var item=$(this);
     var device=item.data('device');
     var label=item.data('var');//get the button data
@@ -375,12 +406,12 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
       _.remove(aqiChart.data.datasets,{label,device});//and delete the data
       aqiChart.update(0);
     }else{//if Not
-      console.log("PROBANDO ACTIVE MODE")
-      console.log(label)
-      console.log(normalizedLabel)
-      console.log(object)
-      console.log(objectIndex)
-      console.log(result)
+      // console.log("PROBANDO ACTIVE MODE")
+      // console.log(label)
+      // console.log(normalizedLabel)
+      // console.log(object)
+      // console.log(objectIndex)
+      // console.log(result)
 
       $(this).addClass("active");//set it as active
       if(!_.has(object,normalizedLabel)){
@@ -408,16 +439,34 @@ function generateAqiGraphMenuBtn(destiny,name,units,device){
  * @param  {Date} lastDate  Last date in the report
  */
 function generatePDF(data,firstDate,lastDate){
-  firstDate =moment(firstDate);
-  lastDate  =moment(lastDate);
+  firstDate = moment(firstDate);
+  lastDate  = moment(lastDate);
+  var img = "";
+  var headers = _(data)
+    .chain()
+    .map(item=>_.keys(item))
+    .flatten()
+    .uniq()
+    .filter((item)=>item !== 'date')
+    .filter((item)=>item !== 'name')
+    .map(item=>{return {text:item,style:'tableHeader'};})
+    .value();
+  headers.unshift({text:'dates',style:'tableHeader'});
+  var table={
+    headerRows: 1,
+    body: headers
+  };
   if (_.isEmpty(data)){//check if the data is empty
     toastAndRemoveClass("There is no data to print","","");
     return;
   }
-  if(firstDate.diff(lastDate)<=0){//check the input dates
+  if(firstDate.diff(lastDate)>0){//check the input dates
     toastAndRemoveClass("LastDateError","","");
     return;
   }
+  data.forEach(item=>{
+    //generateTable(item)
+  })
   var pdf={
     content:[{
       text: "ARDUAIR summary document",
@@ -426,42 +475,25 @@ function generatePDF(data,firstDate,lastDate){
     },{
       text:" "
     },{
-      text:"Devices:",
+      text:"Devices",
       style: 'subheader'
     },{
       text:"Devices:",//for each data.devices....
     },{
       text:" "
     },{
-      text:"date Ranges:"
+      text:"date Ranges",
+      style: 'subheader'
     },{
       text: `From:  ${firstDate.format("dddd, MMMM Do YYYY, h:mm:ss a")}
       To:        ${lastDate.format("dddd, MMMM Do YYYY, h:mm:ss a")}`
     },{
       text:" "
     },{
-      text:"Results"
-    },{
-      table: {
-								headerRows: 1,
-								// keepWithHeaderRows: 1,
-								// dontBreakRows: true,
-								body: [//todo, put devices
-										[
-                    { text: 'Parameter', style: 'tableHeader' },
-                    { text: 'Header 1', style: 'tableHeader' },//TODO: set devices as headers
-                    { text: 'Header 2', style: 'tableHeader' },
-                    { text: 'Header 3', style: 'tableHeader' },
-                    { text: 'Header 4', style: 'tableHeader' },
-                    { text: 'Header 5', style: 'tableHeader' }],
-										[{text:"Min", style: 'tableHeader' },      "","","",""],
-                    [{text:"Max", style: 'tableHeader' },      "","","",""],
-                    [{text:"Mean", style: 'tableHeader' },     "","","",""],
-                    [{text:"Median", style: 'tableHeader' },   "","","",""],
-                    [{text:"Peak hour", style: 'tableHeader' },"","","",""],
-								]
-						}
-    }],
+      text:"Resume",
+      style: 'subheader'
+    }
+  ],
     styles: {
       header: {
         fontSize: 25,
@@ -484,7 +516,20 @@ function generatePDF(data,firstDate,lastDate){
     }
   };
 
-   pdfMake.createPdf(pdf).open();
+   //pdfMake.createPdf(pdf).open();
+   function generateTable(data,dates,title,header,subheader){
+     var result = { headerRows: 0, body: [] }
+     if (title !== undefined){
+       result.body.push("")
+     }
+     if (header !== undefined){
+       result.body.push("")
+     }
+     if (subheader !== undefined){
+       result.body.push("")
+     }
+
+   }
 }
 /* eslint-enable */
 /*///////////////////////////////////////

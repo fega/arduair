@@ -63,8 +63,9 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] Finish Fritzing Sketch
 
 - [ ] User Manual
+  - [ ] UPDATE USER MANUAL
 	- [ ] Introducción
-			- [x] Primer parrafo
+		- [x] Primer parrafo
 		- [ ] Características del dispositivo
 		- [ ] Extraer la microSD
 			- [x] parrafo
@@ -108,9 +109,10 @@ Don't care about this file. it's only to organize my thoughts.
 - [x] Insert default calibration constants
 - [x] Add "get configuration from web" feature
 - [x] Add MQ 131 support
-- [ ] Create the container box -> Sunday
+- [x] Create the container box -> Sunday
+- [ ] Create the container box in Inkscape
 - [x] Insert time calibration function
-- [ ] Print PCB -> monday
+- [x] Print PCB -> monday
 
 ## others
 
